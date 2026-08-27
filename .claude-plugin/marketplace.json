@@ -1,0 +1,12 @@
+{
+  "name": "kstack",
+  "owner": {
+    "name": "keivan"
+  },
+  "plugins": [
+    {
+      "name": "kstack",
+      "source": "./"
+    }
+  ]
+}
