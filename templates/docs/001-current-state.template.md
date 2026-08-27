@@ -17,6 +17,8 @@
 ## Architecture in one paragraph
 
 {{ARCHITECTURE_SUMMARY}}
+<!-- One paragraph and, where the 020-architecture band exists, a pointer into it — 020 owns
+     the detail; this is a summary, never a second architecture doc. -->
 
 ## Active work
 
@@ -24,4 +26,9 @@
 
 ## Deferral register
 
-(none recorded yet — deferred items land here with NAMED triggers, never as vague someday-notes)
+(none recorded yet)
+<!-- Product-scope deferrals no unit owns, each with a NAMED trigger — never vague
+     someday-notes. Registers have exactly three homes, split by grain: a UNIT's residues
+     live in that unit's probe (Registers); LESSON medium promotions live in the ledger's
+     mechanization queue; everything else deferred lives HERE. The close-unit overdue-trigger
+     walk covers all three. -->

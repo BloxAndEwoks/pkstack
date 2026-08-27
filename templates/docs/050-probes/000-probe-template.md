@@ -56,10 +56,18 @@ Date: YYYY-MM-DD · Status: OPEN | EXECUTED | CLOSED · Gated: yes | no (why)
      action taken. Headline: novel n/m. Then the loop self-check results: anchoring, ratio
      confound, overdue triggers, medium rot. The Loop-health row goes in the LEDGER, not here. -->
 
+## 7. Consumer drive (cadence step 6)
+
+<!-- For units that touched a consumer surface: the mapped features driven through the repo's
+     verification skill, proved/refused per feature, and the artifact run names (the evidence
+     itself stays in the skill's gitignored artifacts). Where no verification skill exists
+     yet, record whether its register trigger has now fired. -->
+
 ## Registers
 
-<!-- Residues deliberately not fixed in this unit. Every entry carries a NAMED trigger — a
-     register without one is a dodge, and an overdue trigger is surfaced loudly at the next
-     close. -->
+<!-- UNIT-scoped residues deliberately not fixed in this unit — product-scope deferrals no
+     unit owns go in current-state's deferral register instead. Every entry carries a NAMED
+     trigger — a register without one is a dodge, and an overdue trigger is surfaced loudly
+     at the next close. -->
 
 - <residue> — trigger: <the concrete event that reopens this>

@@ -73,8 +73,9 @@ loop-level failure mode is added to this list in the same sitting it is found.
   anchoring: demote it (drop the hunt clause, keep only the disclosure rule).
 - **Ratio confound** — never read a falling novel ratio as success on its own; only the blind
   control distinguishes an anchored reviewer from genuinely exhausted classes.
-- **Register abuse / overdue triggers** — walk the registered items (ledger queue + probe
-  registers): has any NAMED TRIGGER since fired without the work being done? An overdue
+- **Register abuse / overdue triggers** — walk ALL THREE register homes (the ledger's
+  mechanization queue, the probes' Registers sections, and current-state's deferral
+  register): has any NAMED TRIGGER since fired without the work being done? An overdue
   register is a dodge, not a disposition — surface it in the probe, loudly.
 - **Medium rot** — for each lesson marked mechanized, confirm the mechanism still exists and
   still bites (the walk test runs, the lint is enabled, the trigger is applied in prod).
