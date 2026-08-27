@@ -71,8 +71,10 @@ an ungated unit runs steps 1–4a and 6–7 (skipping external certification and
 with step 1 scaled to a short probe note and 4a scaled to the diff. **4a is never skipped** —
 the ledger walk is what makes a "small" unit provably small.
 
-1. **Look before designing** (UI-touching units): read the touched surfaces' current behavior —
-   the design starts from how the product actually behaves today, not from memory of it. Then
+1. **Look before designing** (consumer-surface units): read the touched surfaces' feature
+   files (the repo's verification skill, where it exists) and, where genuinely informative,
+   take a quick live look at current behavior — the design starts from how the product
+   actually behaves today, not from memory of it. Then
    **premortem before building.** Run `/premortem` (fan out adversarial agents); record the
    findings as a probe in `docs/050-probes/`. Then **cluster the scenarios into CLASSES before
    designing** — a premortem returns a flat list, and a flat list invites a fix per item. Name
@@ -135,11 +137,15 @@ the ledger walk is what makes a "small" unit provably small.
    external-review rubric. **Size law: lessons and their evidence accrete in the LEDGER, never
    here; when a lesson is fully mechanized, its prose in this file is cut to a one-line
    pointer.**
-6. **Verify the changed user-facing behavior as a user experiences it**, if the unit touched UI
-   or its wiring. {{UI_VERIFICATION}}
-   <!-- Fill with the repo's actual mechanism (a smoke suite, a Playwright drive, a manual
-        script) — or, before one exists: "REGISTERED: no UI-verification harness yet; named
-        trigger = first unit that touches a rendered UI generates the verify-<project> skill." -->
+6. **Verify the changed consumer-facing behavior as its consumer experiences it**, if the unit
+   touched a consumer surface or its wiring. {{UI_VERIFICATION}}
+   <!-- Fill with the repo's actual mechanism: any repo-level smoke first, then the repo's
+        verification skill (verify-<project>) driving the unit's changed mapped features.
+        Before one exists: "REGISTERED: no verification skill yet; named trigger = first unit
+        touching a consumer-facing surface runs /create-verification-skill (hermetic launch
+        built first if none exists)." A unit whose close finds the feature map wrong runs the
+        skill's MAINTAIN mode in the same sitting; EXPERIENCE passes schedule as their own
+        ungated units. -->
 7. **Commit** the checkpoint as a system of record (see Commits).
 
 ## Test-Driven Development

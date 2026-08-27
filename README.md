@@ -51,6 +51,9 @@ skills/
   close-unit/         step 5b — the self-improvement close (razor, forks, loop self-check)
   adversarial-audit/  the generic falsification catalogue — the sweep's floor while the
                       ledger is young, and standalone verification for non-kstack repos
+  create-verification-skill/  generates verify-<project>: the consumer-surface feature map +
+                      driver (step 6's mechanism); every generated skill carries its own
+                      MAINTAIN mode, so maintenance needs no second generator
 templates/
   AGENTS.template.md            the procedure file kstack-init fills per-repo
   finding-ledger.template.md    the ledger mechanism — ships with an EMPTY lesson list

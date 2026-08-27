@@ -108,9 +108,13 @@ unit in the repo runs the full cadence — its close mints the repo's first ledg
 it doubles as the acceptance test of this init (a Machine Constraints section that bites, a
 Commands section that runs).
 
-A UI-verification skill (a `verify-<project>` feature map plus a driver that exercises the
-rendered product as a user) is NOT generated at init — it needs a rendered product to map. Register it
-in the generated AGENTS.md with a named trigger: "first unit that touches a rendered UI".
+The repo's verification skill (`verify-<project>` — the feature map of its consumer-facing
+surfaces plus the driver that operates them as a consumer does) is NOT generated at init — it
+needs a running product to map, and a hermetic stack to drive it against. It has its own
+generator: `/create-verification-skill`, which also defines the hermetic-stack precondition and
+the map contract. Register it in the generated AGENTS.md with a named trigger: "first unit that
+touches a consumer-facing surface runs /create-verification-skill (building the hermetic launch
+first if none exists)".
 
 ## What this skill never does
 
