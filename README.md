@@ -68,6 +68,9 @@ e.g. `/kstack:kstack-init`).
 **As user-level skills:** copy `skills/*` into `~/.claude/skills/` (skills resolve as
 `/<name>`, e.g. `/kstack-init`).
 
+**In Cursor:** the same checkout carries `.cursor-plugin/plugin.json`, so it installs as a
+Cursor plugin with the identical skills.
+
 **In non-Claude-Code environments** (Cursor, Codex, any agent that reads markdown): the skills
 are plain markdown procedures — point the agent at `skills/<name>/SKILL.md` and it follows the
 steps directly. `skills/simplify/SKILL.md` is deliberately self-contained for exactly this
@@ -90,3 +93,11 @@ what code cannot answer, then generates `AGENTS.md`, `docs/`, the finding ledger
 `scripts/external-review.sh`. On a greenfield repo it is a short Q&A plus defaults. The first
 real unit you build is the init's acceptance test — and its close mints the repo's first
 ledger lessons.
+
+## Provenance
+
+The verification-skill discipline descends from pstack's create/maintain-verification-skill
+pair (MIT, Lauren Tan — github.com/cursor/plugins), hardened by a production port before it
+landed here; the feature-map example under
+`skills/create-verification-skill/references/` is adapted from pstack's. The rest of the
+discipline was earned in production and distilled by the rules in `PHILOSOPHY.md`.
