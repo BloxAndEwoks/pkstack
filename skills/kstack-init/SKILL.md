@@ -102,8 +102,8 @@ From `templates/` in this plugin/repo, generate into the target:
      `templates/docs/` — a new ADR/PRD/probe starts as a copy at the band's next number, so a
      fresh repo has the doc conventions before the cadence first demands one)
    - `docs/070-quality/004-finding-ledger.md` (from the ledger template)
-   Bands outside the manifest (010/020 architecture, 060 operations) are DEFINED in the band
-   map but created on first need, never at init.
+   Bands outside the manifest (010 product, 020 architecture, 060 operations, 099 archive)
+   are DEFINED in the band map but created on first need, never at init.
 
    By docs state (step 0's classification):
    - **Absent** → generate the full manifest. Greenfield included: `001-current-state.md`

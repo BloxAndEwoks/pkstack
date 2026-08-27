@@ -20,10 +20,12 @@ Bands are directories named `NNN-name/`; leaf files carry their own three-digit 
 the band. A band not listed above is created on first need — never speculatively:
 
 - `000–009` — repo level: this index, current-state, a roadmap.
-- `010–020` — architecture: system overview, boundaries and invariants.
+- `010` — product: the brief, users and their jobs, the domain model.
+- `020` — architecture: system overview, boundaries and invariants.
 - `030` — decisions (ADRs) · `040` — PRDs · `050` — probes.
 - `060` — operations: local development, runbooks, deployment mechanics.
 - `070` — quality: testing strategy, the finding ledger.
+- `099` — archive: superseded docs, moved here with a pointer left at the old home.
 
 Each seeded band carries a `000-*-template.md` — start a new doc by copying it to the band's
 next number. Preserve existing numbers; never renumber.
