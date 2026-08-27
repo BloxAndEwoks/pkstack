@@ -30,8 +30,10 @@ first init.
 ## Step 0 — mode selection and the re-run guard
 
 - If the repo already has an AGENTS.md carrying the kstack cadence (or an equivalent procedure
-  file), the only legitimate re-run is **GAP-FILL**: walk the spine manifest (step 3.2),
-  create what is missing, touch NOTHING that exists, report what was filled — never a re-init.
+  file), the only legitimate re-run is **GAP-FILL**: walk step 3's FULL generation list (the
+  spine manifest, the ledger, the gate script, the CLAUDE.md pointer), create what is missing,
+  touch NOTHING that exists, report what was filled — never a re-init. A script gap the owner
+  declined at init stays declined: the recorded gap is an answer, not a hole.
   If it has a NON-kstack AGENTS.md/CONTRIBUTING with real content, absorb that content into
   the generated file (its facts are provenance-grade) and say what moved where; never silently
   overwrite.
