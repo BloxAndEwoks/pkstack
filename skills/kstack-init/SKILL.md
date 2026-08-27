@@ -94,9 +94,16 @@ From `templates/` in this plugin/repo, generate into the target:
 2. **The docs spine** — governed by one law: **init CREATES, never rewrites**. A file that
    exists is never overwritten, regenerated, or renamed by this skill, whatever its content.
    The spine MANIFEST — the checkable definition of "spine present":
-   - `docs/000-index.md` · `docs/001-current-state.md` (from the templates)
-   - `docs/030-decisions/` · `docs/040-prds/` · `docs/050-probes/` · `docs/070-quality/`
+   - `docs/000-index.md` · `docs/001-current-state.md` (from the templates; the index carries
+     the BAND MAP — where every future doc kind goes)
+   - `docs/030-decisions/` · `docs/040-prds/` · `docs/050-probes/` · `docs/070-quality/`,
+     each cadence band seeded with its in-band doc-type template
+     (`000-adr-template.md` / `000-prd-template.md` / `000-probe-template.md`, from
+     `templates/docs/` — a new ADR/PRD/probe starts as a copy at the band's next number, so a
+     fresh repo has the doc conventions before the cadence first demands one)
    - `docs/070-quality/004-finding-ledger.md` (from the ledger template)
+   Bands outside the manifest (010/020 architecture, 060 operations) are DEFINED in the band
+   map but created on first need, never at init.
 
    By docs state (step 0's classification):
    - **Absent** → generate the full manifest. Greenfield included: `001-current-state.md`

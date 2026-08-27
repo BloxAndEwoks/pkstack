@@ -57,7 +57,9 @@ skills/
 templates/
   AGENTS.template.md            the procedure file kstack-init fills per-repo
   finding-ledger.template.md    the ledger mechanism — ships with an EMPTY lesson list
-  docs/                         docs-spine skeletons (000-index, 001-current-state)
+  docs/                         docs-spine skeletons: 000-index (with the band map),
+                                001-current-state, and the in-band doc-type templates
+                                (ADR, PRD, probe) seeded into each cadence band
 ```
 
 ## Installing

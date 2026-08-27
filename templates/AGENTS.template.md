@@ -165,7 +165,8 @@ not to lock in implementation details.
 
 ## Commands
 
-<!-- Verbatim-runnable, discovered by the init wave. Keep in sync with the operations doc. -->
+<!-- Verbatim-runnable, discovered by the init wave. Keep in sync with the operations doc
+     (060-operations band), where one exists. -->
 {{COMMANDS}}
 
 ## Machine Constraints (not inferrable from the code)

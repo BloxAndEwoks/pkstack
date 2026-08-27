@@ -13,3 +13,17 @@
   unit's premortem findings, verification records, and close-of-unit sections live here.
 - `070-quality/004-finding-ledger.md` — the finding ledger: the repo's build lessons with
   their extensions. The self-improvement loop's home.
+
+## Where a new doc goes (the band map)
+
+Bands are directories named `NNN-name/`; leaf files carry their own three-digit prefix within
+the band. A band not listed above is created on first need — never speculatively:
+
+- `000–009` — repo level: this index, current-state, a roadmap.
+- `010–020` — architecture: system overview, boundaries and invariants.
+- `030` — decisions (ADRs) · `040` — PRDs · `050` — probes.
+- `060` — operations: local development, runbooks, deployment mechanics.
+- `070` — quality: testing strategy, the finding ledger.
+
+Each seeded band carries a `000-*-template.md` — start a new doc by copying it to the band's
+next number. Preserve existing numbers; never renumber.
