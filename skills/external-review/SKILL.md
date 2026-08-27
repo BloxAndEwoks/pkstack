@@ -9,9 +9,9 @@ This is the backstop on the build cadence, not a step in it. The repo's own veri
 ledger-driven sweep, or `/adversarial-audit` where no ledger exists) is where WE attack the
 guarantees; this gate has an **independent model (Codex)** attack them — one that does not share our
 blind spots or our incentive to confirm our own work. It exists because a green suite plus a self-run
-audit still let composed-flow defects through in the origin repo; Codex denied them. Making it a
-one-command ritual is what turns "we should get a second opinion" into something that actually happens
-at every high-stakes unit.
+audit still leave the builder's blind spots unsampled — an independent reviewer repeatedly lands
+composed-flow defects both had passed. Making it a one-command ritual is what turns "we should get a
+second opinion" into something that actually happens at every high-stakes unit.
 
 ## When to run it
 

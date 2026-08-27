@@ -19,7 +19,9 @@ Before substantial work:
    deployment, data model, or security posture.
 5. For implementation work, also read the finding ledger
    (`docs/070-quality/004-finding-ledger.md`) — its lessons are the repo's recorded defect
-   classes, applied at design time and verified at sweep time.
+   classes, applied at design time and verified at sweep time. It starts empty and is only
+   ever grown from this repo's own findings; its header carries the mechanism and the
+   young-ledger bootstrap.
 
 ## Build Principles
 
@@ -32,7 +34,7 @@ Before substantial work:
 - Preserve valuable project context. If docs are moved, leave an index or archive pointer so
   future readers can trace the decision.
 
-### Requiredness (imported doctrine — the ledger holds the living lessons)
+### Core doctrine (method-level; this repo's earned lessons live in the finding ledger)
 
 - **A fact introduced at a boundary is REQUIRED at that boundary.** Where absence is a genuine
   domain state, it is a NAMED VARIANT (`carried | none | unavailable`), never `undefined`.
@@ -88,7 +90,9 @@ the ledger walk is what makes a "small" unit provably small.
    - **4a — the verification sweep, EVERY unit** (gated and ungated; the fan-out scales to the
      diff — a small unit may be a driver-level ledger walk, but the walk itself is never
      skipped). Run `/verify-sweep`: a driver-led executor fan-out applying EVERY finding-ledger
-     lesson to the unit's diff, in the neutral falsify/verify register. Ground-truth DB claims
+     lesson to the unit's diff, in the neutral falsify/verify register (while the ledger is
+     young, the sweep's breakdown falls back to `/adversarial-audit`'s generic falsification
+     classes — the walk itself still runs). Ground-truth DB claims
      against a live database. A green suite is not evidence until it has been verified against
      the ledger. Two rules make this enforceable: **compose the flow, don't just call the verb**
      (drive each guarantee end to end; where the UI enforces something, re-POST crafted input at

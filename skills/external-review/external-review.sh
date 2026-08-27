@@ -3,9 +3,9 @@
 #
 # The build cadence's own verification step (the ledger-driven sweep, or /adversarial-audit where no
 # ledger exists) is OUR audit; this is the backstop that checks we followed it honestly — a reviewer
-# that does not share our blind spots or our incentive to confirm our own work. In the origin repo it
-# caught six composed-flow defects a green suite was hiding; this makes running it a one-command
-# ritual instead of an ad-hoc call.
+# that does not share our blind spots or our incentive to confirm our own work. It exists to catch
+# the composed-flow defects a green suite hides; this makes running it a one-command ritual instead
+# of an ad-hoc call.
 #
 # Codex CLI must be installed (`brew install codex`) and logged in (`codex login`). It runs headless
 # via `codex exec` using ~/.codex/config.toml (model, sandbox, approvals); give that config whatever

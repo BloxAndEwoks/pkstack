@@ -1,9 +1,10 @@
 # kstack
 
-A portable build discipline, extracted from a production repo where it was earned round by
-round and ratified 2026-08-26. One command — `/kstack-init` — installs it into a repo by
-**generating** that repo's own procedure file, docs spine, and finding ledger. Nothing else is
-copied between repos.
+A portable build discipline, earned in production round by round and distilled into a tool.
+One command — `/kstack-init` — installs it into a repo by **generating** that repo's own
+procedure file, docs spine, and finding ledger. Nothing is ever copied between repos — kstack
+is self-contained, and so is every repo it initializes. The reasoning behind every rule lives
+in `PHILOSOPHY.md`.
 
 ## The shape of the discipline
 
@@ -31,12 +32,16 @@ Per unit of work (a unit = the body of work answering one named goal, one to fiv
 - **Instantiation is generated.** A repo's AGENTS.md — its commands, machine constraints, gated
   scopes — is written by `/kstack-init` from *that repo's* discovered facts, never copied from
   another repo.
-- **Evidence is earned.** The generated finding ledger imports lesson *statements* with empty
-  extensions, explicitly marked imported. Authority accrues at the new repo's own unit closes.
+- **Evidence is earned.** The generated finding ledger ships EMPTY — kstack carries the
+  mechanism (the razor, the regeneration forks, the media ranking); a repo's lessons are minted
+  at its own unit closes, from its own findings, and are never seeded from another repo. Until
+  lessons exist, the sweep falls back to `/adversarial-audit`'s generic falsification classes
+  (the young-ledger bootstrap in `PHILOSOPHY.md`).
 
 ## Layout
 
 ```
+PHILOSOPHY.md         why every rule is the way it is — read this first
 skills/
   kstack-init/        the installer: interview wave → owner Q&A → generate
   premortem/          step 1 — prospective-hindsight failure hunt (engineering mode included)
@@ -44,10 +49,11 @@ skills/
   verify-sweep/       step 4a — the ledger-driven per-unit verification sweep
   external-review/    step 4b — the independent Codex gate (SKILL.md + external-review.sh)
   close-unit/         step 5b — the self-improvement close (razor, forks, loop self-check)
-  adversarial-audit/  standalone fallback verification for repos with no ledger/sweep yet
+  adversarial-audit/  the generic falsification catalogue — the sweep's floor while the
+                      ledger is young, and standalone verification for non-kstack repos
 templates/
   AGENTS.template.md            the procedure file kstack-init fills per-repo
-  finding-ledger.template.md    the ledger mechanism + imported starter lessons (L1–L10)
+  finding-ledger.template.md    the ledger mechanism — ships with an EMPTY lesson list
   docs/                         docs-spine skeletons (000-index, 001-current-state)
 ```
 
@@ -79,5 +85,5 @@ cd your-repo
 On an existing repo it runs a read-only interview wave over the codebase, asks the owner only
 what code cannot answer, then generates `AGENTS.md`, `docs/`, the finding ledger, and
 `scripts/external-review.sh`. On a greenfield repo it is a short Q&A plus defaults. The first
-real unit you build is the init's acceptance test — and its close is where the imported ledger
-earns its first local members.
+real unit you build is the init's acceptance test — and its close mints the repo's first
+ledger lessons.

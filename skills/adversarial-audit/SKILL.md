@@ -15,7 +15,8 @@ step is the default and this skill is not run in its place. This skill is the st
 for repos without one. Where this skill runs at all, use the neutral falsify/verify register in all
 prose and subagent prompts — same depth, and it keeps the driving session on its intended model.
 
-The failure mode it exists to catch (probe 068 was the reckoning): the audits were **component-level**
+The failure mode it exists to catch (a real reckoning, preserved below as anonymized worked
+examples): the audits were **component-level**
 — a core function called directly plus a DB assertion — and passed while the **composed flow** was
 broken. A flag that raised correctly but never cleared and wedged `close`. A server action whose
 copyable result was silently discarded by a wrapper. A quote and a submit that disagreed in a
@@ -36,7 +37,7 @@ touches in production:
 > rendered surface / server action → the server boundary → subsequent state transitions →
 > operational queues + side-effects → the lifecycle outcome
 
-Not the core function in isolation. The seams between layers are where the bugs Codex found lived:
+Not the core function in isolation. The seams between layers are where the found defects lived:
 
 - **The wrapper that eats the result.** `toActionResult` returns a bare `{ ok: true }` and discards
   whatever the thunk returned — so an action that "returns" a copyable link surfaced nothing. Only a
@@ -57,8 +58,8 @@ Ask of every finding: *which layer boundary does this cross, and does a test cro
 The probe (`docs/050-probes/NNN`) must carry, per finding, a **"validated, attacked, fixed, locked"**
 record: the concrete attack that was run and what actually broke — not a premortem list of what might
 break. A probe with a premortem and a test list but no executed attacks is an **incomplete audit**.
-`docs/050-probes/068` is the template. This record is what makes a green suite auditable by a human
-(or an external reviewer like Codex) instead of merely asserted.
+This record is what makes a green suite auditable by a human (or an independent external reviewer)
+instead of merely asserted.
 
 ---
 
@@ -87,7 +88,7 @@ Find a concrete input or sequence where the COMPOSED flow produces the wrong out
 the component works: a result discarded at a layer boundary; a side-effect that never fires or
 never clears; two entry points that disagree on the same input; a UI-enforced rule a crafted
 request slips past at the server boundary; a figure recomputed on a different basis than the
-stored one. Ground every claim against the live Postgres where it's about the database — run the
+stored one. Ground every claim against the live database where it's about the database — run the
 query, show the row. Report each as: the exact input/state sequence, the observed wrong outcome
 (actual vs expected), and the file:line. If you cannot falsify it after a genuine attempt, say so
 and state what you tried.
@@ -160,8 +161,8 @@ sweep it AFTER your own hunt as a completeness check, so it catches what you mis
 what you look for. (This is the same independence-first rule we impose on the external reviewer —
 prescribed categories cap exploration for us exactly as they would for it.)
 
-Each class below found a real defect (probe 068, CP-R1/R2); they generalize far beyond the bugs that
-taught them:
+Each class below found a real defect (the parentheticals are those episodes, anonymized); they
+generalize far beyond the bugs that taught them:
 
 1. **Enumerate ALL writers of the state, not just the chokepoint.** An invariant enforced at one write
    path is broken at every other write path. Grep every write to the column/state — the normal
@@ -169,29 +170,29 @@ taught them:
    GRANT surface (a table the runtime role can UPDATE **or INSERT** is a writer: a row's BIRTH
    establishes state exactly as an update does, and an UPDATE-only revoke or monitor certifies a
    narrower boundary than the claim) — and prove the invariant rides
-   each. (The backstop resolution rode 1 of 3 status writers; override and cancel bypassed it.
-   CP-8a external gate: unrestricted `abacus_app` UPDATE on `connected_account_liveness`. CP-ML
-   external gate P0: the UPDATE revoke + `UPDATE OF` floors left raw INSERT free to forge both
-   money books at birth.)
+   each. (A backstop resolution rode 1 of 3 status writers; override and cancel bypassed it. A
+   runtime role held an unrestricted UPDATE on a liveness table no ceremony had revoked. An
+   UPDATE revoke plus `UPDATE OF` trigger floors left raw INSERT free to forge both money books
+   at birth.)
 2. **Attack the torn multi-transaction seam, and demand that retry REPAIRS.** Any operation that
    commits across two transactions (insert order → advance state; create → open session) has a crash
    seam between them. Simulate the tear, retry with the same idempotency key, and assert recovery for
    EVERY outcome class — a retry that returns "idempotent: true" while leaving broken state is worse
-   than an error. Every fact the provider call used (SettlementRoute / account scope) must be
-   DURIABLY admitted BEFORE the call so a retry cannot re-derive it from a mutated registry.
-   (Outcome-3 retry recovery existed only for the payable outcomes; CP-8a external gate: torn mint
-   re-stamped A→B because `pi == null` re-derived.)
+   than an error. Every fact the provider call used (routing / account scope) must be
+   DURABLY admitted BEFORE the call so a retry cannot re-derive it from a mutated registry.
+   (Retry recovery existed only for the payable outcomes; a torn mint re-stamped ownership
+   because a null check re-derived a fact from a since-mutated registry.)
 3. **A lock-recheck must re-verify ALL candidate predicates.** When a TOCTOU fix re-reads under the
    lock, list every predicate that qualified the candidate and re-check each — status, lease/claim
    freshness, age, AND a generation fence — as ONE shared predicate used at selection and at act
-   time, under a row lock, so the next qualifier cannot drift between the two sites. (The sweep's
-   requalification checked status but not the delivery date; a moved date still raised a stale
-   backstop. CP-ML external gate: the undo sweep re-checked liveness only, so a legitimately
-   reclaimed attempt was still alarmed as stranded.)
+   time, under a row lock, so the next qualifier cannot drift between the two sites. (A sweep's
+   requalification checked status but not the delivery date — a moved date still raised a stale
+   backstop. An undo sweep re-checked liveness only, so a legitimately reclaimed attempt was
+   still alarmed as stranded.)
 4. **Fallback and special-case paths inherit the main path's guards.** Diff the guard list: every
    ceiling, validation, flag, and rail compare the primary path enforces must be proven on the bypass
-   / early-dispatch path too. (The no-coverage fallback skipped MAX_LINE_QUANTITY; CP-8a external
-   gate: charge-fire dispatched before the settle rail check.)
+   / early-dispatch path too. (A no-coverage fallback skipped the quantity ceiling; a charge
+   fired before the settlement-rail check.)
 5. **Trace the result through every wrapper.** A generic wrapper that normalizes returns can silently
    discard data (`toActionResult` → bare `{ok:true}` ate the copyable link). Assert the caller-visible
    shape at the boundary, not that the inner verb ran. A thin/notification event that names a CHANGE
@@ -199,8 +200,7 @@ taught them:
    substring. Work that must run after ingest is born as named handled-work in the queue lifecycle
    (terminal `ignored` before the consumer runs is a silent drop). An adapter that fills a missing or
    unobservable source with a default (zero, empty) has discarded the FACT OF ABSENCE — unavailable
-   is a named state, never a number (CP-ML external gate: a renamed watched relation read as healthy
-   0-byte storage).
+   is a named state, never a number (a renamed watched relation read as healthy 0-byte storage).
 6. **One fact, many surfaces.** When a stated fact changes (a fee constant, a rate, a limit), grep for
    BOTH the old and new value across code, UI captions, ADRs, and probes — the code being right while
    the rendered caption lies is still a defect. (20p in code, "30p" in the caption + two docs.)
@@ -208,12 +208,13 @@ taught them:
    (no coverage, empty basket, expired state). (Quote said "we'll call you"; submit threw.) Sharing
    one derived FACT is not sharing one POLICY: if each consumer may still choose its own projection
    of the shared fact, the disagreement has only moved into the projection choice — one named policy
-   function, every producer of the outcome routed through it. (CP-ML external gate: ordinary cancel
-   and override-cancel consumed one MoneyExposure through different projections.)
+   function, every producer of the outcome routed through it. (Ordinary cancel and override-cancel
+   consumed one exposure fact through different projections.)
 
 ## Prove races deterministically (never sleep, never a sequential stand-in)
 
-A "race test" that runs the two operations sequentially proves nothing. Use lock-staging: a blocker
+A "race test" that runs the two operations sequentially proves nothing. Use lock-staging (Postgres
+shown; adapt to the repo's database): a blocker
 connection takes the contended row lock (`BEGIN; SELECT … FOR UPDATE`), the racers are queued and
 verified blocked (poll `pg_locks`/`pg_stat_activity` for waiters on the blocker's pid), then the
 blocker commits and the assertions run on the now-deterministic interleaving. Always

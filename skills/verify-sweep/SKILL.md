@@ -20,8 +20,10 @@ driver session on its intended model.
 1. The unit's diff (an explicit commit range — state it in every executor prompt).
 2. The repo's finding ledger — resolve its path from the repo's procedure file (AGENTS.md);
    kstack repos keep it at `docs/070-quality/004-finding-ledger.md`. The lesson list IS the work
-   breakdown. A ledger whose lessons are marked "imported, extension empty" is still swept in
-   full — imported statements decide local diffs exactly as earned ones do.
+   breakdown. **Young-ledger bootstrap:** while the ledger has no (or few) lessons, the work
+   breakdown falls back to the generic falsification classes in `/adversarial-audit`'s seam
+   catalogue, run under this same protocol and register; as lessons are minted they take over,
+   with the generic catalogue remaining the completeness floor beneath them.
 3. The unit's probe + registers, so registered residues read as disclosures, not findings.
 
 ## Protocol (driver/executor)

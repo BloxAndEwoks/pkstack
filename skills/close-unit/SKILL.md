@@ -19,9 +19,11 @@ members that do not exist yet.
    triage clusters — every finding from every round of this unit, already clustered by mechanism
    (the cadence's triage step).
 2. The repo's finding ledger — resolve it from the repo's procedure file (AGENTS.md); kstack
-   repos keep it at `docs/070-quality/004-finding-ledger.md`. If the repo has no ledger, STOP
-   and propose seeding one from its probe history first; do not run this step without the
-   extension data.
+   repos keep it at `docs/070-quality/004-finding-ledger.md`. If the repo has no ledger FILE,
+   create one first (the mechanism header from kstack's `finding-ledger.template.md`); its
+   first lessons are then minted below from this unit's clusters and the repo's probe history —
+   local evidence only. An EMPTY ledger is a valid state for a young repo: every cluster simply
+   takes the mint fork.
 
 ## The procedure
 
@@ -30,8 +32,6 @@ For EACH triage cluster, in order:
 1. **Ledger lookup.** Does an existing lesson's extension decide this cluster's members? Write
    the one-sentence test for each member: "applied at build time, lesson LN forbids this
    because …". If the sentence writes cleanly for all members → the cluster is a re-sampling.
-   An IMPORTED lesson (extension marked empty) whose statement decides the cluster gains the
-   cluster as its first LOCAL members — that is how an imported ledger earns its authority.
 2. **Fork the diagnosis** (this is the step's whole value — the two forks demand opposite
    responses):
    - **Covered but unenforced** → the statement was right; its MEDIUM failed. Do NOT edit the

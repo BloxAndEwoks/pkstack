@@ -9,6 +9,8 @@ kstack is a portable build discipline: premortem before building, test-first aga
 classes, simplify after, a ledger-driven verification sweep, an independent external gate on
 high-value surfaces, mechanism-first triage, and a self-improvement loop that distills every
 round's findings into a finding ledger by Bennett's razor. This skill installs it into ONE repo.
+The reasoning behind every rule here lives in kstack's `PHILOSOPHY.md` — read it before the
+first init.
 
 ## The three-layer law (what this skill may and may not write)
 
@@ -18,9 +20,12 @@ round's findings into a finding ledger by Bennett's razor. This skill installs i
    script are written HERE, from the templates, filled with THIS repo's facts — discovered from
    its code or asked of its owner. **Never copy another repo's machine constraints, commands,
    ports, or migration mechanics.** A fact you cannot ground in this repo does not go in.
-3. **Evidence is EARNED.** The generated ledger imports lesson STATEMENTS with empty extensions,
-   explicitly marked as imported. Authority accrues locally, at this repo's own unit closes.
-   Copying another repo's evidence would be doctrine wearing someone else's proof.
+3. **Evidence is EARNED.** The generated ledger starts EMPTY: the mechanism header travels;
+   lesson statements do not — from any repo, kstack's origin included. A repo's lessons are
+   minted at its own unit closes, from its own findings; until then the verification sweep
+   falls back to `/adversarial-audit`'s generic falsification classes (the young-ledger
+   bootstrap in PHILOSOPHY.md). A seeded statement would be doctrine wearing no proof,
+   anchored to another codebase's failure distribution.
 
 ## Step 0 — mode selection and the re-run guard
 
@@ -83,7 +88,8 @@ From `templates/` in this plugin/repo, generate into the target:
    plus empty `docs/030-decisions/`, `docs/040-prds/`, `docs/050-probes/`, `docs/070-quality/`.
    All leaf docs carry the three-digit sortable prefix.
 3. **`docs/070-quality/004-finding-ledger.md`** from `finding-ledger.template.md` — the
-   mechanism header plus the imported starter lessons, extensions empty and marked imported.
+   mechanism header, an empty lesson list, and the empty mechanization-queue and loop-health
+   tables. Never pre-populate a lesson.
 4. **`scripts/external-review.sh`** seeded from this plugin's
    `skills/external-review/external-review.sh`, committed to the target repo (skip only if the
    owner declined the gate; record the gap per step 2).
@@ -98,18 +104,18 @@ From `templates/` in this plugin/repo, generate into the target:
 
 Close by presenting: what was generated, every fact's provenance (wave lane / owner answer),
 the open questions that got a "none recorded yet", and the first-unit recommendation. The FIRST
-unit in the repo runs the full cadence — its close is where the imported ledger earns its first
-local members, and it doubles as the acceptance test of this init (a Machine Constraints section
-that bites, a Commands section that runs).
+unit in the repo runs the full cadence — its close mints the repo's first ledger lessons, and
+it doubles as the acceptance test of this init (a Machine Constraints section that bites, a
+Commands section that runs).
 
-A UI-verification skill (a `verify-<project>` feature map + driver, on the pattern of the origin
-repo's verify skill) is NOT generated at init — it needs a rendered product to map. Register it
+A UI-verification skill (a `verify-<project>` feature map plus a driver that exercises the
+rendered product as a user) is NOT generated at init — it needs a rendered product to map. Register it
 in the generated AGENTS.md with a named trigger: "first unit that touches a rendered UI".
 
 ## What this skill never does
 
-- Never copies facts, constraints, or evidence from another repo (including the one kstack was
-  extracted from).
+- Never copies facts, constraints, or evidence from another repo — and never seeds the ledger
+  with lesson statements, from any source.
 - Never writes a fact without provenance.
 - Never classifies a scope ungated to make a unit lighter — unsure ⇒ gated.
 - Never overwrites an existing procedure file without absorbing and disclosing.
