@@ -167,6 +167,8 @@ fi
 # anchoring (drop the hunt clause, keep the disclosure rule); if both converge on the same
 # shrinking set, the feed is innocent and the classes are genuinely being exhausted.
 # --with-ledger / --no-ledger override one run explicitly; close-unit records which mode ran.
+# kstack's conventional ledger path. When kstack-init seeds this script into a repo whose
+# ledger lives elsewhere, it points this at the actual path.
 LEDGER_DOC="docs/070-quality/004-finding-ledger.md"
 LEDGER_AUTO=""
 if [[ -z "$LEDGER_MODE" ]]; then

@@ -30,11 +30,18 @@ first init.
 ## Step 0 — mode selection and the re-run guard
 
 - If the repo already has an AGENTS.md carrying the kstack cadence (or an equivalent procedure
-  file), STOP and say so — maintenance is an edit to that file, not a re-init. If it has a
-  NON-kstack AGENTS.md/CONTRIBUTING with real content, absorb that content into the generated
-  file (its facts are provenance-grade) and say what moved where; never silently overwrite.
+  file), the only legitimate re-run is **GAP-FILL**: walk the spine manifest (step 3.2),
+  create what is missing, touch NOTHING that exists, report what was filled — never a re-init.
+  If it has a NON-kstack AGENTS.md/CONTRIBUTING with real content, absorb that content into
+  the generated file (its facts are provenance-grade) and say what moved where; never silently
+  overwrite.
+- Classify the DOCS STATE independently of the code state — it decides how step 3.2 runs:
+  **absent** (no `docs/`), **kstack-shaped** (a numbered spine present, wholly or partly), or
+  **foreign** (a docs tree in another convention — unnumbered files, an `adr/` dir, RFCs, a
+  wiki folder).
 - Repo with substantial code → **existing-repo mode** (interview wave first).
-- Empty or near-empty repo → **greenfield mode** (owner Q&A + defaults; skip the wave).
+- Empty or near-empty repo → **greenfield mode** (owner Q&A + defaults; skip the wave). An
+  "empty empty" repo still gets the FULL docs spine — the spine needs no code to exist.
 
 ## Step 1 (existing repo) — the interview wave
 
@@ -84,9 +91,29 @@ From `templates/` in this plugin/repo, generate into the target:
    answer; if none exist yet, the section says "none recorded yet — append the first time one
    bites" rather than inventing any. The gated-scope list gets this repo's concrete surfaces
    appended to the generic classes. Unsure whether a scope is gated ⇒ it is gated.
-2. **The docs spine** — `docs/000-index.md`, `docs/001-current-state.md` (from the templates),
-   plus empty `docs/030-decisions/`, `docs/040-prds/`, `docs/050-probes/`, `docs/070-quality/`.
-   All leaf docs carry the three-digit sortable prefix.
+2. **The docs spine** — governed by one law: **init CREATES, never rewrites**. A file that
+   exists is never overwritten, regenerated, or renamed by this skill, whatever its content.
+   The spine MANIFEST — the checkable definition of "spine present":
+   - `docs/000-index.md` · `docs/001-current-state.md` (from the templates)
+   - `docs/030-decisions/` · `docs/040-prds/` · `docs/050-probes/` · `docs/070-quality/`
+   - `docs/070-quality/004-finding-ledger.md` (from the ledger template)
+
+   By docs state (step 0's classification):
+   - **Absent** → generate the full manifest. Greenfield included: `001-current-state.md`
+     then honestly records "nothing built yet" rather than waiting for code.
+   - **kstack-shaped (whole or partial)** → GAP-FILL: create only the missing manifest
+     entries. Numbering continues from the repo's existing numbers — preserve existing
+     numbers, never renumber. Where the repo already keeps an EQUIVALENT file under another
+     number or path (a finding ledger elsewhere, an index by another name), USE the repo's
+     file — create no duplicate — and point both the generated AGENTS.md and the seeded
+     `scripts/external-review.sh` (`LEDGER_DOC=`) at the actual path.
+   - **Foreign** → ABSORB, never convert: leave every existing doc exactly where it is,
+     write `000-index.md` as the map OVER what exists (each doc indexed in place; ADR/RFC
+     dirs pointed at, not moved), and apply the numbering rule to NEW files only. Renumbering
+     or moving existing docs is a separate, owner-approved migration that leaves archive
+     pointers — never an init side effect.
+
+   Re-running init on any repo is therefore safe by construction: it can only fill gaps.
 3. **`docs/070-quality/004-finding-ledger.md`** from `finding-ledger.template.md` — the
    mechanism header, an empty lesson list, and the empty mechanization-queue and loop-health
    tables. Never pre-populate a lesson.
@@ -120,6 +147,8 @@ first if none exists)".
 
 - Never copies facts, constraints, or evidence from another repo — and never seeds the ledger
   with lesson statements, from any source.
+- Never overwrites, renames, or renumbers an existing doc — the spine law is create-only;
+  converting a foreign docs tree is separate owner-approved migration work.
 - Never writes a fact without provenance.
 - Never classifies a scope ungated to make a unit lighter — unsure ⇒ gated.
 - Never overwrites an existing procedure file without absorbing and disclosing.
