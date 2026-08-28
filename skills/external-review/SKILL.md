@@ -44,16 +44,20 @@ must be installed + logged in machine-globally (`brew install codex`, `codex log
 It can take several minutes — run it in the BACKGROUND and read the verdict file when it finishes:
 
 ```bash
+scripts/external-review.sh --base <unit-start-sha> --probe <NNN>   # THE canonical per-unit gate
 scripts/external-review.sh                 # REVIEW this branch vs main (read-only verdict)
-scripts/external-review.sh --probe 068     # focus on a probe's guarantees
 scripts/external-review.sh --commits 7     # the last N commits
-scripts/external-review.sh --base <branch> # a different base
 scripts/external-review.sh --fix           # REVIEW **and** apply fixes+tests, left UNCOMMITTED
 scripts/external-review.sh --fast          # priority service tier: faster INFERENCE, same effort
 scripts/external-review.sh --effort <lvl>  # per-run reasoning effort (minimal…ultra)
 scripts/external-review.sh --with-ledger   # force the ledger feed ON for this run
 scripts/external-review.sh --no-ledger     # force a BLIND control round (feed withheld)
 ```
+
+**Certify the unit's own range, not the accumulated branch.** The premortem records the unit's
+base SHA in the probe header at unit start; pass it as `--base`. A `main...HEAD` default over a
+range holding older work makes the reviewer re-certify history it never scoped — and on a pushed
+main the range is simply empty.
 
 Two INDEPENDENT knobs — do not conflate them. `--fast` is inference SPEED (`service_tier="priority"`,
 same model + effort); `--effort` is thinking DEPTH (`model_reasoning_effort`). The adversarial hunt
@@ -69,16 +73,37 @@ sleeps — you're re-invoked when the background command exits.
 test suite, if Codex runs it too) while the review runs — the script soft-resets to the review's
 starting commit on finish, orphaning any mid-review commit.
 
+## Inside the run: one coordinator, parallel lanes, one verdict
+
+The prompt makes Codex the ROOT CERTIFICATION COORDINATOR of one gate with one consolidated
+verdict. After recording its own independent attack plan, it spawns up to three concurrent
+READ-ONLY review subagents on lanes derived from the unit's diff (journeys/reachability · data
+authority · temporal/operational) — only the lanes the diff implicates, never splitting one causal
+chain. Resource ownership is enforced in the prompt: the coordinator alone runs the repo's full
+suite (once) and any UI smoke; at most one agent mutates the live database; other lanes return
+executable counterexample recipes the coordinator reproduces serially — a lane report is a claim,
+not a finding. Where the Codex environment can't spawn subagents, the same lanes run as sequential
+passes — the design degrades, the discipline doesn't. NEVER run two gate script processes
+concurrently: that is how shared suites, fixed-port smoke stacks, and shared databases corrupt.
+
+The gate certifies against a **manifest floor**: on gated units the verify-sweep closes by writing
+a `## Gate manifest` section into the unit's probe (unit · base..head · guarantees · known-class
+checks executed · residues with triggers · suite evidence · runtime surfaces). The prompt has Codex
+read it only AFTER forming its own plan — a completeness floor, never the search strategy.
+
 ## The ledger feed and the blind control
 
 In a repo with a finding ledger (`docs/070-quality/004-finding-ledger.md`), the script FEEDS the
 ledger's lessons to Codex as its minimum defect classes (the floor, never the ceiling — Independence
 First still leads), and treats registered residues as disclosures, not denials to re-litigate.
-Feeding risks ANCHORING, so the script self-schedules a BLIND control every 4th gated round by
-counting the ledger's Loop-health rows — no human keeps the count, and the close-unit step records
-which mode ran. If blind rounds keep finding what fed rounds stopped finding, the feed is anchoring:
-drop the hunt clause, keep the disclosure rule. In a repo with no ledger, the feed degrades to
-nothing automatically.
+Feeding risks ANCHORING, so the feed is positioned AFTER the prompt's independence-first plan step,
+and the script self-schedules a BLIND control every 4th gated round by counting the ledger's
+Loop-health rows — no human keeps the count, and the close-unit step records which mode ran. A
+blind round withholds the ledger from the coordinator AND every subagent, and withholds the probe's
+Gate-manifest section with it (its known-class and residue lines are ledger content by proxy). If
+blind rounds keep finding what fed rounds stopped finding, the feed is anchoring: drop the hunt
+clause, keep the disclosure rule. In a repo with no ledger, the feed degrades to nothing
+automatically.
 
 ## Division of labor: who fixes (token efficiency without losing the check)
 

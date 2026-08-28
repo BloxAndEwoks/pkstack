@@ -17,7 +17,9 @@ driver session on its intended model.
 
 ## Inputs
 
-1. The unit's diff (an explicit commit range — state it in every executor prompt).
+1. The unit's diff (an explicit commit range — state it in every executor prompt). The range's
+   base is the SHA the premortem recorded in the probe header at unit start (`git rev-parse
+   HEAD` before the first checkpoint) — never reconstructed from memory afterwards.
 2. The repo's finding ledger — resolve its path from the repo's procedure file (AGENTS.md);
    kstack repos keep it at `docs/070-quality/004-finding-ledger.md`. The lesson list IS the work
    breakdown. **Young-ledger bootstrap:** while the ledger has no (or few) lessons, the work
@@ -70,3 +72,12 @@ the suite or a scratch container.
 3. The sweep's result line goes in the unit's probe: lessons swept, findings by lesson,
    clean-to-ledger or not. A clean sweep is a PRECONDITION for requesting external
    certification, not a substitute for it.
+4. **On a gated unit, close the sweep by writing the GATE MANIFEST into the unit's probe** — a
+   short section titled exactly `## Gate manifest`, holding: unit name · base..head SHAs ·
+   the named guarantees · the known-class checks this sweep executed · registered residues
+   with their named triggers · suite/typecheck/lint evidence · the runtime surfaces needing
+   live attack. The external gate reads it AFTER forming its own attack plan, as a
+   completeness floor — this section is what stops the certifier re-deriving scope from
+   thousands of lines of history. Note: a BLIND control round withholds this section along
+   with the ledger (its known-class and residue lines are ledger content by proxy), so the
+   probe's design sections must state the unit's guarantees in their own right.

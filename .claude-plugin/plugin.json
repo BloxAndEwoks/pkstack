@@ -1,7 +1,7 @@
 {
   "name": "kstack",
   "description": "A portable build discipline: premortem → test-first → simplify → ledger-driven verification sweep → independent external gate → mechanism-first triage → a self-improvement loop distilled by Bennett's razor. /kstack-init installs it into a repo by generating that repo's own AGENTS.md, docs spine, and finding ledger — method is carried, instantiation is generated, evidence is earned.",
-  "version": "0.3.6",
+  "version": "0.4.0",
   "author": {
     "name": "keivan",
     "email": "keivan.samani@live.co.uk"

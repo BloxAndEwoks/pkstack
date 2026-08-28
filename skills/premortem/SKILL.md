@@ -44,7 +44,10 @@ skill goes stale the next time a step is redesigned.
 3. **The output.** NOT the HTML report + transcript — record the findings as the repo's probe/design
    doc convention (e.g. `docs/050-probes/NNN-*.md` in repos that keep probes; otherwise a committed
    markdown doc). The findings are the checkpoint's test-first target list; what later cadence steps
-   append to that document is their business, defined in the procedure file.
+   append to that document is their business, defined in the procedure file. **Record the unit's
+   BASE in the probe header** — `git rev-parse HEAD` at unit start, before the first checkpoint
+   commit — so the verification sweep's diff range and the external gate's `--base` are captured
+   facts, never later archaeology.
 
 Use general-purpose agents for the fan-out, never depth-capped explore/search agents. Everything
 below this section is the original decision/business premortem, unchanged — use it for launches,

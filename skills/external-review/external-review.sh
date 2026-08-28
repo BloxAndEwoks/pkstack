@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
-# external-review.sh — drive Codex (an INDEPENDENT model) as the adversarial external review gate.
+# external-review.sh — drive Codex (an INDEPENDENT model) as the external certification gate.
 #
 # The build cadence's own verification step (the ledger-driven sweep, or /adversarial-audit where no
-# ledger exists) is OUR audit; this is the backstop that checks we followed it honestly — a reviewer
-# that does not share our blind spots or our incentive to confirm our own work. It exists to catch
-# the composed-flow defects a green suite hides; this makes running it a one-command ritual instead
-# of an ad-hoc call.
+# ledger exists) is OUR audit — it applies every KNOWN defect class to the unit's diff before this
+# gate runs. This is the backstop that CERTIFIES the unit: an independent reviewer that does not
+# share our blind spots or our incentive to confirm our own work, whose budget goes to NOVEL classes
+# and composed-flow depth, never to re-discovering the ledger. It exists to catch the composed-flow
+# defects a green suite hides; this makes running it a one-command ritual instead of an ad-hoc call.
+# ONE run = ONE gate = ONE consolidated verdict — never run two of these concurrently (they share
+# the repo's suite, its live database, and any fixed-port smoke stack).
 #
 # Codex CLI must be installed (`brew install codex`) and logged in (`codex login`). It runs headless
 # via `codex exec` using ~/.codex/config.toml (model, sandbox, approvals); give that config whatever
@@ -27,6 +30,10 @@
 #                                              #   ~/.codex/config.toml setting)
 #   scripts/external-review.sh --with-ledger   # force the finding-ledger feed ON for this run
 #   scripts/external-review.sh --no-ledger     # force a BLIND control round (feed withheld)
+#
+# The canonical per-unit invocation: certify exactly the unit's range, never the accumulated
+# branch — the premortem records the unit's base SHA in the probe header at unit start:
+#   scripts/external-review.sh --base <unit-start-sha> --probe <NNN>
 #
 # Two independent knobs. --fast = HOW QUICKLY tokens are served (service_tier="priority"); --effort =
 # HOW HARD the model thinks. The adversarial hunt should keep deep effort (a shallow adversary is a
@@ -180,12 +187,21 @@ if [[ -z "$LEDGER_MODE" ]]; then
     LEDGER_MODE="fed" # no ledger in this repo — the feed line degrades to nothing below
   fi
 fi
-if [[ "$LEDGER_MODE" == "blind" && -f "$LEDGER_DOC" ]]; then
-  LEDGER_LINE="CONTROL ROUND: this repo keeps a finding ledger of its known defect classes at ${LEDGER_DOC}. Do NOT open it this round — it is deliberately withheld so your search is an unanchored control sample (the feed itself is being tested for anchoring). Hunt entirely from your own plan; re-denying something the repo registered elsewhere is acceptable this round."
-elif [[ -f "$LEDGER_DOC" ]]; then
-  LEDGER_LINE="Also read ${LEDGER_DOC}: its lessons are your MINIMUM defect classes (hunt their extensions in the new code), and a finding whose remediation is REGISTERED there or in the probes with a named trigger is a DISCLOSURE to verify honestly stated, not a denial to re-litigate."
-else
-  LEDGER_LINE=""
+# The feed is SPLIT by position in the prompt (plan-before-feed): the BLIND prohibition must land
+# EARLY (before the reviewer starts reading files), while the FED feed must land LATE (after the
+# reviewer has recorded its own plan), or the feed frames the search it was only meant to floor.
+# The blind arm also withholds the probe's Gate manifest — its known-class and residue lines are
+# ledger content by proxy — and binds every spawned subagent.
+LEDGER_EARLY=""
+LEDGER_FLOOR=""
+SWEEP_LINE=""
+if [[ -f "$LEDGER_DOC" ]]; then
+  SWEEP_LINE="CONTEXT: the repo's own ledger-driven verification sweep has ALREADY applied every known defect class to this diff before you were invoked (its record is in the unit's probe). Your budget is the certification the sweep cannot give: NOVEL classes, composed-flow depth, and an honest check that the discipline was actually followed. Re-deriving the ledger's known classes is the one way to waste this round."
+  if [[ "$LEDGER_MODE" == "blind" ]]; then
+    LEDGER_EARLY="CONTROL ROUND: this repo keeps a finding ledger of its known defect classes at ${LEDGER_DOC}. Neither you nor any subagent you spawn may open it this round — it is deliberately withheld so your search is an unanchored control sample (the feed itself is being tested for anchoring). The probe section titled 'Gate manifest' is withheld with it (its known-class and residue lines are ledger content by proxy) — take your scope from the diff range and the probe's design sections. Hunt entirely from your own plan; re-denying something the repo registered elsewhere is acceptable this round."
+  else
+    LEDGER_FLOOR="COMPLETENESS FLOOR — read only NOW, with your own plan already recorded. (1) The ledger, ${LEDGER_DOC}: its lessons are your MINIMUM defect classes (hunt their extensions in the new code), and a finding whose remediation is REGISTERED there or in the probes with a named trigger is a DISCLOSURE to verify honestly stated, not a denial to re-litigate. (2) The unit probe's 'Gate manifest' section (where present): unit, base..head, named guarantees, the known-class checks the sweep executed, registered residues with triggers, suite evidence, and the runtime surfaces needing live attack. Use both to verify your plan covers every guarantee — never as your search strategy."
+  fi
 fi
 echo "[external-review] ledger feed: ${LEDGER_MODE}${LEDGER_AUTO:+ (auto — 4th-unit control rule)}"
 
@@ -195,22 +211,64 @@ STAMP="$(date +%Y%m%d-%H%M%S)"
 VERDICT="${OUT_DIR}/verdict-${STAMP}.md"
 LOG="${OUT_DIR}/session-${STAMP}.log"
 
+# The coordinator/lanes design: the wall-clock cost of the gate was one serial reviewer
+# re-performing every review discipline; the fix is concurrent read-only lanes under ONE coordinator
+# holding ONE verdict — never a second gate process. Resource ownership keeps the repo's recorded
+# single-process machine constraints intact inside Codex's own parallelism. The block degrades
+# gracefully where subagents are unavailable (the lanes run as sequential passes).
+read -r -d '' LANES_BLOCK <<'LANES_EOF' || true
+PARALLEL LANES: after recording your plan (and reading the floor, where fed), spawn up to three
+concurrent READ-ONLY review subagents with isolated, self-contained briefs derived from THIS unit's
+diff — where your environment supports spawning subagents; otherwise run the same lanes yourself as
+sequential passes. The default lenses:
+  L1 JOURNEYS — end-to-end composition and fact reachability: rendered surface / server action ->
+     server boundary -> state -> queues -> outcome; crafted requests wherever a UI enforces a rule;
+     every fact the diff introduces reaching every consumer that must act on it; what each external
+     party was TOLD vs what is true.
+  L2 DATA AUTHORITY — the writer inventory (UPDATE, INSERT, and the GRANT surface), row-level
+     security and custody doors, constraints and triggers, migration behaviour against live data.
+  L3 TEMPORAL / OPERATIONAL — locks and re-qualification at act time, generation fences, retries and
+     torn seams, idempotence, queue lifecycle and dead letters, recovery paths, provider truth.
+Spawn only the lanes this diff actually implicates — never a lane to fill a slot, and never split
+one causal chain across two lanes (composition is the point).
+RESOURCE OWNERSHIP (hard rules): YOU, the coordinator, run the repo's full test suite at most ONCE,
+and any UI smoke — never a subagent: honour the machine constraints the repo's procedure file
+(AGENTS.md) records; single-process suites, shared databases, and fixed-port stacks corrupt under
+concurrent runs. At most ONE agent — you, or one designated executor — may mutate the live
+database; every other lane returns EXECUTABLE counterexample recipes (exact commands, queries,
+crafted requests) for you to run serially. No agent edits files, commits, pushes, or starts another
+review run. The suite baseline may run WHILE the read-only lanes inspect code.
+Each lane reports, per guarantee examined: the exact path traced; the counterexample (proposed or
+executed); expected vs observed; file:line evidence; a verdict (defect / coverage gap / upheld); any
+suspected shared mechanism, without implementing a fix. A lane report is a CLAIM — a denial is
+invalid until YOU have reproduced it. You own the consolidated verdict: deduplicate across lanes,
+reconcile, and synthesize.
+LANES_EOF
+
 # The rubric IS the review: attack composed flows, not the green suite; distinguish missing coverage
 # from an actual defect; ground-truth DB claims against a live database; verify external facts against
-# their source; give a per-guarantee verdict. This mirrors the repo's own verification discipline so
-# our audit and the external gate speak the same language.
+# their source; give ONE consolidated per-guarantee verdict. It speaks the same language as the
+# repo's own verification discipline, so the sweep and the gate hold the work to one standard.
 read -r -d '' PROMPT <<PROMPT_EOF || true
-You are an INDEPENDENT adversarial reviewer. Your job is to DENY this work's claims, not confirm them.
-Do not trust the green test suite — attack the implemented flows.
+You are an INDEPENDENT adversarial reviewer and the ROOT CERTIFICATION COORDINATOR for one gated
+unit of work. Your job is to DENY this work's claims, not confirm them. Do not trust the green test
+suite — attack the implemented flows. This is ONE gate producing ONE consolidated verdict.
 
 SCOPE: audit ${SCOPE}. ${PROBE_HINT}
 First read AGENTS.md and the relevant docs/050-probes/* so you audit against the repo's OWN documented
-guarantees, which are stricter than "the suite passed". ${LEDGER_LINE}
+guarantees, which are stricter than "the suite passed". ${LEDGER_EARLY}
 
-INDEPENDENCE FIRST: before reading the rules below, devise YOUR OWN attack plan from the code and the
-claimed guarantees — your independent search strategy is the reason you are being run; do not limit
-yourself to our categories. The rules are the repo's MINIMUM bar (the floor, not the ceiling): after
-executing your own plan, verify you have also covered each of them.
+INDEPENDENCE FIRST: before reading the finding ledger, any Gate-manifest section, or the rules below,
+inspect the scoped diff and the claimed guarantees and RECORD YOUR OWN ATTACK PLAN — your independent
+search strategy is the reason you are being run; do not limit yourself to our categories. The rules
+are the repo's MINIMUM bar (the floor, not the ceiling): after executing your own plan, verify you
+have also covered each of them.
+
+${SWEEP_LINE}
+
+${LEDGER_FLOOR}
+
+${LANES_BLOCK}
 
 RULES (the repo's own audit discipline — hold the work to at least this):
 1. Compose the flow, don't just call the verb. For each guarantee, drive it END TO END — rendered
