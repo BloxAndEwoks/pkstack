@@ -2,7 +2,7 @@
 
 **You own the skill's voice.** Agent-facing prose has a higher bar than human prose; unhelpful sentences become instructions.
 
-1. Use the **create-skill** skill (Cursor's built-in for authoring SKILL.md files).
+1. Draft the `SKILL.md` here: frontmatter first (`name`, then a `description` naming the triggers that should route to it), then the body as steps an agent executes, not prose about the topic.
 2. Validate the skill: frontmatter has `name` and `description`, referenced files exist, cross-skill links resolve.
 3. Test cases if structural; skip if subjective.
 4. Run **Opening a PR**.

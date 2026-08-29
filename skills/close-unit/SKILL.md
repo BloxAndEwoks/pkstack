@@ -25,6 +25,15 @@ members that do not exist yet.
    local evidence only. An EMPTY ledger is a valid state for a young repo: every cluster simply
    takes the mint fork.
 
+## The process sampler
+
+Optional at a close: fan out the three reviewer prompts in `references/` (judgment, tooling,
+divergent) over the unit's transcript or its `decisions.tsv` trail, one subagent each, models
+per the `close-unit sampler` roles in `~/.claude/pkstack-models.md` (defaults: judgment
+`fable`, tooling `opus`, divergent `fable`). What they return are PROCESS findings — how the
+agent worked, not what the code does. Cluster them by mechanism alongside the unit's own
+clusters and run each through the same per-cluster procedure below.
+
 ## The procedure
 
 For EACH triage cluster, in order:
