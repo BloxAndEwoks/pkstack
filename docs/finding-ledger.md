@@ -76,7 +76,29 @@ completeness floor beneath it.
 
 ## The lessons
 
-(none yet — the first gated unit's close mints the first; numbering starts at L1)
+### L1 — Readers of a changed literal are found by grep, never by memory
+When a literal, format, or path that other files read is changed, its readers are found by
+grepping the literal across the whole repo — every file type — never from memory or a
+type-filtered sweep.
+**Polarity:** prohibition. **Extension:** probe 001 C1 (3 confirmed members: the
+external-review blind counter, the orch verdicts.tsv drift, the worktree-audit Cursor path).
+**Medium:** wire-check registered greps as the regression floor + the PATCHES.md rubric line
+for change-time discipline. **Status:** stable.
+
+### L2 — Numbered-sequence insertions land as continuations
+An insertion into a numbered sequence that other text cites by number lands as a continuation
+of the existing item, never as a renumbering insertion.
+**Polarity:** prohibition. **Extension:** probe 001 C2 (2 confirmed members: feature 5a,
+bug-fix 2a). **Medium:** prose, with reason — the surface is authoring-time editorial judgment
+and no checker exists over playbook markdown. **Status:** stable.
+
+### L3 — A rule three playbooks need is defined once, above them
+A rule needed by three or more playbooks is defined once at router or principle altitude;
+playbook text references it and never restates it. (Process lesson; the first executed run of
+the process-media ladder.)
+**Polarity:** prohibition. **Extension:** probe 001 C3 (2 confirmed clusters, 11 restatement
+sites: /deslop ×5, control-ui/control-cli ×6). **Medium:** router trigger — the promotion rule
+in poteto-mode's Principles index. **Status:** stable.
 
 ---
 
@@ -119,7 +141,7 @@ that unit. The loop's housekeeping is wanted, and it is measured so it stays lea
 figure that keeps climbing means move the paperwork into subagents, never that a step gets
 dropped.
 
-(no rows yet — the first gated unit's close appends the first)
+- 2026-08-30 · probe 001 · novel 3/6 · mode: claude-opus-5 (non-author executors)·fed · ceremony: ~3.5h wall, 6 delegate runs, driver close ~20min
 
 ## Ledger discipline
 

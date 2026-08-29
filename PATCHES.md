@@ -306,3 +306,10 @@ grep: verdicts.tsv
 ### p2-orch-test-rename — skills/poteto-mode/scripts/orch/orch.test.ts
 why: test follows the store rename
 grep: verdicts.tsv
+### p3-lever-pinned-input — skills/poteto-mode/scripts/worktree-audit.sh
+why: M4 promotion — pinned set is a lever input; safe unemittable for a pinned tree
+grep: pinned-list-file
+
+### p3-lever-cc-transcripts — skills/poteto-mode/scripts/worktree-audit.sh
+why: L1 member 3 — transcript path retargeted to Claude Code (missed by the *.md sweep)
+grep: .claude/projects

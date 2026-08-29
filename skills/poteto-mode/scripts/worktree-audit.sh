@@ -4,10 +4,14 @@
 # operated in it. Emits a table sorted by size with a suggested bucket. Never
 # deletes anything; deletion stays a human-gated step in the playbook.
 #
-# Usage: worktree-audit.sh [repo-path]   (defaults to the current repo)
+# Usage: worktree-audit.sh [repo-path] [pinned-list-file]
+#   repo-path defaults to the current repo. pinned-list-file holds one worktree
+#   path per line (comments with #). A pinned worktree can never be bucketed
+#   "safe": the pinned set is an input fact, not a hand cross-check.
 set -u
 
 repo="${1:-$(git rev-parse --show-toplevel 2>/dev/null)}"
+pinned_file="${2:-}"
 [ -z "$repo" ] && { echo "not in a git repo; pass a repo path" >&2; exit 1; }
 cd "$repo" || exit 1
 
@@ -22,15 +26,29 @@ prs=$(mktemp)
 gh pr list --author "@me" --state all --limit 1000 \
 	--json number,state,headRefName 2>/dev/null > "$prs" || echo "[]" > "$prs"
 
-# Transcripts dir: ~/.cursor/projects/<slugified-repo-path>/agent-transcripts.
-slug=$(printf '%s' "$main_wt" | sed 's#^/##; s#/#-#g')
-transcripts="$HOME/.cursor/projects/$slug/agent-transcripts"
+# Transcripts dir: ~/.claude/projects/<slug>, slug = path with every "/" as "-"
+# (leading one included). Transcript files are *.jsonl in that directory.
+slug=$(printf '%s' "$main_wt" | sed 's#/#-#g')
+transcripts="$HOME/.claude/projects/$slug"
 now=$(date +%s)
 
 printf "SIZE\tAGE\tMERGED\tDIRTY\tREMOTE\tPR\tLAST_CHAT\tBUCKET\tWORKTREE\n"
 
 git worktree list --porcelain | awk '/^worktree /{print $2}' | while read -r wt; do
 	[ "$wt" = "$main_wt" ] && continue
+
+	# Compare canonical paths: on macOS /tmp is a symlink to /private/tmp, and a
+	# pin recorded through the symlink must still pin the canonical worktree.
+	pinned=no
+	if [ -n "$pinned_file" ] && [ -f "$pinned_file" ]; then
+		wt_real=$(cd "$wt" 2>/dev/null && pwd -P || printf '%s' "$wt")
+		while IFS= read -r pin; do
+			case "$pin" in ''|'#'*) continue ;; esac
+			pin="${pin%/}"
+			pin_real=$(cd "$pin" 2>/dev/null && pwd -P || printf '%s' "$pin")
+			if [ "$pin_real" = "$wt_real" ]; then pinned=yes; break; fi
+		done < "$pinned_file"
+	fi
 
 	size=$(du -sh "$wt" 2>/dev/null | awk '{print $1}')
 	head=$(git -C "$wt" rev-parse HEAD 2>/dev/null)
@@ -71,6 +89,7 @@ git worktree list --porcelain | awk '/^worktree /{print $2}' | while read -r wt;
 	fi
 	recent=$([ "$last_ts" -gt 0 ] 2>/dev/null && [ $(( (now - last_ts) / 86400 )) -le 4 ] && echo yes || echo no)
 
+	if [ "$pinned" = yes ]; then bucket=pinned; else
 	case "$dirty" in wip:*) bucket=hold-wip ;; *)
 		case "$pr" in *OPEN*) bucket=hold-open-pr ;; *)
 			if [ "$recent" = yes ]; then bucket=verify-recent-chat
@@ -78,6 +97,7 @@ git worktree list --porcelain | awk '/^worktree /{print $2}' | while read -r wt;
 			else bucket=review; fi ;;
 		esac ;;
 	esac
+	fi
 
 	printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" \
 		"$size" "$age" "$merged" "$dirty" "$remote" "$pr" "$last" "$bucket" "$wt"
