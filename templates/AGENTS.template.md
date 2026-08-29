@@ -154,6 +154,10 @@ The primary goal of a test is to verify business requirements and observable sys
 not to lock in implementation details.
 
 - Write tests before implementation for bug fixes and new behavior.
+- Each checkpoint's test-first pass INCLUDES the locking test for every ledger lesson the
+  probe's class rows implicate (the premortem's instantiated-lessons map) — written as a
+  composed behavior test that pins the lesson's guarantee, never a lesson citation. A floor
+  added to the class-derived tests, not a substitute for them.
 - Test behavior via public APIs where available.
 - Avoid tautological tests that only assert calls into specific internals.
 - Test the underlying principle, not one edge case or an over-specific scenario.

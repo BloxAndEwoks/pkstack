@@ -40,6 +40,12 @@ skill goes stale the next time a step is redesigned.
    repair, concurrency/deadlocks, idempotency and money invariants, migrations against LIVE data,
    trust boundaries (the UI is not one), and external-fact assumptions (fees, API behaviour, rates).
    Then **cluster the scenarios into classes before designing** — a flat list invites a fix per item.
+   **The walk leaves a MAP behind**: each design class's row in the probe records the ledger lessons
+   it implicates, INSTANTIATED to the class's own nouns — not "L3" but "L3: the failure-overlay fact
+   must reach the status card and the email fold". The map is a column ON the class rows, never a
+   separate section (the feature-whole view stays the top-level object), and it is how the ledger
+   reaches the build step: the builder reads the probe, never re-walks the ledger per checkpoint.
+   The fan-out agents stay ledger-blind — the map is DRIVER synthesis, after the free hunt.
 
 3. **The output.** NOT the HTML report + transcript — record the findings as the repo's probe/design
    doc convention (e.g. `docs/050-probes/NNN-*.md` in repos that keep probes; otherwise a committed
