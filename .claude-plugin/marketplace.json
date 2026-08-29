@@ -1,11 +1,11 @@
 {
-  "name": "kstack",
+  "name": "pkstack",
   "owner": {
     "name": "keivan"
   },
   "plugins": [
     {
-      "name": "kstack",
+      "name": "pkstack",
       "source": "./"
     }
   ]
