@@ -57,6 +57,8 @@ Read `references/reviewer-prompt.md` and fill in the template with:
 
 The same filled template goes to all reviewers, so every model applies the code-quality lens.
 
+Reviewers are samplers and stay ledger-blind. The repo's finding ledger never enters a reviewer prompt.
+
 Each reviewer produces structured findings as described in the prompt template.
 
 ## Step 4, Synthesize
@@ -68,6 +70,10 @@ As results come back, build a unified picture:
 3. **Identify lone-model findings**. Still worth reading, but weight accordingly.
 4. **Deduplicate**. Different models may describe the same issue differently. Merge these and note which models raised it.
 5. **Note disagreements**. If one model flags something and another explicitly says the opposite, that's useful context for the verdict.
+6. **Cluster by mechanism**. Group the surviving findings by the cause they share, not by the symptom they wear.
+7. **Classify each cluster** as missing GUARD, missing FACT, or wrong MODEL.
+
+Carry each finding's Location and Severity into the Act On entries. The reviewer prompt already produces both, and a finding that drops them is no longer citable.
 
 ## Step 5, Lead Judgment
 
@@ -111,3 +117,7 @@ Present the verdict in this structure:
 
 ### Agreement Map
 [Where did models agree, where did they diverge, and what does the pattern of agreement/disagreement tell us?]
+
+## Persist the Verdict
+
+The synthesized verdict does not end in the chat. Write it to the repo's probe or docs spine, Dismissed bucket included. A dismissal is a recorded non-member, and it is what stops a later close from over-claiming a lesson's extension.

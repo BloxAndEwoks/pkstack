@@ -188,7 +188,7 @@ describe("Store", () => {
     expect(await store.init()).toEqual({ store: directory });
     const firstUnits = await readFile(join(directory, "units.tsv"), "utf8");
     const firstLedger = await readFile(
-      join(directory, "ledger.tsv"),
+      join(directory, "verdicts.tsv"),
       "utf8"
     );
 
@@ -196,7 +196,7 @@ describe("Store", () => {
     expect(await readFile(join(directory, "units.tsv"), "utf8")).toBe(
       firstUnits
     );
-    expect(await readFile(join(directory, "ledger.tsv"), "utf8")).toBe(
+    expect(await readFile(join(directory, "verdicts.tsv"), "utf8")).toBe(
       firstLedger
     );
     expect((await readdir(directory)).sort()).toEqual([
@@ -204,7 +204,7 @@ describe("Store", () => {
       "frontier.json",
       "gates.md",
       "inbox",
-      "ledger.tsv",
+      "verdicts.tsv",
       "preferences.md",
       "units.tsv",
     ]);
@@ -511,11 +511,11 @@ describe("Store", () => {
     );
 
     await writeFile(
-      join(directory, "ledger.tsv"),
+      join(directory, "verdicts.tsv"),
       "pr\tsha\tverdict\tevidence\tverifier\tts\n1\tsha\tinvalid\treport\tme\tnow\n"
     );
     await expect(store.ledger.summary()).rejects.toThrow(
-      "ledger.tsv has invalid verdict invalid"
+      "verdicts.tsv has invalid verdict invalid"
     );
 
     await writeFile(join(directory, "frontier.json"), '{"generation":"1"}\n');

@@ -24,6 +24,12 @@ when a round's findings are clustered by mechanism, each cluster is looked up he
   members nobody named). Land it in the most quantification-forcing medium that can express it;
   prose-only requires a written reason.
 
+**Polarity.** Those forks assume a PROHIBITION — a lesson whose extension is the defects it
+forbids, weakened toward sufficiency. A PERMISSION (a skip rule, a dismissal rule, an allow-list)
+inverts: its extension is what it LETS THROUGH, so it is NARROWED toward sufficiency, and a
+regenerated member means narrow it, never weaken it. Every entry states which polarity it is on —
+the two forks are indistinguishable until you know.
+
 A lesson is never seeded from another repo, this template included: a statement with no local
 members has an unrunnable sufficiency walk and undefined regeneration forks — it would be
 doctrine wearing no proof, anchored to another codebase's failure distribution.
@@ -33,16 +39,31 @@ one sentence — "applied at build time, this forbids that defect because …". 
 write the sentence for is not in the extension.
 
 **The lesson entry form.** Each lesson records: `### Ln — <statement title>`, the statement
-itself (one to three sentences, no more specific than necessary), its **Extension** (findings
-cited by probe number — plus any positive members: places the lesson is already mechanized and
-held), its **Medium**, and its **Status** (stable / promotion queued with a named trigger /
-weakened on date, why).
+itself (one to three sentences, no more specific than necessary), its **Polarity**
+(prohibition / permission), its **Extension** (findings cited by probe number — plus any positive
+members: places the lesson is already mechanized and held), its **Medium**, and its **Status**
+(stable / promotion queued with a named trigger / weakened on date, why).
+
+**Extension members are tiered.** Every member is marked `confirmed` — the mechanism was
+reproduced: a runtime repro, a failing test, the queried row — or `hypothesis`: the strongest
+reading the artifact supports, never reproduced (a forensics diagnosis is a hypothesis member, and
+so is a finding accepted on a reviewer's reasoning alone). ONLY confirmed members count in the
+sufficiency walk and in the weaken/split decisions. Hypothesis members are carried for context and
+promoted the day someone reproduces them; counting them would let a lesson be weakened, split, or
+mechanized on evidence nobody has.
 
 **Media, ranked by quantification force** (why: a Record/walk/trigger can only say "EVERY member
 of the family…", which is a weak hypothesis whose extension includes members that do not exist
 yet — the reason mechanized lessons hold under attack and prose ones leak):
-`DB constraint/trigger` > `registry walk / compile-forced Record` > `lint rule` > `required
-design-artifact field` > `gate-rubric line` > `prose (with reason)`.
+`DB constraint/trigger` > `registry walk / compile-forced Record` > `lint rule / executable gate
+(a frozen, sensitivity-proven measurement harness wired to a CI budget — the medium for perf and
+behavioural lessons)` > `required design-artifact field` > `gate-rubric line` > `prose (with
+reason)`.
+
+The executable gate earns lint's rung for lint's reason: a frozen harness quantifies over commits
+that do not exist yet. Its sensitivity proof — the demonstration that it FAILS on a seeded
+regression — is also the medium-rot detector for this rung: a ruler that has stopped
+discriminating is rotten even though it still runs green.
 
 **The young-ledger bootstrap.** An empty lesson list does not shrink verification to nothing:
 until lessons exist, the per-unit sweep (AGENTS.md step 4a) falls back to the generic
@@ -66,16 +87,37 @@ completeness floor beneath it.
 
 (none yet)
 
+## The export queue (plugin-level candidates)
+
+<!-- Process lessons whose medium is a PLUGIN file — a skill, a router trigger, a playbook step —
+     rather than a file in this repo. They are exported, never applied here. -->
+
+Each entry carries: `repo:probe` provenance · the proposed statement · its polarity (prohibition /
+permission) · the target plugin medium. Entries are consumed ONLY at a pkstack maintenance close,
+on the owner's approval — never automatically, and never as a side effect of a unit close. An entry
+sitting past its named trigger is an overdue register, surfaced loudly at the next close exactly
+like the mechanization queue's.
+
+(none yet)
+
 ## Loop health
 
-One row per gated unit, appended by the close-unit step. `novel n/m` = statements minted vs
-total findings (the loop's health metric: mostly re-samplings ⇒ the problem is media, not
-doctrine). `mode:` = whether the external gate ran FED (ledger in the rubric) or BLIND — the
-gate script SELF-SCHEDULES a blind CONTROL round every 4th unit by counting `mode: fed` rows
-since the last `mode: blind` row in this table (no human keeps the count; `--with-ledger` /
-`--no-ledger` override one run). If blind rounds keep finding what fed rounds stopped finding,
-the feed is anchoring (drop the hunt clause, keep the disclosure rule); if both converge on the
-same shrinking set, the feed is innocent.
+One row per gated unit, appended by the close-unit step: `- <date> · probe <n> · novel <n/m> ·
+mode: <model id>·<fed|blind>`. `novel n/m` = statements minted vs total findings (the loop's
+health metric: mostly re-samplings ⇒ the problem is media, not doctrine). `mode:` = the certifying
+reviewer's MODEL ID, verbatim, plus whether it ran `·fed` (ledger in the rubric) or `·blind` —
+`mode: gpt-5-codex·fed`, `mode: claude-opus-5 (non-author)·blind`, `mode: self`. The id is recorded
+rather than an internal/external category because that binary flattens exactly the case that
+matters: a cross-family reviewer that is still internal. The gate script SELF-SCHEDULES a blind
+CONTROL round every 4th unit by counting `·fed` rows since the last `·blind` row in this table (no
+human keeps the count; `--with-ledger` / `--no-ledger` override one run). If blind rounds keep
+finding what fed rounds stopped finding, the feed is anchoring (drop the hunt clause, keep the
+disclosure rule); if both converge on the same shrinking set, the feed is innocent.
+
+A row may also carry `ceremony: <wall-clock or context share>` — what the loop's own paperwork cost
+that unit. The loop's housekeeping is wanted, and it is measured so it stays lean: a ceremony
+figure that keeps climbing means move the paperwork into subagents, never that a step gets
+dropped.
 
 (no rows yet — the first gated unit's close appends the first)
 

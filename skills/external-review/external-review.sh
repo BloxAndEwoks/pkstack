@@ -181,7 +181,7 @@ LEDGER_AUTO=""
 if [[ -z "$LEDGER_MODE" ]]; then
   LEDGER_AUTO=1
   if [[ -f "$LEDGER_DOC" ]]; then
-    fed_since_blind=$(awk '/mode: blind/{n=0; next} /mode: fed/{n++} END{print n+0}' "$LEDGER_DOC")
+    fed_since_blind=$(awk '/mode: .*blind/{n=0; next} /mode: .*fed/{n++} END{print n+0}' "$LEDGER_DOC")
     if [[ "$fed_since_blind" -ge 3 ]]; then LEDGER_MODE="blind"; else LEDGER_MODE="fed"; fi
   else
     LEDGER_MODE="fed" # no ledger in this repo — the feed line degrades to nothing below

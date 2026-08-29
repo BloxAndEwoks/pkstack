@@ -17,13 +17,21 @@ members that do not exist yet.
 
 1. The unit's probe (the repo's probe convention — kstack repos: `docs/050-probes/`) with its
    triage clusters — every finding from every round of this unit, already clustered by mechanism
-   (the cadence's triage step).
+   (the cadence's triage step). Clusters are written into the probe AS THEY FORM, during the
+   unit — never reconstructed at the close. The close reads the PROBE, never in-context memory: a
+   compaction between the final review round and this step must not be able to empty the close's
+   input.
 2. The repo's finding ledger — resolve it from the repo's procedure file (AGENTS.md); kstack
    repos keep it at `docs/070-quality/004-finding-ledger.md`. If the repo has no ledger FILE,
    create one first (the mechanism header from kstack's `finding-ledger.template.md`); its
    first lessons are then minted below from this unit's clusters and the repo's probe history —
    local evidence only. An EMPTY ledger is a valid state for a young repo: every cluster simply
    takes the mint fork.
+3. The unit's recorded DISMISSALS — every finding rejected with a standing reason (`/interrogate`'s
+   Dismissed bucket; any review flow that dismisses with a written reason). They are read here as
+   recorded NON-members, and they bound extensions from above: a sufficiency walk cannot claim a
+   member that was dismissed with a reason still in force. Either the dismissal falls — say so, in
+   the probe, with what changed — or the member is out of the extension.
 
 ## The process sampler
 
@@ -45,11 +53,17 @@ For EACH triage cluster, in order:
    responses):
    - **Covered but unenforced** → the statement was right; its MEDIUM failed. Do NOT edit the
      statement. Queue (or perform, if cheap) a medium promotion, one rung up the ledger's
-     ranking: prose → required design-artifact field → gate-rubric line → lint rule →
-     compile-forced Record / registry walk → DB constraint/trigger.
+     ranking: prose → required design-artifact field → gate-rubric line → lint rule / executable
+     gate → compile-forced Record / registry walk → DB constraint/trigger.
    - **Not covered** → the standing lesson is TOO STRONG. Weaken its statement until the new
      member falls inside, then RE-RUN the sufficiency walk over ALL its members (old and new).
      A lesson that cannot be weakened without losing a member must be SPLIT.
+   - **Polarity guard.** The weaken fork assumes a PROHIBITION-lesson, whose extension is the
+     defects it prevents — weakening admits more of them, which is safe. A PERMISSION-lesson (a
+     skip rule, a dismissal rule, an allow-list) INVERTS: its extension is what it lets through, so
+     a regenerated member means NARROW it, never weaken it. Weakest-sufficient for prohibitions,
+     narrowest-sufficient for permissions; the ledger entry states which polarity it is on, because
+     the two forks look identical until you know.
 3. **Mint** where no lesson claims the cluster: draft the weakest statement sufficient over the
    cluster's members PLUS any historical findings it also decides (search the probes — a new
    lesson usually has older members nobody named). Land it at the highest medium that can
@@ -57,6 +71,29 @@ For EACH triage cluster, in order:
 4. **Guard against over-weakening**: a lesson weakened past sufficiency decides nothing ("be
    careful with facts"). The sufficiency walk is the floor — every claimed member gets its
    sentence, or it is not in the extension.
+
+## Process lessons (the second media ranking)
+
+Process findings — about how the AGENT works, not what the code does: what the sampler's reviewer
+prompts in `references/` return, plus what triage of the owner's corrections surfaces — take the
+SAME fork above (lookup → covered-but-unenforced vs not-covered → mint), against their own media
+ranking, ordered by the same quantification force:
+
+`mechanism (lint rule / script / eval)` > `principle leaf skill` > `router trigger` > `playbook
+step` > `prose`.
+
+- **Promotion rule (the size law, applied to process).** An extension spanning 3+ playbooks has
+  left playbook altitude: it belongs at principle altitude, and it lands by SHARPENING an existing
+  principle entry, not by appending a new one. Two entries that share a deeper principle merge; a
+  principle set nobody can hold in attention guides nothing.
+- **A promotion that edits a plugin file is an EXPORT, not an edit.** A process lesson whose medium
+  is a skill, a router trigger, or a playbook step goes to the ledger's export queue with its
+  `repo:probe` provenance and is consumed at a pkstack maintenance close, on the owner's
+  approval — never automatically, and never as a side effect of a repo's unit close.
+- **Router-level promotions carry a queued EVAL as their completion criterion.** A trigger line
+  changed without an eval that separates the two variants is an untested behaviour change to every
+  future session; the Eval playbook (`skills/poteto-mode/playbooks/eval.md`) is the instrument, and
+  the promotion is not done until it has run.
 
 ## Outputs (all four, same sitting)
 
@@ -66,9 +103,15 @@ For EACH triage cluster, in order:
    fork → action, plus the headline ratio (new lessons vs re-sampled extensions — the ratio is
    the loop's health metric: mostly re-samplings means the problem is media, not doctrine).
 3. **The Loop-health row appended** to the ledger's table: `- <date> · probe <n> · novel <n/m> ·
-   mode: <fed|blind>` (mode from the gate's own `[external-review] ledger feed:` log line). The
-   gate script schedules its blind control rounds by COUNTING these rows — the row IS the
-   scheduler's state; skipping it silently disables the anchoring control.
+   mode: <certifying reviewer's model id>·<fed|blind>`. The model id goes in VERBATIM — `mode:
+   gpt-5-codex·fed`, `mode: claude-opus-5 (non-author)·blind`, `mode: self` — never an
+   internal/external binary, which flattens exactly the case that matters (cross-family but
+   internal). The fed|blind flag rides alongside it, from the gate's own `[external-review] ledger
+   feed:` log line: the gate script schedules its blind control rounds by COUNTING these rows — the
+   row IS the scheduler's state; skipping it silently disables the anchoring control. Optionally
+   add `ceremony: <wall-clock or context share>` — what the loop's own paperwork cost this unit.
+   Housekeeping is WANTED here, and measured so it stays lean: a ceremony figure that keeps growing
+   means move the paperwork to subagents, never that the step gets dropped.
 4. **The rubric fed** — landed findings into the external-review prompt/ledger feed, per the
    repo's build cadence.
 
@@ -88,6 +131,11 @@ loop-level failure mode is added to this list in the same sitting it is found.
   register is a dodge, not a disposition — surface it in the probe, loudly.
 - **Medium rot** — for each lesson marked mechanized, confirm the mechanism still exists and
   still bites (the walk test runs, the lint is enabled, the trigger is applied in prod).
+- **Extension audit** — every extension member newly cited at this close must resolve to a REAL
+  recorded finding: walk the probe and the `decisions.tsv` trail until you land on the entry. Cut
+  the aspirational members ("this would also have caught…") — they are the cheapest thing in the
+  world to write and they inflate exactly the quantity the razor reads. A lesson's entire authority
+  is its extension, so an uncitable member is a lesson claiming proof it does not have.
 
 ## Size law
 

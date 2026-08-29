@@ -15,6 +15,15 @@ step is the default and this skill is not run in its place. This skill is the st
 for repos without one. Where this skill runs at all, use the neutral falsify/verify register in all
 prose and subagent prompts — same depth, and it keeps the driving session on its intended model.
 
+**The pre-registered commitment:** before the first falsifier is spawned, write down that this
+audit will not touch the instruments it attacks with — no harness edits, no regenerated baselines,
+no assertion loosened, no subject restructured so a check goes green. When the oracle (a fixture, a
+golden file, an expected-value table, a recorded baseline) and the product DISAGREE, that is a
+fork, not an edit: stop and surface it as a finding for triage to adjudicate. The commitment is
+pre-registered because tampering is invisible after the fact — a green result looks identical
+either way — and an audit that quietly adjusts its own ruler has recorded nothing except its own
+compliance.
+
 The failure mode it exists to catch (a real reckoning, preserved below as anonymized worked
 examples): the audits were **component-level**
 — a core function called directly plus a DB assertion — and passed while the **composed flow** was
@@ -210,6 +219,40 @@ generalize far beyond the bugs that taught them:
    of the shared fact, the disagreement has only moved into the projection choice — one named policy
    function, every producer of the outcome routed through it. (Ordinary cancel and override-cancel
    consumed one exposure fact through different projections.)
+
+### The perf floor — the eight cost families
+
+A performance guarantee ("this stays under X", "this scales with Y") is falsified by MEASUREMENT,
+never by reading. Where a checkpoint claims one, capture a baseline trace first, then sweep the
+eight strategy families from `skills/poteto-mode/playbooks/perf-issue.md` as the completeness floor
+for where the cost hides:
+
+- **Elimination** — work that need not run at all: a computation nobody consumes, an always-off
+  gate, a redundant mirror, a legacy path kept "just in case". The odd family out on evidence: a
+  trace shows what is slow, never that it is deletable, so this one earns its attempt from the
+  design read rather than the profile — and it beats every other family where it applies.
+- **Divide and conquer** — the dominant cost scales with input size: chunk, shard, prune the
+  search space, or run independent pieces in parallel.
+- **Caching** — the same computation or fetch repeats on identical inputs. Name what invalidates
+  it before claiming the win.
+- **Indirection** — the hot path does expensive work a cheaper intermediate could absorb (an index
+  instead of a scan, a queue off the interactive thread). A layer that sits on the hot path
+  without removing work from it is pure cost.
+- **Batching** — many small operations each pay a fixed overhead (RPC, query, syscall, draw call);
+  coalesce so the overhead is paid once per batch.
+- **Redundancy** — the wait hangs on one slow instance or attempt: hedge, replicate, speculate, and
+  take the fastest. Earns an attempt only where the trace shows the tail dominates AND the system
+  has headroom; without both, duplication only adds load.
+- **Lazy evaluation** — cost lands on results never used or not needed yet (eager init on the boot
+  path, offscreen rendering); defer to first use.
+- **Scheduling** — the work must happen, but not in the interactive moment: idle callbacks, a
+  background warmup, precompute before the user arrives, cleanup after the frame commits. The win
+  is perceived latency, so measure the interactive path, not total work done.
+
+The same evidence gate governs these as governs the classes above: **a family earns an attempt only
+when a trace or a measurement shows the signal it names**, and a focused fix for the DOMINANT cost
+beats applying all eight. They are hypothesis generators, not a checklist — and a perf verdict
+carrying no before/after number on the same surface is a coverage gap, not an upheld guarantee.
 
 ## Prove races deterministically (never sleep, never a sequential stand-in)
 

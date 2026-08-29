@@ -504,12 +504,12 @@ async function saveUnits(store: string, rows: readonly Unit[]): Promise<void> {
 }
 
 async function readLedger(store: string): Promise<readonly LedgerEntry[]> {
-  return (await readTsv(join(store, "ledger.tsv"), LEDGER_HEADER, 6)).map(
+  return (await readTsv(join(store, "verdicts.tsv"), LEDGER_HEADER, 6)).map(
     (row) => {
       const rawVerdict = row[2] ?? "";
       const verdict = verdictOrNull(rawVerdict);
       if (verdict === null) {
-        throw new UserError(`ledger.tsv has invalid verdict ${rawVerdict}`);
+        throw new UserError(`verdicts.tsv has invalid verdict ${rawVerdict}`);
       }
       return {
         pr: row[0] ?? "",
@@ -539,7 +539,7 @@ async function saveLedger(
   rows: readonly LedgerEntry[]
 ): Promise<void> {
   await writeTsv(
-    join(store, "ledger.tsv"),
+    join(store, "verdicts.tsv"),
     LEDGER_HEADER,
     rows.map(ledgerCells)
   );
@@ -1578,7 +1578,7 @@ export function openStore(
       await mkdir(store, { recursive: true });
       await ensureLock();
       await writeIfMissing(join(store, "units.tsv"), `${UNIT_HEADER}\n`);
-      await writeIfMissing(join(store, "ledger.tsv"), `${LEDGER_HEADER}\n`);
+      await writeIfMissing(join(store, "verdicts.tsv"), `${LEDGER_HEADER}\n`);
       await mkdir(join(store, "inbox"), { recursive: true });
       await writeIfMissing(join(store, "gates.md"), "");
       await writeIfMissing(join(store, "preferences.md"), "");

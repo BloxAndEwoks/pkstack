@@ -39,6 +39,12 @@ skill goes stale the next time a step is redesigned.
    multi-writer states bypassing a chokepoint, torn multi-transaction seams + retries that don't
    repair, concurrency/deadlocks, idempotency and money invariants, migrations against LIVE data,
    trust boundaries (the UI is not one), and external-fact assumptions (fees, API behaviour, rates).
+   **The floor is evidence-gated, not a tick-box**: a class earns a scenario — and the sweep budget
+   downstream of it — only where something in THIS repo shows its signal (a schema, a grant, a
+   live-data fact, a trace, a prior finding). Walked as a checklist, a completeness floor
+   manufactures scenarios for classes the code cannot reach and spends the unit's verification
+   budget attacking them; its job is to catch what the free hunt MISSED, not to be answered line by
+   line. A class walked and dismissed records the dismissal and its reason.
    Then **cluster the scenarios into classes before designing** — a flat list invites a fix per item.
    **The walk leaves a MAP behind**: each design class's row in the probe records the ledger lessons
    it implicates, INSTANTIATED to the class's own nouns — not "L3" but "L3: the failure-overlay fact
@@ -54,6 +60,47 @@ skill goes stale the next time a step is redesigned.
    BASE in the probe header** — `git rev-parse HEAD` at unit start, before the first checkpoint
    commit — so the verification sweep's diff range and the external gate's `--base` are captured
    facts, never later archaeology.
+
+Two instruments ride with the engineering mode: the bar for its costliest verdict, and the pin for
+its riskiest axis.
+
+### the wrong-MODEL bar (the redesign verdict)
+
+Clustering ends in a classification — missing GUARD (the model is right, one path forgot a check:
+local fix), missing FACT (the code is inferring what it could be told: carry the fact at the layer
+that first has it), or wrong MODEL (every guard rests on a falsehood: redesign, because more guards
+make it worse). Design time is where a wrong-MODEL verdict is cheapest to cash, and also where it
+is easiest to fake.
+
+**The precondition.** A wrong-MODEL classification requires a mechanism CONFIRMED by runtime
+evidence — the reproduced sequence, the queried rows, the trace, the failing composed flow — never
+inferred from the text of findings. Wrong MODEL triggers redesign, the costliest response in the
+cadence; a verdict reached by reading a finding list and recognising a vibe spends a redesign on a
+guess.
+
+**The tells.** Guard density is the leading indicator: if the obvious fix would add the third
+conditional to one path, redesign the path now rather than after two more rounds prove it. Beside
+it, the shapes that recur when the MODEL is wrong rather than the guarding thin —
+
+- the same workaround shape recurring across unrelated code;
+- unrelated edge cases that each need their own special-case branch;
+- types that need escape hatches (casts, `any`, nullable-everything) to compile;
+- a "we need a lock here" reflex on state the design said was not shared;
+- repeated builder deviations of the SAME shape from the design.
+
+Bounded, and in both directions: a few edge cases do not condemn an architecture — complexity in
+the DATA is not complexity in the DESIGN — and a single isolated finding on a sound model gets the
+local fix and nothing more. Record the judgement either way.
+
+### the migrations axis: pin the behaviour before the structure moves
+
+Before structure moves on the migrations axis — a schema change, a backfill, a rewrite of a path
+that already carries live data — capture CURRENT behaviour as an EXECUTABLE oracle: a
+characterization test over real inputs, a snapshot, an equivalence harness running old and new over
+the same corpus, or a recorded baseline replayed against the new code. A type check and a lint are
+NOT a pin: they constrain shape, not behaviour. The pin is what turns "behaviour unchanged" from a
+sentence in a commit message into a quantified claim, and it is written BEFORE the move, because
+afterwards the behaviour it was supposed to capture is unobservable.
 
 Use general-purpose agents for the fan-out, never depth-capped explore/search agents. Everything
 below this section is the original decision/business premortem, unchanged — use it for launches,

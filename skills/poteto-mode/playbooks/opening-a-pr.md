@@ -16,9 +16,11 @@ Invoked at the end of every other playbook.
 - `## Scope`. State facts from the diff. Name real symbols and paths. Name both sides of a rename or retarget. State what is in and out when the boundary matters.
 - `## Tradeoffs`. State real choices only. Skip this section when there are none.
 - `## Blast Radius`. State who and what the change touches. Explain why the change is safe or risky. If main is red without the fix, name the continuing cost.
-- `## Verification`. State how you ran each check and its rigor. Name the real path, such as the repo's `verify-<project>` skill or the targeted tests. State the outcome of each check, not only the command name.
+- `## Verification`. State how you ran each check and its rigor. Name the real path, such as the repo's `verify-<project>` skill or the targeted tests. State the outcome of each check, not only the command name. On a gated unit, name the ledger walk in this section: `ledger: n lessons swept — clean`, or the exceptions.
 
 After these sections, attach videos or screenshots when they prove a claim. Do not use `## Summary` or `## Test plan` boilerplate. A commit body does not restate its subject.
+
+**Register the unit.** A gated unit is registered here, at PR open. Update its probe with the BASE, the gated classification, and the clusters so far. Record a named close trigger alongside them: a stack closes at Shipping's ceiling, a program closes at the coordinator's wave boundary, and solo work with no shipping pass closes on the unit's final review round. A registered unit that never closes surfaces as an overdue register at the next close.
 
 **Size and stacks.** Prefer five narrow PRs to one large PR. Stack follow-ups with Graphite (`gt`), and keep the ordered stack visible to reviewers. Branch from main only for independent work. Rebase on `main` before substantial stack work.
 

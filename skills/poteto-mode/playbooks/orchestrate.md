@@ -28,10 +28,10 @@ Create `orchestrate/<project-slug>/` in the current agent's store (path in the s
 - `overview.md` is the durable PR and issue DB. Append; never rewrite wholesale per event.
 - `units.tsv` has one row per unit: id, track, state, branch, PR, head SHA, brief path. Update rows in place.
 - `frontier.json` is the computed merge frontier, per Stack safety.
-- `ledger.tsv` is the verification ledger, per Verification.
+- `verdicts.tsv` is the verification verdict log, per Verification.
 - `inbox/` holds completion pointers. `gates.md` parks human gates (question, options, default on no answer) so a completion flood cannot wipe AskQuestion state.
 - `decisions.tsv` is the trail via the show-me-your-work skill.
-- `status.md` is derived from `units.tsv` and `ledger.tsv` at each drain, never hand-maintained; regenerate it from the tables instead of narrating events into it, because hand-churned boards get rewritten on every event and go unreadable.
+- `status.md` is derived from `units.tsv` and `verdicts.tsv` at each drain, never hand-maintained; regenerate it from the tables instead of narrating events into it, because hand-churned boards get rewritten on every event and go unreadable.
 
 #### The brief
 
@@ -42,14 +42,18 @@ GOAL         one sentence, the outcome, executable by a stranger with no chat ac
 SCOPE        paths this unit may write; paths it may not; its exclusive worktree or branch
 CONTEXT      pointers to files and PRs; upstream reports pasted in full when this unit
              depends on them, because workers cannot see siblings
+LESSONS      the unit's instantiated-lessons map; builder briefs only, omitted outright
+             from a verifier brief
 ACCEPTANCE   checkable criteria, one per line
 VERIFY       exact commands or the control-skill path, plus known gotchas
 TIMEBOX      rough cap on runtime; on expiry, return partial findings and stop rather than run on
 FORBIDDEN    no gt, no rebase, no force-push, no fixes outside scope, plus unit-specific bans
 REPORT       status, branch, head SHA, PRs, verdict, what you actually ran, deviations,
-             suggested follow-ups
+             suggested follow-ups, plus FINDINGS: one line per finding, mechanism-tagged
 STANDING     <preferences.md pasted verbatim>
 ```
+
+A builder brief carries `LESSONS`; a verifier brief omits it, because a verification arm stays ledger-blind. The `FINDINGS` lines are what let a drain cluster a wave without reading diffs.
 
 Size the brief to the unit. A one-command unit gets the template collapsed to a paragraph that still names goal, scope, the verify command, and the report shape; a 4KB scaffold around a two-line edit costs more to write and obey than the edit. Local spawns may reference the standing-orders file by store path; verbatim paste is for cloud spawns and every resume.
 
@@ -73,6 +77,7 @@ A dependency is a context relay, not just ordering: undeclared upstream context 
 - Drain in batches at four points: the end of a critical section, a track rollup, a frontier watcher wake (arm it via the loop skill, with a long heartbeat fallback), and before a human report. Begin each batch with `orch inbox drain`. Arrivals during a drain wait for the next one.
 - Critical sections you finish first: authoring a brief, a stack operation, a conflict decision, writing a gate, updating ledger or frontier.
 - Each drain classifies every pointer (landed, needs-verify, failed, zombie, noise), writes the resulting rows through `orch unit add`, `orch unit set`, and `orch ledger record`, runs `orch status`, then spawns the next wave in one message.
+- Closes run at the wave boundary, over that wave's clustered findings. The coordinator closes; a sub-coordinator closes its own track and rolls the result up. Workers return mechanism-tagged findings in `REPORT` and never write the ledger. One writer.
 - Account for every spawned child at its track's rollup: arrived, respawned, or its scope explicitly absorbed. Silently redoing a missing child's work hides both the wasted spend and the coverage gap its result existed to close.
 - A drain turn ends with the three lines from `orch status`: counts against the states, what changed, gates open. Detail lives in `status.md`; the full reply contract applies at checkpoints and close.
 
@@ -88,7 +93,7 @@ A dependency is a context relay, not just ordering: undeclared upstream context 
 
 Scale verification to the unit. When VERIFY is a single cheap command, the worker runs it and reports the output, and the coordinator spot-checks receipts; a dedicated verifier agent (on a different model family than the worker) is for units whose verification is expensive, judgment-laden, or high-blast-radius. A verifier agent whose entire product would be rerunning one command is ceremony, not verification.
 
-Write ledger rows with `orch ledger record`. Check the current PR and head SHA with `orch ledger check`. `ledger.tsv`, one row per verdict, keyed by PR number plus head SHA: `live-ui-verified | unit-test-verified | type-check-only | verifier-blocked | verifier-failed`. CI green is an input to a verdict, not a verdict. Behavioral work needs better than `type-check-only`. `verifier-blocked` is not a pass; respawn when the environment heals. `verifier-failed` gets a fix unit, not a re-verify. A worker may self-report; a verifier overrides it on the same key. A new head SHA voids the row, so re-verify after restack. The ledger answers "was this verified", not memory and not the transcript.
+Write verdict rows with `orch ledger record`. Check the current PR and head SHA with `orch ledger check`. `verdicts.tsv`, one row per verdict, keyed by PR number plus head SHA: `live-ui-verified | unit-test-verified | type-check-only | verifier-blocked | verifier-failed`. CI green is an input to a verdict, not a verdict. Behavioral work needs better than `type-check-only`. `verifier-blocked` is not a pass; respawn when the environment heals. `verifier-failed` gets a fix unit, not a re-verify. A worker may self-report; a verifier overrides it on the same key. A new head SHA voids the row, so re-verify after restack. The verdict log answers "was this verified", not memory and not the transcript.
 
 A unit is not done until its output is externalized the moment it lands, never batched to the end of the run: a worker pushes its branch, a verifier writes its ledger row, receipts land in the store. Work that exists only on one VM when that VM dies was never done.
 
@@ -110,4 +115,4 @@ Never reaches the human: frontier nudges, restack mechanics, retries, CI flake t
 
 Mid-run discoveries fix only what blocks the frontier. Everything else parks in follow-ups; at this fan-out a small scope leak multiplies into PRs nobody asked for.
 
-**Reply:** at checkpoints and close: the predicate and the count against it from `units.tsv` and `ledger.tsv`, tracks and what each landed, the frontier (PR list plus SHAs), verdicts summary, what was abandoned and why, gates awaiting the human (the only asks), the store path, and the trail path. Numbers from the tables, not narrative. Include PR links.
+**Reply:** at checkpoints and close: the predicate and the count against it from `units.tsv` and `verdicts.tsv`, tracks and what each landed, the frontier (PR list plus SHAs), verdicts summary, what was abandoned and why, gates awaiting the human (the only asks), the store path, and the trail path. Numbers from the tables, not narrative. Include PR links.

@@ -36,6 +36,8 @@ The rationale is mandatory. Without it, the parent cannot tell whether a candida
 
 If a candidate fails to produce output, proceed with N-1 and note the dropout in the synthesis record.
 
+Runners stay ledger-blind. Neither the repo's ledger nor the unit's lessons map goes into a candidate brief.
+
 ## Phase C: Cross-judge
 
 After all Phase B candidates complete, choose one model from the `arena cross-judge pool` in `~/.claude/pkstack-models.md` when present. Otherwise use `claude-fable-5-thinking-max`, `gpt-5.6-sol-max`, `grok-4.6-fast-xhigh`, `claude-opus-5-thinking-xhigh`. Prefer a different model family from the parent's. Spawn one readonly judge subagent on that model. It sees the rubric and the candidates by path label, scores each criterion, and recommends a base with rationale. It runs in parallel with the parent's reading in Phase D, not with the candidates themselves. Spawning while candidates are still writing means the judge sees partial or empty outputs and reports them as dropouts.
@@ -69,3 +71,5 @@ If verification surfaces a problem the arena did not catch, either Phase A was w
 ## Outputs
 
 One synthesized artifact. One short synthesis note alongside, naming the base, the grafts (with source candidate), the rejections, the dropouts if any, and the verification result.
+
+When the base lands in a repo with a docs spine, that note commits there as the decision record, an ADR or a probe, carrying the base, the grafts, the rejections, and the dropouts. Otherwise it dies in `/tmp` with the worktree and the rejections go with it. It is not a ledger entry: design rejections are decision-record material, never ledger extensions, because a rejected candidate is no defect and no sufficiency sentence can be written for it.

@@ -14,6 +14,8 @@ reminder: New task? Playbook match or rigor needed -> apply /poteto-mode. Casual
 
 **Start every multi-step task with a todolist whose first item is to read the Principles section below in full.** The principles ground every trigger here. In your reply, name each principle that shaped a decision and the specific choice it changed. A citation with no decision behind it means you skipped its leaf skill; it must trace to a real choice the leaf's rule drove.
 
+**Classify the unit in the same breath.** At the start of any multi-step task, decide GATED or ungated. GATED if the work touches money, lifecycle or state machines, customer-facing flows, custody, or migrations. Unsure means gated. Capture the unit's BASE (`git rev-parse HEAD`) before any grounding, because a base reconstructed afterwards is a guess. The classification and the BASE both travel in the unit's design package, which is its probe in a repo that keeps one. Work confined to an isolated scratch dir with zero production source (the **Prototype** playbook) is ungated by construction and skips this; gating re-attaches at the handoff to Feature. Re-routing to another playbook mid-task re-classifies at the SAME BASE, and the probe records the route change. A unit is its goal, not its playbook. A repo with no docs spine (no probe or ledger convention) gets one offer of `/kstack-init`; declined, the `.audit/<task-slug>.tsv` trail stays the record and the ledger loop stays dormant.
+
 Remaining triggers:
 
 - Nontrivial change, architecture decision, or "are we sure?" → the **how** skill.
@@ -33,6 +35,7 @@ Remaining triggers:
 - Bugbot or the agentic security review commented → skeptical posture. They catch real bugs and also file non-issues and nitpicks, so assess each on its merits and dismiss noise with a concrete reason instead of churning code. Triage fix / dismiss / ask per `references/bugbot-triage.md`.
 - Broken skill mid-task → fix it in its own PR. Don't block. Don't silently work around it.
 - Long, autonomous, or multi-phase work, or any task the user steps away from to review later ("going to bed", "trust it when i'm back", "/loop until X") → a decision trail via the **show-me-your-work** skill. Commit it when stakes need an auditable record; keep it local otherwise.
+- A GATED unit reaching its registered close point (**Opening a PR** registers it with the trigger that fires it) → the **close-unit** skill, run over the probe's clusters and the `decisions.tsv` trail.
 
 ## Principles
 
@@ -73,6 +76,8 @@ Read the leaf skill in full for any principle you apply. Each entry names when i
 **Meta**
 
 - **Encode Lessons in Structure** (**principle-encode-lessons-in-structure**). You catch yourself writing the same instruction a second time. Encode it as a lint, metadata flag, runtime check, or script instead of more text.
+
+A process lesson in the repo's finding ledger whose extension spans three or more playbooks is promoted into this index or a trigger line above. Promotion sharpens an existing entry; it never appends a new one. A promotion that edits a plugin file is a queued export, applied on the owner's approval. A router-level promotion carries a queued eval as its completion criterion (the **Eval** playbook).
 
 ## Autonomy
 

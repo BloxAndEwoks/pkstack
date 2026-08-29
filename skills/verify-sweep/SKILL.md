@@ -15,6 +15,15 @@ vocabulary — *verify, falsify, counterexample, reachable, refuse* — never co
 Code inspection uses native Read/Grep. Same depth, different register; this is what keeps the
 driver session on its intended model.
 
+**The pre-registered commitment (written into the probe BEFORE the first executor is spawned):**
+this sweep does not modify the instrument it measures with. No harness edits, no regenerated
+baselines, no loosened assertion, no restructuring of the subject so a check goes green. Where the
+sweep's own oracle — a fixture, a golden file, an expected-value table, a characterization pin —
+DISAGREES with the product, that is a FORK, not an edit: stop, surface it as a finding, and let
+triage decide which side is wrong. The commitment is pre-registered rather than asserted afterwards
+because an oracle edited mid-run cannot falsify anything and the edit is invisible in the result:
+a green sweep looks the same either way.
+
 ## Inputs
 
 1. The unit's diff (an explicit commit range — state it in every executor prompt). The range's
@@ -73,11 +82,15 @@ the suite or a scratch container.
    clean-to-ledger or not. A clean sweep is a PRECONDITION for requesting external
    certification, not a substitute for it.
 4. **On a gated unit, close the sweep by writing the GATE MANIFEST into the unit's probe** — a
-   short section titled exactly `## Gate manifest`, holding: unit name · base..head SHAs ·
-   the named guarantees · the known-class checks this sweep executed · registered residues
-   with their named triggers · suite/typecheck/lint evidence · the runtime surfaces needing
-   live attack. The external gate reads it AFTER forming its own attack plan, as a
-   completeness floor — this section is what stops the certifier re-deriving scope from
-   thousands of lines of history. Note: a BLIND control round withholds this section along
-   with the ledger (its known-class and residue lines are ledger content by proxy), so the
-   probe's design sections must state the unit's guarantees in their own right.
+   short section titled exactly `## Gate manifest`, holding: unit name · base..head SHAs · the
+   certified tree's `git patch-id` (`git diff base..head | git patch-id --stable`) · the named
+   guarantees · the known-class checks this sweep executed · registered residues with their named
+   triggers · suite/typecheck/lint evidence · the runtime surfaces needing live attack. The
+   patch-id is not decoration: a rebase, an amend, or a squash silently invalidates every
+   SHA-pinned verdict while the certified CONTENT is unchanged, and the patch-id survives the
+   rewrite — it is what lets a later reader tell "the head moved" from "the work changed".
+   The external gate reads the manifest AFTER forming its own attack plan, as a completeness
+   floor — this section is what stops the certifier re-deriving scope from thousands of lines of
+   history. Note: a BLIND control round withholds this section along with the ledger (its
+   known-class and residue lines are ledger content by proxy), so the probe's design sections must
+   state the unit's guarantees in their own right.

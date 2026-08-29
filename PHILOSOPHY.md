@@ -8,7 +8,9 @@ with single-member extensions, and the next round reliably lands in the gaps BET
 paper: Bennett, *The Optimal Choice of Hypothesis Is the Weakest, Not the Shortest*
 (arXiv:2301.12987). Its principle — **explanations should be no more specific than
 necessary** — is the selection rule that replaces taste everywhere kstack turns findings into
-process.
+process. Where the razor meets the build it collapses to one law: **every shipped line traces to
+evidence** — a fix to its runtime repro, a lesson to its cited members — and breadth with neither
+is belt-and-suspenders, which does not ship.
 
 ## Two nested loops
 
@@ -35,9 +37,11 @@ loop-level failure mode is added to that checklist in the sitting it is found.
 A **lesson** is a hypothesis generalising from the findings you observed (the child task) to
 the defect class they sample (the parent). The optimal hypothesis is the **weakest one still
 sufficient** to decide every observed member — weakest measured by extension (what it covers),
-not by sentence length. A lesson therefore has three mandatory parts: the **statement**, its
-**extension** (the recorded findings it decides — cited, checkable), and its **medium** (where
-it is enforced).
+not by sentence length. The razor as stated governs PROHIBITIONS, whose extension is the defects
+they forbid; a permission-shaped statement — a skip rule, a dismissal rule, an allow-list —
+inverts, because its extension is what it LETS THROUGH: narrowest sufficient, not weakest. A
+lesson therefore has three mandatory parts: the **statement**, its **extension** (the recorded
+findings it decides — cited, checkable), and its **medium** (where it is enforced).
 
 The **sufficiency walk** keeps this from being taste: for every finding in a claimed
 extension, one sentence — "applied at build time, this forbids that defect because …". A
@@ -82,7 +86,7 @@ primary breakdown, with the generic catalogue remaining the completeness floor b
 
 ## Enforcement media, ranked by quantification force
 
-`DB constraint/trigger` > `registry walk / compile-forced Record` > `lint rule` > `required
+`DB constraint/trigger` > `registry walk / compile-forced Record` > `lint rule / executable gate` > `required
 design-artifact field` > `gate-rubric line` > `prose (with written reason)`.
 
 The ranking is not bureaucratic — it is the razor applied to enforcement. A mechanized medium
@@ -96,11 +100,18 @@ a written reason.
 
 ## The division of verification labor
 
-Two verification instruments, deliberately asymmetric:
+Three verification instruments, deliberately asymmetric:
 
 - **The sweep (4a, every unit)** applies the repo's KNOWN classes to the diff — cheap,
   parallel, exhaustive over the ledger. Run in a neutral falsify/verify register with bounded
   per-lesson executor specs; judgment (scope, triage, verdict) stays with the driver.
+- **The non-author verifier (the middle rung)** is a fresh agent that did NOT write the code,
+  in its own worktree, driving the real surface parent-vs-head, with its verdict posted where it
+  outlives the chat. It buys the one property the sweep's executors are denied by design —
+  independence from the build — at a fraction of the gate's cost, and it samples what a builder's
+  own falsification structurally cannot: the assumption the author never knew they were making. It
+  does not replace the gate; it is still in-family, and being OUT of the family is precisely what
+  the gate is for.
 - **The external gate (4b, gated units)** is an INDEPENDENT model hunting NOVEL classes — the
   builder's blind spots, which no amount of self-review samples. A clean sweep is the gate's
   precondition, so the expensive reviewer never spends its budget re-discovering the ledger.

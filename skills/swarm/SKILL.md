@@ -20,7 +20,7 @@ Open a todolist with one entry per phase before launching anything.
 ## Phase A: Frame
 
 1. State the done predicate and the artifact or report the swarm must return.
-2. Choose the shape. Partition into slices, race N workers on identical briefs, or mix both. For a race or mixed shape, declare `first pass`, `rank all`, or `best-of` before spawning.
+2. Choose the shape. Partition into slices, race N workers on identical briefs, or mix both. For a race or mixed shape, declare `first pass`, `rank all`, or `best-of` before spawning. Declare every arm's role in the same breath. BLIND is the default: verification and exploration arms never receive the repo's ledger or the unit's lessons map. Only an arm declared as a build or coverage arm carries the map in its brief.
 3. Set N from the user or derive it from the shape. N is total workers, not the cloud concurrency limit.
 4. Pick the worker model from `swarm workers` in `~/.claude/pkstack-models.md` when present. Otherwise use `grok-4.6-fast-xhigh`. For a model race, name each arm's model up front.
 5. Give each worker its own writable output when it writes. Use a worktree, branch, or `/tmp/swarm-<slug>/worker-<n>/`.
@@ -39,8 +39,10 @@ If a worker drops out, proceed with N-1 and note it.
 
 Read the terminal results. For coverage, every required slice needs a result. For a race, apply the selection rule declared up front. Use first pass, rank all, or best-of. Do not paste raw worker dumps.
 
-Keep a compact result table, one-line evidenced issues, and explicit gaps or dropouts.
+Aggregate the findings by shared mechanism into clusters, not a flat issue list. Each cluster names its mechanism, its members with evidence pointers, and a class tag of GUARD, FACT, or MODEL. A downstream close consumes clusters, so a flat list makes it re-derive them.
+
+Keep a compact result table, the clusters one line each, and explicit gaps or dropouts.
 
 ## Phase D: Report
 
-Return one consolidated in-chat report with the table, issue one-liners, gaps or dropouts, and the race rule when used.
+Return one consolidated in-chat report with the table, the clusters, gaps or dropouts, and the race rule when used.

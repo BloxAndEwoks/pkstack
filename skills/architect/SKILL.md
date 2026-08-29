@@ -40,6 +40,8 @@ Compare viable candidates on interface depth. Prefer the design that hides more 
 
 Arena returns one synthesized design package. The synthesis decision populates the rationale's "Synthesis decision" section.
 
+Then instantiate the ledger against it. The driver walks the repo's finding ledger and, for every load-bearing decision named in the package's Shape section, annotates the lessons that decision implicates in this design's own nouns ("L3: the failure-overlay fact must reach the status card"). A bare lesson ID is not an annotation; a reader who has to open the ledger to know what the decision owes has been handed nothing. State the omission too, because it is deliberate. The runners stay ledger-blind, ledger content never enters `references/runner-prompt.md`, and the map is driver synthesis after the free hunt, so no candidate is anchored to a lesson the ledger already knows.
+
 ## Phase C: Agree (opt-in)
 
 Default: proceed directly to implementation with the synthesized design. No human checkpoint.
@@ -80,4 +82,4 @@ When you scrap:
 
 ## Outputs
 
-The caller's usage is written first and the type sketch derived from it. One file with new types and signatures for small changes; module map plus type definitions for larger work. The rationale ships alongside, shaped per `references/rationale-template.md`, including the usage sketch and the synthesis decision.
+The caller's usage is written first and the type sketch derived from it. One file with new types and signatures for small changes; module map plus type definitions for larger work. The rationale ships alongside, shaped per `references/rationale-template.md`, including the usage sketch, the synthesis decision, and the implicated-lessons annotations. In a repo with a docs spine, the design package commits as the unit's probe.
