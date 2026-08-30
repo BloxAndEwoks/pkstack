@@ -111,6 +111,32 @@ in poteto-mode's Principles index. **Status:** stable.
 
 ## The export queue (plugin-level candidates)
 
+### EQ-1 — kstack-init generates a pkstack-blind procedure file
+Provenance: pangea:probe-061 (the compliance-tool run). kstack-init's AGENTS template
+prescribes the kstack-only cadence — no router entry, no architect step, no register/close
+pair — so a repo initialised by it routes every unit down the kstack path and the pstack body
+never fires. Proposed statement (prohibition): the generated procedure file names every
+chokepoint the installed plugin's loop depends on (entry router, design step, hygiene,
+register, close), not only the verification spine. Target medium: the kstack-init template.
+Trigger: next pkstack maintenance close.
+
+### EQ-2 — invocability asymmetry pulls mixed repos toward the invocable half
+Provenance: pangea:probe-061. kstack-side skills are model-invocable (MANDATORY TRIGGERS);
+most pstack-body skills carry disable-model-invocation, so mid-flow an agent can fire
+verify-sweep but cannot fire architect — under a kstack-shaped procedure file, gravity pulls
+one way. Needs a deliberate ruling: lift the flag on architect (and possibly interrogate), or
+make the router's text instruct READING those SKILL.md files explicitly. Target medium:
+frontmatter or router trigger. Trigger: next pkstack maintenance close.
+
+### EQ-3 — solo flow has no register site
+Provenance: pangea:probe-061. Registration is wired to Opening a PR; a solo direct-commit
+workflow never opens PRs, so units are never registered and the overdue-register net never
+arms (the close still ran, carried by the procedure file). Proposed statement: registration
+fires at the unit's LAST CHECKPOINT when no PR step exists — the repo-level fix landed in
+pangea's AGENTS.md (FD-026) and is this entry's first member; the plugin-level fix patches
+opening-a-pr/the router. Target medium: playbook + router patch. Trigger: next pkstack
+maintenance close.
+
 <!-- Process lessons whose medium is a PLUGIN file — a skill, a router trigger, a playbook step —
      rather than a file in this repo. They are exported, never applied here. -->
 
