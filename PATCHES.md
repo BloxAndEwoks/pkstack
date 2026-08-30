@@ -313,3 +313,6 @@ grep: pinned-list-file
 ### p3-lever-cc-transcripts — skills/poteto-mode/scripts/worktree-audit.sh
 why: L1 member 3 — transcript path retargeted to Claude Code (missed by the *.md sweep)
 grep: .claude/projects
+### p4-router-model-invocable — skills/poteto-mode/SKILL.md
+why: probe 002 — CC has no mode system; disable-model-invocation left the router dead unless the user typed it every task
+grep: Invoke at the START of any multi-step engineering task

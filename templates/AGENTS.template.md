@@ -61,6 +61,14 @@ Before substantial work:
 
 ## Build Cadence
 
+**Every multi-step task enters through the router.** Invoke the **poteto-mode** skill at task
+start: it classifies the unit (gated/ungated, BASE captured), matches a playbook, and the
+playbook's steps carry the cadence below — the design step produces the probe with its
+instantiated-lessons map (architect), the build steps consume it, Opening a PR registers the
+unit with a named close trigger, and the close runs close-unit. The steps below are the
+cadence's CONTRACT; the playbooks are how it is driven. Where no playbook fits,
+figure-it-out designs one; the contract still binds it.
+
 **Units, not checkpoints, are the cadence's grain.** A CHECKPOINT is one commit-sized coherent
 change. A UNIT is the body of work answering one named goal — one probe, one premortem, one
 sweep; usually one to five checkpoints. A unit is **GATED** if its scope touches any of: money

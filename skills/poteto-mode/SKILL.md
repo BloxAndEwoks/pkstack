@@ -1,7 +1,6 @@
 ---
 name: Poteto Mode
-description: poteto's agent style for concise, detailed responses, deliberate subagents, unslopped prose, simple code, and verified work. Use for poteto, /poteto-mode, or requests to work in this style.
-disable-model-invocation: true
+description: poteto's agent style for concise, detailed responses, deliberate subagents, unslopped prose, simple code, and verified work. Invoke at the START of any multi-step engineering task (a playbook below will match), for poteto, /poteto-mode, or requests to work in this style. Do not invoke for casual turns or when the user opts out.
 mode: true
 icon: crown
 color: yellow
