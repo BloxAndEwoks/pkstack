@@ -139,9 +139,9 @@ Codex runs on the owner's subscription, so let it spend ITS tokens on the heavy 
    FACT / wrong MODEL; fix the class, not the members. Each accepted defect gets a COMPOSED full-flow
    test (fails before, passes after) at the layer the break lived in, and an entry in the unit's
    probe record.
-3b. **Run `/simplify` over a substantial `--fix` diff before committing.** The cadence's "simplify
-   after building" applies to Codex's building too. The diff is uncommitted at this point, which is
-   exactly what /simplify reviews.
+3b. **Run `/simplify` over a substantial `--fix` diff before committing.** The Feature playbook's
+   simplify-after-building step applies to Codex's building too. The diff is uncommitted at this
+   point, which is exactly what /simplify reviews.
 4. **Re-run the gates** (typecheck, full suite, lint, UI smoke if UI) and re-commit. If the fixes
    were substantial, it is legitimate to run the gate ONCE more on the remediation — a fix is a new
    guarantee. One re-gate is the convergence rule: anything still landing after it is triaged into

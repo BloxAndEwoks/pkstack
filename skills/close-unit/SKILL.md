@@ -118,11 +118,11 @@ step` > `prose`.
    the loop's health metric: mostly re-samplings means the problem is media, not doctrine).
 3. **The Loop-health row appended** to the ledger's table: `- <date> · probe <n> · novel <n/m> ·
    mode: <verifier model id>·<fed|blind>` where the PR's non-author verifier ran, and `mode: self`
-   where only the sweep did. The model id goes in VERBATIM — `mode: claude-opus-5 (verifier)·blind`,
-   `mode: gpt-5-codex·fed`, `mode: self` — never an internal/external binary, which flattens
-   exactly the case that matters (cross-family but internal). The DRIVER sets the fed|blind flag,
-   from whether that verifier was given the ledger, and the driver also schedules the
-   control by COUNTING these rows: every FOURTH verifier runs blind (count the fed rows
+   where only the sweep did. The model id goes in VERBATIM — `mode: claude-opus-5 (verifier)·fed`,
+   `mode: claude-sonnet-5 (verifier)·blind`, `mode: self` — never an internal/external binary,
+   which flattens exactly the case that matters (cross-family but internal). The DRIVER sets the
+   fed|blind flag, from whether that verifier was given the ledger, and the driver also schedules
+   the control by COUNTING these rows: every FOURTH verifier runs blind (count the fed rows
    standing since the last blind one). The row IS the counter's state; skipping it silently
    disables the anchoring control. Optionally add `ceremony: <wall-clock or context share>` — what
    the loop's own paperwork cost this unit. Housekeeping is WANTED here, and measured so it stays

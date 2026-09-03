@@ -154,8 +154,8 @@ One row per unit whose close ran, appended by the close-unit step: `- <date> · 
 <n/m> · mode: <model id>·<fed|blind>`. `novel n/m` = statements minted vs total findings (the
 loop's health metric: mostly re-samplings ⇒ the problem is media, not doctrine). `mode:` = the
 PR VERIFIER's model ID, verbatim, plus whether it ran `·fed` (ledger in its brief) or `·blind`.
-Examples: `mode: claude-opus-5 (verifier)·fed`, `mode: gpt-5-codex·blind`. A unit closed with no
-verifier verdict records `mode: self`. The id is recorded rather than an internal/external
+Examples: `mode: claude-opus-5 (verifier)·fed`, `mode: claude-sonnet-5 (verifier)·blind`. A unit
+closed with no verifier verdict records `mode: self`. The id is recorded rather than an internal/external
 category because that binary flattens exactly the case that matters: a cross-family reviewer that
 is still internal.
 
