@@ -20,7 +20,7 @@ Update mode mines only the history since the skill last changed. It keeps rules 
 
 ## Capture a unit's lessons with `/close-unit`
 
-At the close of a unit of work, once the last review round is in and before the PR opens, run:
+At the close of a unit of work, once the PR's non-author verdict is in and before you merge, run:
 
 ```text
 /close-unit that took way too long. distill what we learned so the next unit doesn't repeat it.

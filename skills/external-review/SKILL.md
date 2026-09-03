@@ -8,8 +8,8 @@ description: "UNROUTED TOOLBOX: this gate runs only when the repo's procedure fi
 This skill is unrouted toolbox: it runs only when the repo's procedure file names it, no step of
 the Feature flow depends on it, and it requires the Codex CLI installed and logged in.
 
-This is the backstop on the build cadence, not a step in it. The repo's own verification pass (the
-ledger-driven sweep, or the seam catalogue at `skills/verify-sweep/references/seam-catalogue.md` where no ledger exists) is where WE attack the
+This is the backstop on the repo's own loop, not a step in it. The repo's own verification pass (the
+ledger-driven sweep, run from the executors' own plans where the ledger is empty) is where WE attack the
 guarantees; this gate has an **independent model (Codex)** attack them — one that does not share our
 blind spots or our incentive to confirm our own work. It exists because a green suite plus a self-run
 audit still leave the builder's blind spots unsampled — an independent reviewer repeatedly lands
@@ -18,8 +18,8 @@ second opinion" into something that actually happens at every high-stakes unit.
 
 ## When to run it
 
-- AFTER the repo's own verification pass + `/simplify`, as the certifying close of a gated unit. The
-  repo's procedure file (AGENTS.md) owns the exact cadence seat — in kstack repos: a clean 4a sweep
+- AFTER the repo's own verification pass + `/simplify`, as the certifying close of a high-stakes
+  unit. The repo's procedure file (AGENTS.md) owns the exact seat — in kstack repos: a clean sweep
   is the PRECONDITION for this gate, and the gate's budget goes to NOVEL classes, not re-discovering
   the ledger.
 - On surfaces where being wrong is expensive: money rails, the state machine / lifecycle, customer-
@@ -27,8 +27,8 @@ second opinion" into something that actually happens at every high-stakes unit.
   token/latency cost isn't justified there.
 - It is a BACKSTOP, never a substitute. Do not verify less rigorously because "Codex will catch it" —
   the gate checks a real audit happened; it doesn't replace one.
-- Respect the repo's caps where recorded (kstack default: ONE round per gated unit, at most ONE
-  re-gate; survivors go to triage where register-with-named-trigger is a legitimate disposition).
+- Respect the repo's caps where recorded (kstack default: ONE round per unit, at most ONE
+  re-gate; survivors go to triage where a NOTE with a named trigger is a legitimate disposition).
 
 ## How to run it
 
@@ -89,7 +89,7 @@ not a finding. Where the Codex environment can't spawn subagents, the same lanes
 passes — the design degrades, the discipline doesn't. NEVER run two gate script processes
 concurrently: that is how shared suites, fixed-port smoke stacks, and shared databases corrupt.
 
-The gate certifies against a **manifest floor**: on gated units the verify-sweep closes by writing
+The gate certifies against a **manifest floor**: the verify-sweep closes by writing
 a `## Review manifest` section (formerly `## Gate manifest`) into the unit's probe (unit · base..head · guarantees · known-class
 checks executed · residues with triggers · suite evidence · runtime surfaces). The prompt has Codex
 read it only AFTER forming its own plan — a completeness floor, never the search strategy.
@@ -100,7 +100,7 @@ In a repo with a finding ledger (`docs/070-quality/004-finding-ledger.md`), the 
 ledger's lessons to Codex as its minimum defect classes (the floor, never the ceiling — Independence
 First still leads), and treats registered residues as disclosures, not denials to re-litigate.
 Feeding risks ANCHORING, so the feed is positioned AFTER the prompt's independence-first plan step,
-and the script self-schedules a BLIND control every 4th gated round by counting the ledger's
+and the script self-schedules a BLIND control every 4th round by counting the ledger's
 Loop-health rows — no human keeps the count, and the close-unit step records which mode ran. A
 blind round withholds the ledger from the coordinator AND every subagent, and withholds the probe's
 Gate-manifest section with it (its known-class and residue lines are ledger content by proxy). If

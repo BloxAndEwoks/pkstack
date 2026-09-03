@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # external-review.sh — drive Codex (an INDEPENDENT model) as the external certification gate.
 #
-# The build cadence's own verification step (the ledger-driven sweep, or the verify-sweep seam catalogue where no
-# ledger exists) is OUR audit — it applies every KNOWN defect class to the unit's diff before this
+# The repo's own verification step (the ledger-driven sweep, run from the executors' own plans where
+# the ledger is empty) is OUR audit — it applies every KNOWN defect class to the unit's diff before this
 # gate runs. This is the backstop that CERTIFIES the unit: an independent reviewer that does not
 # share our blind spots or our incentive to confirm our own work, whose budget goes to NOVEL classes
 # and composed-flow depth, never to re-discovering the ledger. It exists to catch the composed-flow
@@ -168,7 +168,7 @@ fi
 # ── Ledger feed mode (loop self-scheduling) ────────────────────────────────────────────────────
 # Feeding the reviewer our finding ledger risks ANCHORING: a fed reviewer can satisfice on our
 # known classes and under-sample novel ones — and whether that is happening must be MEASURED,
-# never remembered. Every 4th gated round therefore runs BLIND (the feed stripped) as a control,
+# never remembered. Every 4th round therefore runs BLIND (the feed stripped) as a control,
 # scheduled BY THIS SCRIPT from the ledger's own Loop-health table — no human keeps the count.
 # The discriminator: if blind rounds keep finding what fed rounds stopped finding, the feed is
 # anchoring (drop the hunt clause, keep the disclosure rule); if both converge on the same
@@ -250,7 +250,7 @@ LANES_EOF
 # their source; give ONE consolidated per-guarantee verdict. It speaks the same language as the
 # repo's own verification discipline, so the sweep and the gate hold the work to one standard.
 read -r -d '' PROMPT <<PROMPT_EOF || true
-You are an INDEPENDENT adversarial reviewer and the ROOT CERTIFICATION COORDINATOR for one gated
+You are an INDEPENDENT adversarial reviewer and the ROOT CERTIFICATION COORDINATOR for one
 unit of work. Your job is to DENY this work's claims, not confirm them. Do not trust the green test
 suite — attack the implemented flows. This is ONE gate producing ONE consolidated verdict.
 

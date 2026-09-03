@@ -38,8 +38,8 @@ must be real).
 1. **Interview the repo, not the owner.** Answer five axes from the codebase; ask the owner
    only what cannot be observed:
    - **Surfaces + personas** — what does a consumer actually touch (web UI, CLI/TUI, API,
-     desktop, token links, outbound messages), and as whom? The repo's AGENTS.md gated-scope
-     map and its routing/entry points are the sources. Every surface gets a feature-map file;
+     desktop, token links, outbound messages), and as whom? The repo's AGENTS.md and its
+     routing/entry points are the sources. Every surface gets a feature-map file;
      absence from the map must be a decision, never an oversight (staged seeding is legitimate
      when the unmapped surfaces are listed with a named trigger).
    - **Run** — how does the hermetic instance start, and how do you tell it is ready (a log
@@ -152,7 +152,7 @@ its name — some dry-runs still touch the network.
   judge them as the recipient), and judge every screen against the product's OWN design
   principles (named in the generated skill from the repo's design canon as it accrues).
   Findings are written as triage input (cluster → guard/fact/model), never applied as ad-hoc
-  patches. EXPERIENCE passes schedule as their own ungated units.
+  patches. EXPERIENCE passes schedule as their own units.
 - **MAINTAIN** — the skill keeps itself honest (run when a unit's close finds map drift, or
   on demand). The pass ends by declaring ONE outcome and saying which: **clean** (every
   feature got source and live coverage, nothing worth shipping), **changed** (one commit of

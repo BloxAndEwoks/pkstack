@@ -65,12 +65,9 @@ that do not exist yet. Its sensitivity proof — the demonstration that it FAILS
 regression — is also the medium-rot detector for this rung: a ruler that has stopped
 discriminating is rotten even though it still runs green.
 
-**The young-ledger bootstrap.** An empty lesson list does not shrink verification to nothing:
-until lessons exist, the per-unit sweep falls back to the generic falsification classes in the
-sweep's own seam catalogue (`skills/verify-sweep/references/seam-catalogue.md`) as its work
-breakdown, and the first closes convert what those rounds actually land into this repo's first
-lessons. The ledger then takes over as the sweep's primary breakdown, with the generic catalogue
-remaining the completeness floor beneath it.
+**An empty or young ledger** does not shrink verification to nothing: it means the sweep's
+executors hunt from their own plan over the diff, independence first, and the ledger fills from
+what lands. A lesson is never seeded from another repo, and a generic catalogue is such a seed.
 
 ---
 
@@ -156,17 +153,17 @@ like the mechanization queue's.
 One row per unit whose close ran, appended by the close-unit step: `- <date> · probe <n> · novel
 <n/m> · mode: <model id>·<fed|blind>`. `novel n/m` = statements minted vs total findings (the
 loop's health metric: mostly re-samplings ⇒ the problem is media, not doctrine). `mode:` = the
-REVIEWING model's ID, verbatim, plus whether that round ran `·fed` (ledger in its brief) or
-`·blind`. Examples: `mode: claude-opus-5 (non-author)·fed`, `mode: gpt-5-codex·blind`. A unit
-with no non-author round records `mode: self`. The id is recorded rather than an
-internal/external category because that binary flattens exactly the case that matters: a
-cross-family reviewer that is still internal.
+PR VERIFIER's model ID, verbatim, plus whether it ran `·fed` (ledger in its brief) or `·blind`.
+Examples: `mode: claude-opus-5 (verifier)·fed`, `mode: gpt-5-codex·blind`. A unit closed with no
+verifier verdict records `mode: self`. The id is recorded rather than an internal/external
+category because that binary flattens exactly the case that matters: a cross-family reviewer that
+is still internal.
 
-Every FOURTH non-author round runs ledger-blind as the anchoring CONTROL. The driver counts it
-from this table before briefing the round, by counting the `·fed` rows standing since the last
-`·blind` row. No script schedules it, and nobody keeps the count in their head. If blind rounds
-keep finding what fed rounds stopped finding, the feed is anchoring (drop the hunt clause, keep
-the disclosure rule); if both converge on the same shrinking set, the feed is innocent.
+Every FOURTH verifier runs ledger-blind as the anchoring CONTROL. The driver counts it from this
+table before briefing the verifier, by counting the `·fed` rows standing since the last `·blind`
+row. No script schedules it, and nobody keeps the count in their head. If blind verifiers keep
+finding what fed ones stopped finding, the feed is anchoring (drop the hunt clause, keep the
+disclosure rule); if both converge on the same shrinking set, the feed is innocent.
 
 A row may also carry `ceremony: <wall-clock or context share>` — what the loop's own paperwork cost
 that unit. The loop's housekeeping is wanted, and it is measured so it stays lean: a ceremony

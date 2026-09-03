@@ -6,9 +6,9 @@ description: "Install the kstack build discipline into a repo: interview the cod
 # kstack-init
 
 kstack is a portable build discipline: premortem before building, test-first against failure
-classes, simplify after, a ledger-driven verification sweep, a fresh-context non-author review
-round, mechanism-first triage, and a self-improvement loop that distills every
-round's findings into a finding ledger by Bennett's razor. This skill installs it into ONE repo.
+classes, simplify after, a ledger-driven verification sweep, a non-author verifier on every PR,
+mechanism-first triage, and a self-improvement loop that distills every round's findings into a
+finding ledger by Bennett's razor. This skill installs it into ONE repo.
 The reasoning behind every rule here lives in kstack's `PHILOSOPHY.md` — read it before the
 first init.
 
@@ -22,11 +22,10 @@ first init.
    ports, or migration mechanics.** A fact you cannot ground in this repo does not go in.
 3. **Evidence is EARNED.** The generated ledger starts EMPTY: the mechanism header travels;
    lesson statements do not — from any repo, kstack's origin included. A repo's lessons are
-   minted at its own unit closes, from its own findings; until then the verification sweep
-   falls back to the generic falsification classes in its own seam catalogue
-   (`skills/verify-sweep/references/seam-catalogue.md`; the young-ledger bootstrap in
-   PHILOSOPHY.md). A seeded statement would be doctrine wearing no proof,
-   anchored to another codebase's failure distribution.
+   minted at its own unit closes, from its own findings; until then the sweep's executors hunt
+   from their own plan over the diff, independence first, and the ledger fills from what lands.
+   A seeded statement would be doctrine wearing no proof, anchored to another codebase's failure
+   distribution, and a generic catalogue is such a seed.
 
 ## Step 0 — mode selection and the re-run guard
 
@@ -61,7 +60,8 @@ output. The driver treats each report as a claim and spot-validates before writi
    machine-constraints candidates + the "is anything live?" flag for the owner interview.
 4. **Risk surfaces** — where money, the lifecycle/state machine, customer- or supplier-facing
    flows, custody (authn/authz/RLS/grants), and migrations live in this codebase, with paths.
-   Output: the gated-scope map (what makes a unit GATED here).
+   Output: the risk-surface map, with paths, for the profile's machine constraints and for the
+   premortem's failure classes.
 5. **Architecture + boundaries** — layering rules, import boundaries, env-var access points,
    existing docs/ADRs/READMEs worth absorbing or pointing at. Output: the boundaries summary +
    the absorption list.
@@ -78,7 +78,8 @@ Ask ONLY what the code cannot answer, batched into one round of questions where 
   local services, credentials location, anything a fresh agent would break by not knowing.
 - **Commit policy** — author identity, co-author trailer, push policy (kstack default: commit
   per checkpoint, never push; the owner pushes).
-Greenfield extras: the stack, the product one-liner, what the first gated surface will be.
+Greenfield extras: the stack, the product one-liner, what the first consumer-facing surface will
+be.
 
 ## Step 3 — generation (the write step)
 
@@ -87,11 +88,9 @@ From `templates/` in this plugin/repo, generate into the target:
 1. **`AGENTS.md`** from `AGENTS.template.md` — fill every `{{PLACEHOLDER}}` from steps 1–2.
    Machine Constraints holds ONLY verified facts, each traceable to a wave report or an owner
    answer; if none exist yet, the section says "none recorded yet — append the first time one
-   bites" rather than inventing any. The gated-scope list gets this repo's concrete surfaces
-   appended to the generic classes. Unsure whether a scope is gated ⇒ it is gated. The
-   default list travels as written. Where the owner NARROWS it (a pre-launch repo with no real
-   users, say), record the narrowing in the generated file with a named re-widening trigger
-   beside it; a narrowing with no trigger is not recorded.
+   bites" rather than inventing any. The risk-surface map from wave lane 4 lands as this repo's
+   concrete paths inside Machine constraints and the Read-first list, never as a rule that
+   lightens a unit.
 2. **The docs spine** — governed by one law: **init CREATES, never rewrites**. A file that
    exists is never overwritten, regenerated, or renamed by this skill, whatever its content.
    The spine MANIFEST — the checkable definition of "spine present":
@@ -157,6 +156,4 @@ first if none exists)".
 - Never overwrites, renames, or renumbers an existing doc — the spine law is create-only;
   converting a foreign docs tree is separate owner-approved migration work.
 - Never writes a fact without provenance.
-- Never classifies a scope ungated to make a unit lighter — unsure ⇒ gated. A profile narrows
-  the default scope list only with a named re-widening trigger recorded beside it.
 - Never overwrites an existing procedure file without absorbing and disclosing.

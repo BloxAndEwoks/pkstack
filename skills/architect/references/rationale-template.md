@@ -2,7 +2,7 @@
 
 The prose that ships alongside the type sketch. One page. Sentence-case headings, no boilerplate. Replace the italic notes with actual content.
 
-**Required header line.** The document's first line, above Problem, is `unit BASE: <sha> · gated` or `unit BASE: <sha> · ungated`. The SHA is `git rev-parse HEAD` captured at unit start, before any grounding, and it is the base of every diff range this unit is later swept over; one reconstructed afterwards is not a BASE. The classification is the router's (money, lifecycle or state machines, customer-facing flows, custody, migrations; unsure means gated).
+**Required header line.** The document's first line, above Problem, is `unit BASE: <sha>`. The SHA is `git rev-parse HEAD` captured at unit start, before any grounding, and it is the base of every diff range this unit is later swept over; one reconstructed afterwards is not a BASE.
 
 ## Problem
 

@@ -39,7 +39,7 @@ If a worker drops out, proceed with N-1 and note it.
 
 Read the terminal results. For coverage, every required slice needs a result. For a race, apply the selection rule declared up front. Use first pass, rank all, or best-of. Do not paste raw worker dumps.
 
-Aggregate the findings by shared mechanism into clusters, not a flat issue list. Each cluster names its mechanism, its members with evidence pointers, a class tag of GUARD, FACT, or MODEL, and a `reachable` value of `real user today`, `crafted client`, `raw writer`, `operator`, or `not today`. A downstream close consumes clusters, so a flat list makes it re-derive them.
+Aggregate the findings by shared mechanism into clusters, not a flat issue list. Each cluster names its mechanism, its members with evidence pointers, a class tag of wrong MODEL, missing FACT, or missing GUARD chosen before any remedy, and a `reachable` value of `real user today`, `crafted client`, `raw writer`, `operator`, or `not today` for the FACT and GUARD clusters. A wrong MODEL cluster carries no reachability, because it is fixed by redesign regardless of who can reach it. A downstream close consumes clusters, so a flat list makes it re-derive them.
 
 Keep a compact result table, the clusters one line each, and explicit gaps or dropouts.
 

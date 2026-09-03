@@ -7,8 +7,10 @@ A standalone fork merging [pstack](https://github.com/cursor/plugins/tree/main/p
 The flow is pstack's: `/poteto-mode` routes the task to a playbook, the playbook builds it,
 and the unit is the work behind one PR. kstack's finding ledger, Bennett's-razor lessons, the
 instantiated-lessons map, the verification sweep, and the close-unit self-improvement loop run
-at that flow's own chokepoints — the design step, the verify step, the PR — with every finding
-carrying who can reach it, and the fan-out hunters kept ledger-blind wherever sampling happens.
+at that flow's own chokepoints — the design step, the verify step, the PR, and the non-author
+verdict every PR collects before it merges. Every finding is classified by mechanism (wrong
+MODEL, missing FACT, missing GUARD) before any remedy is chosen, reachability only decides the
+cost of a FACT or a GUARD, and the fan-out hunters stay ledger-blind wherever sampling happens.
 
 ## Install (Claude Code)
 

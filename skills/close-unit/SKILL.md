@@ -1,14 +1,14 @@
 ---
 name: close-unit
-description: "The self-improvement close of a unit of work. Runs after the unit's FINAL review round — the sweep's triage, or a gated unit's non-author round — and BEFORE the PR opens, consuming the unit's triage clusters and the repo's finding ledger. Distills lessons per Bennett's razor (weakest sufficient hypothesis), diagnoses regenerated findings as covered-but-unenforced vs not-covered, promotes lesson media, and records the run in the unit's probe. MANDATORY TRIGGERS: 'close the unit', 'run close-unit', 'distill this round', 'ledger run'. Runs on any unit whose sweep landed findings; a unit whose sweep came back clean records no row."
+description: "The self-improvement close of a unit of work. Runs AFTER the PR's non-author verifier posts its verdict and BEFORE the owner merges, consuming the unit's triage clusters and the repo's finding ledger. Distills lessons per Bennett's razor (weakest sufficient hypothesis), diagnoses regenerated findings as covered-but-unenforced vs not-covered, promotes lesson media, and records the run in the unit's probe. MANDATORY TRIGGERS: 'close the unit', 'run close-unit', 'distill this round', 'ledger run'. Runs on any unit whose sweep or verifier landed findings; a unit with a clean sweep and a PASS verdict records no row."
 ---
 
 # Close the unit
 
-The self-improvement step of the build cadence, run ONCE per unit, after the unit's final review
-round — the sweep's triage, or a gated unit's fresh-context non-author round — and before the PR
-opens. It runs on any unit whose sweep landed findings; a unit whose sweep came back clean has
-nothing to distil and records no row. Its theory (recorded in the ledger's header): a lesson is a
+The self-improvement step, run ONCE per unit, after the PR's non-author verifier posts its verdict
+and before the owner merges. Its promotions land as a commit on the PR branch. It runs on any unit
+whose sweep or verifier landed findings; a unit with a clean sweep and a PASS verdict has nothing
+to distil and records no row. Its theory (recorded in the ledger's header): a lesson is a
 hypothesis meant to generalise from the findings you observed (the child task) to the class they
 sample (the parent). The optimal such hypothesis is the WEAKEST one still sufficient —
 "explanations should be no more specific than necessary" (Bennett, arXiv:2301.12987) — and it
@@ -19,9 +19,9 @@ what makes it apply to members that do not exist yet.
 
 1. The unit's probe (the repo's probe convention — kstack repos: `docs/050-probes/`) with its
    triage clusters — every finding from every round of this unit, already clustered by mechanism
-   (the cadence's triage step). Clusters are written into the probe AS THEY FORM, during the
+   (the triage step). Clusters are written into the probe AS THEY FORM, during the
    unit — never reconstructed at the close. The close reads the PROBE, never in-context memory: a
-   compaction between the final review round and this step must not be able to empty the close's
+   compaction between the verifier's verdict and this step must not be able to empty the close's
    input.
 2. The repo's finding ledger — resolve it from the repo's procedure file (AGENTS.md); kstack
    repos keep it at `docs/070-quality/004-finding-ledger.md`. If the repo has no ledger FILE,
@@ -47,11 +47,16 @@ per-cluster procedure below.
 
 ## The procedure
 
-Clusters arrive from triage carrying each finding's `reachable` value. Reachability does NOT
-change the ledger decision — mint, weaken, or promote is about MECHANISM, and a `not today`
-finding samples its class exactly as a `real user today` one does. Reachability decided only
-whether the finding was FIXED before the PR opened: `real user today` fixed by class, every other
-reproduced finding registered with a named trigger.
+Clusters arrive from triage already classified by MECHANISM — WRONG MODEL, MISSING FACT, or
+MISSING GUARD — because mechanism is decided before any remedy is chosen. A WRONG MODEL cluster
+was fixed in the unit by redesign whatever its reachability; a MISSING FACT by carrying the fact
+at the layer that first has it; a MISSING GUARD by the local check. Reachability was the second
+question and only for the FACT and GUARD clusters: the `reachable` value decided whether the fix
+landed in the unit or became a NOTE with a named trigger. Reachability does NOT change the ledger
+decision — mint, weaken, or promote is about MECHANISM, and a `not today` finding samples its
+class exactly as a `real user today` one does. "Fixed by class" here means the promotion into
+structure — a constraint, a compile-forced table, a lint, a registry walk — never the instance
+patch.
 
 For EACH triage cluster, in order:
 
@@ -112,12 +117,12 @@ step` > `prose`.
    fork → action, plus the headline ratio (new lessons vs re-sampled extensions — the ratio is
    the loop's health metric: mostly re-samplings means the problem is media, not doctrine).
 3. **The Loop-health row appended** to the ledger's table: `- <date> · probe <n> · novel <n/m> ·
-   mode: <reviewer model id>·<fed|blind>` where a non-author round ran, and `mode: self` where
-   only the sweep did. The model id goes in VERBATIM — `mode: claude-opus-5 (non-author)·blind`,
+   mode: <verifier model id>·<fed|blind>` where the PR's non-author verifier ran, and `mode: self`
+   where only the sweep did. The model id goes in VERBATIM — `mode: claude-opus-5 (verifier)·blind`,
    `mode: gpt-5-codex·fed`, `mode: self` — never an internal/external binary, which flattens
    exactly the case that matters (cross-family but internal). The DRIVER sets the fed|blind flag,
-   from whether the non-author round was given the ledger, and the driver also schedules the
-   control by COUNTING these rows: every FOURTH non-author round runs blind (count the fed rows
+   from whether that verifier was given the ledger, and the driver also schedules the
+   control by COUNTING these rows: every FOURTH verifier runs blind (count the fed rows
    standing since the last blind one). The row IS the counter's state; skipping it silently
    disables the anchoring control. Optionally add `ceremony: <wall-clock or context share>` — what
    the loop's own paperwork cost this unit. Housekeeping is WANTED here, and measured so it stays
@@ -125,19 +130,20 @@ step` > `prose`.
    the step gets dropped.
 4. **The rubric fed** — landed findings into the LEDGER, which is the only feed. A lesson that
    does not reach the ledger reaches nothing.
-5. **The product-health line**, for the PR and for the owner: "of N findings, k reachable by a
-   real user, all fixed; the changed journeys driven green through verify-<project>". The PR's
-   Verification section cites it alongside the loop-health row.
+5. **The product-health line**, for the PR and for the owner: "of N findings, m wrong MODEL (all
+   redesigned), k fixed now, p notes with named triggers; verdict PASS+NOTES; the changed journeys
+   driven green through verify-<project>". The PR's Verification section cites it alongside the
+   loop-health row.
 
 ## The loop self-check (final step — the loop attacks ITSELF)
 
 The process's own known failure modes, checked mechanically at every close. A newly discovered
 loop-level failure mode is added to this list in the same sitting it is found.
 
-- **Anchoring** — if the driver's count put this unit's non-author round on the blind arm,
-  compare its findings against the recent fed rounds: did the blind reviewer find classes the fed
-  rounds stopped finding? If yes, the feed is anchoring: demote it (drop the hunt clause, keep
-  only the disclosure rule).
+- **Anchoring** — if the driver's count put this unit's verifier on the blind arm, compare its
+  findings against the recent fed verifiers: did the blind one find classes the fed ones stopped
+  finding? If yes, the feed is anchoring: demote it (drop the hunt clause, keep only the
+  disclosure rule).
 - **Ratio confound** — never read a falling novel ratio as success on its own; only the
   driver-counted blind control distinguishes an anchored reviewer from genuinely exhausted
   classes. A run of closes that never schedules one has no reading at all.

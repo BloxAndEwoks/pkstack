@@ -8,7 +8,7 @@
 The build process for this repository is pkstack poteto-mode. Work enters through the
 `/poteto-mode` router. The router matches a playbook, and the playbook's steps carry the work.
 This file is the repository profile. It carries what the plugin cannot know about this repo,
-and it is the authority on what is gated here.
+and it is the authority on this repo's own surfaces, constraints, and commands.
 
 The docs are part of the codebase, not optional commentary.
 
@@ -22,8 +22,9 @@ Before substantial work:
    deployment, data model, or security posture.
 4. The finding ledger, `docs/070-quality/004-finding-ledger.md`. Its lessons are this repo's
    recorded defect classes, applied at design time and verified at sweep time. It starts empty
-   and grows only from this repo's own findings. Its header carries the mechanism and the
-   young-ledger bootstrap.
+   and grows only from this repo's own findings. Its header carries the mechanism. While it is
+   empty or young, the sweep's executors hunt from their own plan over the diff, and the ledger
+   fills from what lands.
 
 ## Build principles
 
@@ -70,82 +71,83 @@ units. A checkpoint is one commit-sized coherent change. A unit is usually one t
 checkpoints.
 
 The unit's design package is its probe in `docs/050-probes/`. The premortem writes it before
-the build. It carries BASE, the gated classification, the failure classes the design is built
-against, and the ledger lessons those classes implicate. The delegate brief carries those
-annotations verbatim, so a delegate never re-walks the ledger itself.
+the build. It carries BASE, the failure classes the design is built against, and the ledger
+lessons those classes implicate. The delegate brief carries those annotations verbatim, so a
+delegate never re-walks the ledger itself.
 
 For every NEW FACT the design introduces, the probe records a **facts-before-verbs** row.
 Occurrence or state, writer set, requiredness per boundary, enforcement tier. A tier of
 "convention" needs a written reason in the row.
 
 **Registration happens at PR open.** The Opening a PR playbook updates the probe with BASE, the
-gated classification, the clusters so far, and a named close trigger. A registered unit that
-never closes surfaces as an overdue register at the next close.
+clusters so far, and a named close trigger. A registered unit that never closes surfaces as an
+overdue register at the next close.
 
 The PR's Verification section names the real path and the outcome of each check, not the
 command names. Every unit that swept names the ledger walk there too (`ledger: n lessons swept · k
-findings · r reachable by a real user, all fixed · m registered`). Where the close ran, that
-section cites the loop-health row.
+findings · model/fact/guard a/b/c · j fixed now · m notes with named triggers`). Where the close
+ran, that section cites the loop-health row.
 
-## Gated scope
+## Mechanism first, reachability second
 
-A unit is **GATED** if its scope touches any of: money rails, the lifecycle or state machine,
-customer- or supplier-facing flows, custody (authz, grants, doors), or a
-migration{{EXTRA_GATED_SCOPES}}. **Unsure means gated.**
+**Mechanism first.** Every finding is classified WRONG MODEL, MISSING FACT, or MISSING GUARD
+before any remedy is chosen. A WRONG MODEL finding is fixed now by redesign regardless of who can
+reach it, because deferring it multiplies through every checkpoint that composes on it; it is
+never a note. A MISSING FACT is fixed by carrying the fact at the layer that first has it, never
+by a local conditional. A MISSING GUARD is the one mechanism where a local fix is correct.
+Answering a missing-fact problem with a guard is the spiral, every time. Guard density is the
+leading indicator: a third conditional on one path means redesign the path now.
 
-That list is the default. This profile may narrow it, and a narrowing is only valid with a
-named re-widening trigger recorded right here beside it. A narrowing with no trigger is a dodge.
+**Reachability second**, and only for MISSING GUARD and MISSING FACT. The `reachable` value is one
+of `real user today`, `crafted client`, `raw writer`, `operator`, `not today`. It is evidence, not
+an opinion, carried at rung 4 or higher of the evidence ladder in the **blast-radius** skill. Rung
+4 is running it against the real code; rung 5 is reproducing it in the running app. Below rung 4
+the reachability is unproven, and the row says so. The value decides whether the fix lands in this
+unit or becomes a NOTE with a named trigger.
 
-## Reachability decides the cost of a finding
+**The verdict words are PASS, PASS+NOTES, FAIL.** A FAIL is a WRONG MODEL, or a real user reaching
+a false statement today, reproduced on the surface. Every NOTE carries a named trigger. **A unit is
+done when no FAIL is open.**
 
-Every finding is recorded with a `reachable` value, one of `real user today`, `crafted client`,
-`raw writer`, `operator`, `not today`. The value is evidence, not an opinion. It is carried at
-rung 4 or higher of the evidence ladder in the **blast-radius** skill. Rung 4 is running it
-against the real code; rung 5 is reproducing it in the running app. Below rung 4 the
-reachability is unproven, and the row says so.
+**Fixed by class** means the ledger's promotion into structure — a constraint, a compile-forced
+table, a lint, a registry walk — never the instance patch.
 
-Only `real user today` findings are fixed by class before the PR opens. Every other finding is
-registered with a named trigger. **A unit is done when no real-user finding is open.**
-
-## Checkpoint review and the non-author round
+## Checkpoint review and the PR verifier
 
 A fresh-context non-author review round runs on a **composed-on checkpoint** inside a unit: a
 migration, a boundary value type, a served contract, or a state transition a later checkpoint
-writes or reads. On a gated unit, one round also runs over the whole unit diff before the PR
-opens. Both are fed the ledger.
+writes or reads. It is fed the ledger.
 
-The reviewer is a fresh agent that did not write the code, working in its own worktree and
-driving the real surface parent against head, with its verdict posted where it outlives the
-chat. It buys the one property the sweep's executors are denied by design, independence from
-the build, and it samples what a builder's own falsification structurally cannot: the
-assumption the author never knew they were making. Delegates never spawn review rounds. The
-driver does.
+**Every PR carries a non-author verifier.** One agent that did not write the code, working in its
+own worktree, driving the real surface through the verification skill at the PR head against its
+parent, returning `PASS`, `PASS+NOTES` or `FAIL` and posting that verdict on the PR, where it
+outlives the chat. It buys the one property the sweep's executors are denied by design,
+independence from the build, and it samples what a builder's own falsification structurally
+cannot: the assumption the author never knew they were making. It is independence-first: its own
+plan first, the ledger and the sweep's review manifest afterwards as a completeness floor.
+Delegates never spawn review rounds or verifiers. The driver does.
 
-The unit's loop-health row records `mode: <reviewer model id>·fed|blind`, or `mode: self` where
-no non-author round ran. Every fourth non-author round runs **ledger-blind** as the anchoring
+The unit's loop-health row records `mode: <verifier model id>·fed|blind`, or `mode: self` where a
+close ran with no verifier verdict. Every fourth verifier runs **ledger-blind** as the anchoring
 control. The driver counts the rows in the ledger's loop-health table to know when one is due.
 No script schedules it.
 
 ## The close
 
-`/close-unit` runs after the unit's final review round, which is the sweep's triage or, on a
-gated unit, the non-author round over the whole diff. It runs **before the PR opens**, on any
-unit whose sweep landed findings.
+`/close-unit` runs **after the PR's verifier posts its verdict and before the owner merges**, on
+any unit whose sweep or verifier landed findings. Its promotions land as a commit on the PR
+branch.
 
-Triage first, and triage by mechanism. Cluster the findings by shared cause, then ask of each
-cluster whether it is a missing GUARD (local fix), a missing FACT (carry the fact at the layer
-that first has it), or a wrong MODEL (redesign; more guards make it worse). Answering a
-missing-fact problem with a guard is the spiral, every time. Guard density is the leading
-indicator: a third conditional on one path means redesign the path now. Record the judgement
-either way, including "patched deliberately, here is why".
+Triage first, and triage by mechanism, per the section above. Record the judgement either way,
+including "patched deliberately, here is why".
 
 The close then looks each cluster up in the ledger and takes the fork. *Covered but unenforced*
 promotes the medium. *Not covered* weakens the statement and re-walks sufficiency. A cluster no
 lesson claims mints one. The run is recorded in the probe; the loop-health row is appended to
 the ledger.
 
-The close states the unit's product-health line: **"of N findings, k reachable by a real user,
-all fixed; journeys driven green"**.
+The close states the unit's product-health line: **"of N findings, m wrong MODEL (all redesigned),
+k fixed now, p notes with named triggers; verdict PASS+NOTES; journeys driven green"**.
 
 **Size law:** lessons and their evidence accrete in the LEDGER, never here. When a lesson is
 fully mechanized, its prose in this file is cut to a one-line pointer.
@@ -195,13 +197,15 @@ not to lock in implementation details.
 
 ## Proportionality
 
-Proportionality lives in the classification, never in skipped steps. An ungated unit skips the
-non-author round over the whole diff. The premortem scales to a short probe note, and the sweep
-scales to the diff.
+Proportionality lives in the size of each step, never in a skipped step. The premortem scales to
+a short probe note, and the sweep's fan-out scales to the diff.
 
 **The sweep is never skipped.** On a small unit it may be a driver-level ledger walk, but the
-walk itself always runs. The walk is what makes a small unit provably small. A sweep that
-landed findings closes with its promotions, gated or not.
+walk itself always runs. The walk is what makes a small unit provably small.
+
+**The verifier runs on every PR.** A unit with a clean sweep and a PASS verdict records no
+loop-health row, because it has nothing to distil. A sweep or a verdict that landed findings
+closes with its promotions.
 
 ## Machine constraints
 

@@ -1,17 +1,18 @@
-# Seam catalogue — the generic falsification classes
+# Seam catalogue — optional reading
 
-The attack classes, perf cost families, and race-proving recipe that each landed a real defect,
-kept generic so no repo has to re-derive them. `/verify-sweep` reads this as the YOUNG-LEDGER
-FLOOR: the work breakdown while a repo's finding ledger is empty or thin, and the completeness
-floor beneath the ledger once minted lessons take over.
+The attack classes, perf cost families, and race-proving recipe that each landed a real defect in
+some codebase, kept generic. **This is OPTIONAL READING a driver may consult, never a work
+breakdown and never a step.** No skill routes to it and no sweep owes it a walk. An empty or young
+ledger means the sweep's executors hunt from their own plan over the diff, independence first, and
+the ledger fills from what lands. A lesson is never seeded from another repo, and a generic
+catalogue is such a seed.
 
 ## The seam catalogue — attack classes proven to land
 
 Order matters: devise YOUR OWN attack plan from the design and code FIRST — the guarantees, the layers
-they cross, where you'd bet money it breaks. The catalogue is the FLOOR, not the search strategy:
-sweep it AFTER your own hunt as a completeness check, so it catches what you missed without narrowing
-what you look for. (This is the same independence-first rule we impose on the external reviewer —
-prescribed categories cap exploration for us exactly as they would for it.)
+they cross, where you'd bet money it breaks. Anything read here is read AFTER your own hunt, so it
+cannot narrow what you look for. (This is the same independence-first rule we impose on the external
+reviewer — prescribed categories cap exploration for us exactly as they would for it.)
 
 Each class below found a real defect (the parentheticals are those episodes, anonymized); they
 generalize far beyond the bugs that taught them:

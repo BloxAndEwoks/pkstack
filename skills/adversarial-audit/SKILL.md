@@ -12,7 +12,7 @@ record.
 
 The seam catalogue — the generic attack classes, the eight perf cost families, and the
 deterministic race-proving recipe — now lives at
-[`skills/verify-sweep/references/seam-catalogue.md`](../verify-sweep/references/seam-catalogue.md),
-where the sweep reads it as the young-ledger floor.
+[`skills/verify-sweep/references/seam-catalogue.md`](../verify-sweep/references/seam-catalogue.md)
+as optional reading a driver may consult, never a step and never a work breakdown.
 
 Invoke `/verify-sweep`.

@@ -27,15 +27,6 @@ Date: YYYY-MM-DD · Status: draft | ratified | built | superseded
 <!-- Behavioral and observable — each one testable as stated. Unhappy paths and absence
      states are requirements, not footnotes. -->
 
-## Gated-scope classification
-
-<!-- Classify against the gated scope in the repo's procedure file (AGENTS.md) — the default
-     list is money rails, the lifecycle/state machine, customer- or supplier-facing flows,
-     custody, or a migration, and a profile may have narrowed it with a named re-widening
-     trigger. Classify per the profile's gated scope; unsure means gated within it. This line
-     decides whether the unit takes a non-author review round over its whole diff before the
-     PR opens. -->
-
 ## New facts (facts-before-verbs preview)
 
 <!-- For each fact this feature introduces: occurrence-or-state · writer set · requiredness

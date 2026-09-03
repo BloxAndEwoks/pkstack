@@ -1,6 +1,6 @@
 ---
 name: verify-sweep
-description: "Feature step 5a: the per-unit LEDGER-DRIVEN verification sweep — the repo's adversarial-depth audit run in a neutral falsify/verify register (same depth, no safeguard vocabulary), driver-led with executor subagents on bounded per-lesson specs. This IS the unit's verification and it runs on EVERY unit, gated or not (the fan-out scales to the diff; the ledger walk itself is never skipped). On a gated unit, a fresh-context non-author review round over the whole unit diff follows it, before the PR opens. MANDATORY TRIGGERS: 'run the sweep', 'verification sweep', 'verify the unit', 'sweep the diff'. Do NOT trigger for single-file spot checks (a spot check is not a unit)."
+description: "Feature step 5a: the per-unit LEDGER-DRIVEN verification sweep — the repo's adversarial-depth audit run in a neutral falsify/verify register (same depth, no safeguard vocabulary), driver-led with executor subagents on bounded per-lesson specs. This IS the unit's verification and it runs on EVERY unit (the fan-out scales to the diff; the ledger walk itself is never skipped). The PR's non-author verifier reads the manifest this sweep leaves behind, after forming its own plan. MANDATORY TRIGGERS: 'run the sweep', 'verification sweep', 'verify the unit', 'sweep the diff'. Do NOT trigger for single-file spot checks (a spot check is not a unit)."
 ---
 
 # Verification sweep
@@ -31,11 +31,9 @@ a green sweep looks the same either way.
    HEAD` before the first checkpoint) — never reconstructed from memory afterwards.
 2. The repo's finding ledger — resolve its path from the repo's procedure file (AGENTS.md);
    kstack repos keep it at `docs/070-quality/004-finding-ledger.md`. The lesson list IS the work
-   breakdown. **Young-ledger bootstrap:** while the ledger has no (or few) lessons, the work
-   breakdown falls back to the generic falsification classes in
-   [`references/seam-catalogue.md`](references/seam-catalogue.md), run under this same protocol
-   and register; as lessons are minted they take over, with the catalogue remaining the
-   completeness floor beneath them.
+   breakdown. **An empty or young ledger** means the executors hunt from their own plan over the
+   diff, independence first, and the ledger fills from what lands. A lesson is never seeded from
+   another repo, and a generic catalogue is such a seed.
 3. The unit's probe + registers, so registered residues read as disclosures, not findings.
 
 ## Protocol (driver/executor)
@@ -45,8 +43,8 @@ subagents (general-purpose agents) each get one bounded spec — a lesson group,
 and the falsification question. Bounded specs are what make executors safe; open-ended judgment
 stays with the driver.
 
-**Scale the fan-out to the diff, never the walk to zero**: a large or gated unit gets the full
-~5–6-executor fan-out below; a small ungated unit may collapse to a driver-level pass — the driver
+**Scale the fan-out to the diff, never the walk to zero**: a large unit gets the full
+~5–6-executor fan-out below; a small unit may collapse to a driver-level pass — the driver
 walks every ledger lesson against the diff personally — but no unit ships without the walk,
 because the walk is what makes a "small" unit provably small.
 
@@ -77,19 +75,28 @@ the suite or a scratch container.
 
 1. Driver reproduces each reported falsification before accepting it (an executor report is a
    claim).
-2. Every confirmed finding is RECORDED with a `reachable` value — one of `real user today`,
-   `crafted client`, `raw writer`, `operator`, `not today` — and the evidence rung that value
-   stands on: rung 4 or higher of the ladder in `skills/blast-radius/SKILL.md` (you ran it, or you
-   reproduced it in the running app). A reachability argued from reading is not recorded.
-3. Findings then enter the cadence's triage step: ledger lookup → covered-but-unenforced vs
-   not-covered fork → the fix-or-register decision. Only `real user today` findings are FIXED BY
-   CLASS before the PR opens. Every other reproduced finding is REGISTERED with a named trigger,
-   which is a disposition and not a dodge. **The sweep is clean when no `real user today` finding
-   is open, and that is the unit's done condition.**
-4. The sweep's result line goes in the unit's probe: lessons swept, findings by lesson, findings
-   by `reachable` value, clean-to-ledger or not. A clean sweep is a PRECONDITION for a gated
-   unit's non-author round, not a substitute for it.
-5. **On a gated unit, close the sweep by writing the REVIEW MANIFEST into the unit's probe** — a
+2. **Mechanism first.** Every confirmed finding is CLASSIFIED as WRONG MODEL, MISSING FACT, or
+   MISSING GUARD before any remedy is chosen. A WRONG MODEL finding is fixed now by redesign
+   regardless of who can reach it, because deferring it multiplies through every checkpoint that
+   composes on it; it is never a note. A MISSING FACT is fixed by carrying the fact at the layer
+   that first has it, never by a local conditional. A MISSING GUARD is the one mechanism where a
+   local fix is correct.
+3. **Reachability second**, and only for MISSING GUARD and MISSING FACT. Record the `reachable`
+   value — one of `real user today`, `crafted client`, `raw writer`, `operator`, `not today` — and
+   the evidence rung that value stands on: rung 4 or higher of the ladder in
+   `skills/blast-radius/SKILL.md` (you ran it, or you reproduced it in the running app). A
+   reachability argued from reading is not recorded. The value decides whether the fix lands in
+   this unit or becomes a NOTE with a named trigger. Findings then enter the ledger fork:
+   covered-but-unenforced vs not-covered. Fixing BY CLASS means the ledger's promotion into
+   structure — a constraint, a compile-forced table, a lint, a registry walk — never the instance
+   patch.
+4. **The verdict words are PASS, PASS+NOTES, and FAIL.** A FAIL is a WRONG MODEL, or a real user
+   reaching a false statement today, reproduced on the surface. Every NOTE carries a named
+   trigger, which is a disposition and not a dodge. **The unit is done when no FAIL is open.** The
+   sweep's result line goes in the unit's probe: lessons swept, findings by lesson, findings by
+   mechanism and by `reachable` value, and the verdict. A clean sweep is a PRECONDITION for the
+   PR's non-author verifier, not a substitute for it.
+5. **Close the sweep by writing the REVIEW MANIFEST into the unit's probe** — a
    short section titled exactly `## Review manifest`, holding: unit name · base..head SHAs · the
    swept tree's `git patch-id` (`git diff base..head | git patch-id --stable`) · the named
    guarantees · the known-class checks this sweep executed · registered residues with their named
@@ -97,11 +104,11 @@ the suite or a scratch container.
    patch-id is not decoration: a rebase, an amend, or a squash silently invalidates every
    SHA-pinned verdict while the swept CONTENT is unchanged, and the patch-id survives the
    rewrite — it is what lets a later reader tell "the head moved" from "the work changed".
-   The manifest's consumer is the gated unit's fresh-context NON-AUTHOR review round, fed the
-   ledger, which runs over the whole unit diff before the PR opens; the manifest is what stops
-   that round re-deriving scope from thousands of lines of history.
-6. **The blind control.** Every FOURTH non-author round runs ledger-blind, counted by the driver
-   from the ledger's loop-health rows — the fed rows standing since the last blind row. A blind
-   round is given neither the ledger nor the review manifest, so the probe's design sections must
-   state the unit's guarantees in their own right. The round's mode goes in the loop-health row
+   The manifest's consumer is the PR's non-author verifier (Shipping step 1), which reads it only
+   AFTER forming its own plan, as a completeness floor rather than a search strategy; the manifest
+   is what stops that verifier re-deriving scope from thousands of lines of history.
+6. **The blind control.** Every FOURTH verifier runs ledger-blind, counted by the driver from the
+   ledger's loop-health rows — the fed rows standing since the last blind row. A blind verifier is
+   given neither the ledger nor the review manifest, so the probe's design sections must state the
+   unit's guarantees in their own right. The verifier's mode goes in the loop-health row
    `/close-unit` appends.

@@ -2,7 +2,7 @@
 # Read-only worktree prune audit. Classifies every git worktree by size, merge
 # state, uncommitted work, remote/PR state, and the most recent chat that
 # operated in it. Emits a table sorted by size with a suggested bucket. Never
-# deletes anything; deletion stays a human-gated step in the playbook.
+# deletes anything; deletion stays a human decision in the playbook.
 #
 # Usage: worktree-audit.sh [repo-path] [pinned-list-file]
 #   repo-path defaults to the current repo. pinned-list-file holds one worktree

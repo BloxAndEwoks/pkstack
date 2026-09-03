@@ -10,7 +10,7 @@ Spawn one reviewer per configured model to adversarially review code changes. Ea
 
 The deliverable is a synthesized verdict. Do NOT auto-apply changes.
 
-One round per unit is the cap. Two triggers fire it. A contested design, and a gated unit's non-author round over the whole unit diff before the PR opens.
+One round per unit is the cap. One trigger fires it: a contested design, reviewed before shipping.
 
 ## Step 1, Determine Scope
 
@@ -59,7 +59,7 @@ Read `references/reviewer-prompt.md` and fill in the template with:
 
 The same filled template goes to all reviewers, so every model applies the code-quality lens.
 
-Which round this is decides what the reviewers see. On a contested-design round they are samplers and stay ledger-blind, because the class you are hunting is one the ledger has not named yet. On a gated unit's non-author round they are fed the repo's finding ledger, because what that round buys is independence from the builder over known classes, not novelty.
+The reviewers stay ledger-blind. They are samplers, and the class you are hunting is one the ledger has not named yet.
 
 Each reviewer produces structured findings as described in the prompt template.
 
@@ -77,7 +77,9 @@ As results come back, build a unified picture:
 
 Carry each finding's Location and Severity into the Act On entries. The reviewer prompt already produces both, and a finding that drops them is no longer citable.
 
-Give every surviving finding a `reachable` value, one of `real user today`, `crafted client`, `raw writer`, `operator`, or `not today`. Evidence it at rung 4 or higher of the **blast-radius** evidence ladder, meaning you ran it or you reproduced it in the running app. A finding you could not reproduce gets no value and enters no bucket.
+Mechanism decides the remedy, and it is decided first. A WRONG MODEL cluster is fixed now by redesign regardless of who can reach it, because deferring it multiplies through every change that composes on it; it is never a note. A MISSING FACT is fixed by carrying the fact at the layer that first has it, never by a local conditional. A MISSING GUARD is the one mechanism where a local fix is correct.
+
+Reachability comes second, and only for MISSING GUARD and MISSING FACT. Give each such surviving finding a `reachable` value, one of `real user today`, `crafted client`, `raw writer`, `operator`, or `not today`. Evidence it at rung 4 or higher of the **blast-radius** evidence ladder, meaning you ran it or you reproduced it in the running app. A finding you could not reproduce gets no value and enters no bucket.
 
 ## Step 5, Lead Judgment
 
@@ -85,16 +87,19 @@ You are the lead reviewer, a pragmatic senior engineer, not a neutral aggregator
 
 Read `references/lead-judgment.md` for the full framework. Reviewers only see a slice of the codebase. You have the full context (the goal, the constraints, the timeline, which tradeoffs were already considered). Use that context aggressively.
 
-Categorize every finding using these buckets. The `reachable` value picks the bucket, not the severity word the reviewer chose.
+Categorize every finding using these buckets. The mechanism picks the bucket first. The `reachable` value picks the bucket for a MISSING GUARD or MISSING FACT, never the severity word the reviewer chose.
 
-- **Act on**. `reachable: real user today`. Fixed by class before the PR opens. A finding at any other reachability lands here too when the design itself is wrong (a wrong MODEL cluster), because a named trigger cannot hold a broken model.
-- **Consider**. Reproduced at `crafted client`, `raw writer`, or `operator`, and expensive to leave standing. Registered with a named trigger, and worth the user's attention now.
-- **Noted**. Reproduced but `not today`, or reachable only past a boundary nothing crosses yet. Registered with a named trigger and left there.
+- **Act on**. Every wrong MODEL cluster, whatever its reachability, because a named trigger cannot hold a broken model. Plus a MISSING FACT or MISSING GUARD at `reachable: real user today`. Fixed before the PR opens, and fixed by class: a wrong MODEL by redesign, a MISSING FACT by carrying the fact at the layer that first has it, a MISSING GUARD by the local check. "By class" means a promotion into structure, never the instance patch.
+- **Consider**. A MISSING FACT or MISSING GUARD reproduced at `crafted client`, `raw writer`, or `operator`, and expensive to leave standing. A NOTE with a named trigger, and worth the user's attention now.
+- **Noted**. Reproduced but `not today`, or reachable only past a boundary nothing crosses yet. A NOTE with a named trigger, left there.
 - **Dismissed**. Wrong, nitpicky, or missing context. Brief explanation why.
+
+The verdict words are PASS, PASS+NOTES, and FAIL. A FAIL is anything in Act on. The round is done when no FAIL is open.
 
 For each finding, include:
 - Which model(s) raised it
-- Its `reachable` value and the ladder rung that evidenced it
+- Its mechanism (wrong MODEL / missing FACT / missing GUARD)
+- Its `reachable` value and the ladder rung that evidenced it, where the mechanism takes one
 - The category (act on / consider / noted / dismissed)
 - A one-line rationale for the categorization
 

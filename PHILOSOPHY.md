@@ -1,7 +1,7 @@
 # The kstack philosophy
 
 Everything in kstack follows from one observed failure and one paper. The failure: a rigorous
-team that gated every unit through an independent external review kept getting DENIED — round
+team that ran every unit through an independent external review kept getting DENIED — round
 after round, with the findings recurring in the same *shapes* — because each finding was fixed
 as itself: one guard per finding. Guards written that way are maximally specific hypotheses
 with single-member extensions, and the next round reliably lands in the gaps BETWEEN them. The
@@ -18,18 +18,19 @@ is belt-and-suspenders, which does not ship.
 usually one to five commits). It is the router's playbook walked end to end: understand the
 subsystem, premortem then architect the design, plan the fan-out, delegate the code, verify on
 the matching surface with the ledger sweep inside that step, rebase, interrogate a contested
-design, open the PR. It is deliberately boring and always the same. Proportionality lives only
-in classifying the unit, gated or not, never in skipping a step. What "gated" means is the
-repo's procedure file to define; the default scope list travels with the plugin, and a profile
-that narrows it owes a named re-widening trigger.
+design, open the PR, collect the PR's non-author verdict. It is deliberately boring and always
+the same. Proportionality lives in the size of each step, never in a skipped step: the premortem
+scales to a probe note and the sweep's fan-out scales to the diff, but no unit skips the walk,
+the drive, or the verifier.
 
 **The outer loop improves the process itself**, and it has exactly ONE step: the unit close
-(`/close-unit`), run after the unit's final review round, before its PR opens, on any unit whose
-sweep landed findings. One step, placed there, because that is when the finding sample is
-largest; because it must sit outside remediation (a mid-fix reflection is contaminated by
-deadline pressure); and because it must not live inside the review round itself (that round is
-the loop's unbiased sampler, and instrumenting it changes what it samples). A process whose improvement step fires "whenever someone gets around to editing the
-procedure file" does not have an outer loop; it has accumulated pain.
+(`/close-unit`), run after the PR's verifier posts its verdict and before the owner merges, on
+any unit whose sweep or verifier landed findings. One step, placed there, because that is when
+the finding sample is largest; because it must sit outside remediation (a mid-fix reflection is
+contaminated by deadline pressure); and because it must not live inside the verifier itself (the
+verifier is the loop's unbiased sampler, and instrumenting it changes what it samples). A process
+whose improvement step fires "whenever someone gets around to editing the procedure file" does
+not have an outer loop; it has accumulated pain.
 
 The outer loop also attacks itself: every close runs a mechanical self-check (anchoring, the
 ratio confound, overdue registers, medium rot — see `/close-unit`), and any newly discovered
@@ -76,17 +77,15 @@ its own unit closes, from its own findings. This is a considered rule, not modes
   sampled spends verification budget where this repo has no evidence of leakage — and anchors
   its premortems and sweeps to another architecture's failure distribution.
 - **The generalizable part already travels at the right altitude.** What deserves to cross
-  repos is method-level doctrine (requiredness, enforcement tiers, compose-the-flow — in the
-  generated AGENTS.md) and the generic falsification classes (the seam catalogue at
-  `skills/verify-sweep/references/seam-catalogue.md`). The ledger's job is precisely the part
-  that must be local: which classes THIS
-  repo actually samples, with what evidence, enforced where.
+  repos is method-level doctrine — requiredness, enforcement tiers, compose-the-flow — in the
+  generated AGENTS.md. The ledger's job is precisely the part that must be local: which classes
+  THIS repo actually samples, with what evidence, enforced where.
 
-**The young-ledger bootstrap:** an empty ledger does not shrink verification to nothing. Until
-lessons exist, the sweep's work breakdown falls back to the generic falsification classes in
-its own seam catalogue — the floor every repo starts from — and the first closes convert what
-those rounds actually land into the repo's first lessons. The ledger then takes over as the
-primary breakdown, with the generic catalogue remaining the completeness floor beneath it.
+**An empty or young ledger** does not shrink verification to nothing. It means the sweep's
+executors hunt from their own plan over the diff, independence first, and the ledger fills from
+what lands. A lesson is never seeded from another repo, and a generic catalogue is such a seed.
+The seam catalogue at `skills/verify-sweep/references/seam-catalogue.md` survives as optional
+reading a driver may consult, never as a step and never as a work breakdown.
 
 ## Enforcement media, ranked by quantification force
 
@@ -109,13 +108,13 @@ Three verification instruments, deliberately asymmetric:
 - **The sweep (every unit)** applies the repo's KNOWN classes to the diff — cheap, parallel,
   exhaustive over the ledger. Run in a neutral falsify/verify register with bounded per-lesson
   executor specs; judgment (scope, triage, verdict) stays with the driver.
-- **The non-author round (the default independence rung)** is a fresh agent that did NOT write
+- **The non-author verifier (the default independence rung)** is a fresh agent that did NOT write
   the code, in its own worktree, driving the real surface parent-vs-head, with its verdict posted
   where it outlives the chat. It buys the one property the sweep's executors are denied by
   design — independence from the build — and it samples what a builder's own falsification
   structurally cannot: the assumption the author never knew they were making. This is the rung
-  the playbooks route to: on a composed-on checkpoint inside a unit, and over the whole diff of a
-  gated unit before its PR opens. It is still in-family, which is a stated limit rather than a
+  the playbooks route to, unconditionally: on a composed-on checkpoint inside a unit, and on
+  EVERY PR before the owner merges. It is still in-family, which is a stated limit rather than a
   hidden one.
 - **The external gate** is an INDEPENDENT model hunting NOVEL classes — the builder's blind
   spots, which no amount of in-family review samples. It is TOOLBOX, not flow: it runs when a
@@ -125,7 +124,7 @@ Three verification instruments, deliberately asymmetric:
 
 Feeding a reviewer the ledger (as its floor, never its ceiling) risks **anchoring** — a fed
 reviewer can satisfice on known classes and under-sample novel ones — and whether that is
-happening must be MEASURED, never remembered. Every FOURTH non-author round therefore runs as a
+happening must be MEASURED, never remembered. Every FOURTH verifier therefore runs as a
 blind control, and the driver schedules it by counting the `·fed` rows standing since the last
 `·blind` row in the ledger's loop-health table. No script keeps that count. The novel-vs-resampled
 ratio alone is confounded (an anchored reviewer and genuinely exhausted classes look the
@@ -160,14 +159,31 @@ compiler.
 ## Triage: mechanism before remedy
 
 Findings arrive as flat lists; fixed as flat lists they become the original failure. Before
-any fix: cluster by shared mechanism, then classify each cluster — **missing GUARD** (model
-right, one path forgot a check: local fix), **missing FACT** (the code is inferring what it
-could be told: carry the fact at the layer that first has it), or **wrong MODEL** (every guard
-resting on it is load-bearing on a falsehood: redesign; more guards make it worse). Answering
-a missing-fact problem with a guard is the spiral, every time. Guard density is the leading
-indicator — a third conditional on one path means redesign the path now, not after two more
-rounds prove it. And bound it: a single isolated finding on a sound model gets the local fix
-and nothing more, with the judgement recorded either way.
+any fix: cluster by shared mechanism, then classify each cluster — **wrong MODEL** (every guard
+resting on it is load-bearing on a falsehood), **missing FACT** (the code is inferring what it
+could be told), or **missing GUARD** (model right, one path forgot a check).
+
+**Mechanism first, and it alone picks the remedy.** A wrong MODEL is fixed NOW by redesign
+regardless of who can reach it, because deferring it multiplies through every checkpoint that
+composes on it; it is never a note, and more guards make it worse. A missing FACT is fixed by
+carrying the fact at the layer that first has it, never by a local conditional. A missing GUARD
+is the one mechanism where a local fix is correct. Answering a missing-fact problem with a guard
+is the spiral, every time. Guard density is the leading indicator — a third conditional on one
+path means redesign the path now, not after two more rounds prove it.
+
+**Reachability second**, and only for missing GUARD and missing FACT: the `reachable` value
+(real user today, crafted client, raw writer, operator, not today), evidenced at rung 4 or higher
+of the blast-radius ladder, decides whether the fix lands in this unit or becomes a NOTE with a
+named trigger.
+
+**The verdict words are PASS, PASS+NOTES, FAIL.** A FAIL is a wrong MODEL, or a real user
+reaching a false statement today, reproduced on the surface. Every NOTE carries a named trigger.
+A unit is done when no FAIL is open.
+
+**Fixed by class** means the ledger's promotion into structure — a constraint, a compile-forced
+table, a lint, a registry walk — never the instance patch. And bound it: a single isolated
+finding on a sound model gets the local fix and nothing more, with the judgement recorded either
+way.
 
 ## Size laws
 

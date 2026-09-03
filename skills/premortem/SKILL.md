@@ -39,7 +39,7 @@ skill goes stale the next time a step is redesigned.
    multi-writer states bypassing a chokepoint, torn multi-transaction seams + retries that don't
    repair, concurrency/deadlocks, idempotency and money invariants, migrations against LIVE data,
    trust boundaries (the UI is not one), and external-fact assumptions (fees, API behaviour, rates).
-   **The floor is evidence-gated, not a tick-box**: a class earns a scenario — and the sweep budget
+   **The floor is evidence-driven, not a tick-box**: a class earns a scenario — and the sweep budget
    downstream of it — only where something in THIS repo shows its signal (a schema, a grant, a
    live-data fact, a trace, a prior finding). Walked as a checklist, a completeness floor
    manufactures scenarios for classes the code cannot reach and spends the unit's verification

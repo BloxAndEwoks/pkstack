@@ -167,15 +167,15 @@ grep: close-unit driver
 why: pstack-origin reflect reviewer, moved and rewired to return process findings to close-unit.
 grep: close-unit driver
 ### p2-router-gating — skills/poteto-mode/SKILL.md
-why: the unit-classification trigger (GATED test + BASE capture + prototype carve-out + re-route rule + one-time kstack-init offer), the close trigger for a registered gated unit, and the ledger-promotion line closing the Principles index.
-grep: Classify the unit in the same breath.
+why: the BASE-capture trigger (BASE at task start, the prototype carve-out, the same-BASE re-route rule, the one-time kstack-init offer); there is no unit classification.
+grep: Capture BASE in the same breath.
 
 ### p2-architect-lessons-map — skills/architect/SKILL.md
 why: the driver instantiates the ledger against the synthesized package between Phase B and Phase C, with the runners' ledger-blindness stated as a deliberate omission; the package commits as the unit's probe.
 grep: Then instantiate the ledger against it.
 
 ### p2-rationale-base-header — skills/architect/references/rationale-template.md
-why: required BASE-SHA and gated/ungated header line, and the Shape note now requires per-decision lesson annotations in the design's own nouns.
+why: required BASE-SHA header line, and the Shape note now requires per-decision lesson annotations in the design's own nouns.
 grep: **Required header line.** The document's first line, above Problem
 
 ### p2-feature-sweep — skills/poteto-mode/playbooks/feature.md
@@ -218,12 +218,12 @@ grep: If its outputs include findings, verdicts, or a synthesis
 why: the pinned and active set is passed into the audit lever as an input so `safe` is unemittable for a pinned tree; the hand cross-check shrinks to a pointer.
 grep: is unemittable for a pinned tree
 ### p2-pr-register — skills/poteto-mode/playbooks/opening-a-pr.md
-why: a gated unit is REGISTERED at PR open (BASE, classification, clusters so far) with a named close trigger; the Verification section names the ledger walk.
+why: every unit is REGISTERED at PR open (BASE, clusters so far) with a named close trigger; the Verification section names the ledger walk.
 grep: A registered unit that never closes surfaces as an overdue register
 
 ### p2-shipping-close — skills/poteto-mode/playbooks/shipping.md
-why: the ceiling step is the stack's close point (close-unit over the accumulated verdicts and clusters, tree pinned by patch-id); verdict lines carry the surface · mechanism · class schema and persist to the probe.
-grep: that did not already close before their PR opened
+why: the ceiling step is the stack's close point, unconditional on any unit whose sweep or verifier landed findings; verdict lines carry the surface · mechanism · class schema.
+grep: The close runs here for the stack's units whose sweep or verifier landed findings
 
 ### p2-babysit-emit-only — skills/poteto-mode/playbooks/babysit.md
 why: the mid-run sweep is cut to EMIT-only — triage decisions become findings in the unit's probe; lessons and rubric edits wait for the close.
@@ -258,19 +258,19 @@ why: the close runs at chain delivery, the last moment the root holds the whole 
 grep: chain delivery is the last moment the root holds the whole sample
 
 ### p2-pause-resume-fields — skills/poteto-mode/playbooks/pause-safely.md
-why: the resume note carries the lessons-map path, the open triage clusters, and the gated classification with BASE and named close trigger.
+why: the resume note carries the lessons-map path, the open triage clusters, and BASE and the named close trigger.
 grep: Those last three are what a pickup agent cannot cheaply re-derive
 
 ### p2-pickup-reconstruct — skills/poteto-mode/playbooks/session-pickup.md
-why: the reconstruct list gains the lessons-map path, the open triage clusters, and the gated classification with BASE and named close trigger.
+why: the reconstruct list gains the lessons-map path, the open triage clusters, and BASE and the named close trigger.
 grep: Those last three are the artifacts a pickup cannot cheaply re-derive
 
 ### p2-fio-gated-classification — skills/figure-it-out/SKILL.md
-why: the designed phase list carries each unit's gated classification and close point, bespoke playbooks inherit map production and the close, and Phase E's encoding lands as a ledger entry with a cited extension.
-grep: gated or ungated classification (unsure means gated) and its close point
+why: the phase list carries the unit's BASE and close point, not a classification.
+grep: the unit's BASE and its close point
 ### p2-router-close-trigger — skills/poteto-mode/SKILL.md
-why: close routing for gated units (supplemental per-addition guard)
-grep: The unit's final review round has run and its sweep landed findings
+why: close routing: after the PR verifier's verdict, before the owner merges.
+grep: the **close-unit** skill, before the owner merges
 
 ### p2-router-promotion — skills/poteto-mode/SKILL.md
 why: process-lesson promotion rule in the Principles index (supplemental)
@@ -315,8 +315,8 @@ why: probe 002 — CC has no mode system; disable-model-invocation left the rout
 grep: Invoke at the START of any multi-step engineering task
 
 ### p5-router-gating-source — skills/poteto-mode/SKILL.md
-why: the repo's procedure file defines gated scope where one exists; the plugin's list is the default only, and a delegate never classifies.
-grep: defines gated scope wherever one exists
+why: a delegate never captures BASE; BASE and the lessons map arrive in its brief.
+grep: A delegate never captures BASE.
 
 ### p5-router-delegate-contract — skills/poteto-mode/SKILL.md
 why: delegates are bound by agents/poteto-agent.md and never re-enter classification, review rounds, close-unit, or Opening a PR.
@@ -335,12 +335,12 @@ why: step 5 drives the unit's changed mapped features through verify-<project>; 
 grep: drive the unit's changed mapped features as their consumer meets them
 
 ### p5-feature-reachable — skills/poteto-mode/playbooks/feature.md
-why: 5a's fallback moves to verify-sweep's seam catalogue and every finding carries a reachable value at rung 4 or higher.
-grep: skills/verify-sweep/references/seam-catalogue.md
+why: 5a is mechanism-first; reachability decides timing only for a missing guard or a missing fact.
+grep: Reachability comes second, and only for MISSING GUARD and MISSING FACT
 
 ### p5-pr-verification-ledger-line — skills/poteto-mode/playbooks/opening-a-pr.md
-why: the Verification section's real path is the verify-<project> drives, and every swept unit carries the reachable-counting ledger line.
-grep: r reachable by a real user, all fixed
+why: the Verification section's real path is the verify-<project> drives, and the ledger line carries the mechanism split.
+grep: model/fact/guard a/b/c · j fixed now
 
 ### p5-pr-no-delegate-pr — skills/poteto-mode/playbooks/opening-a-pr.md
 why: a delegate never opens a PR; the driver does, after its own deslop and no-comments.
@@ -351,28 +351,28 @@ why: the smoke through verify-<project> is the floor on a shipped surface; the e
 grep: an equivalence check runs in addition to that smoke and never instead of it
 
 ### p5-autopilot-close-hedge — skills/poteto-mode/playbooks/autopilot-full.md
-why: the batch close covers units that did not already close before their PR opened.
-grep: for the units that did not already close before their PR opened
+why: the batch close runs at the ceiling over every unit's clustered findings.
+grep: the batch's clustered swarm findings, ending with the loop-health row appended
 
 ### p5-autopilot-stack-close-hedge — skills/poteto-mode/playbooks/autopilot-stack.md
-why: the chain close covers units that did not already close before their PR opened.
-grep: for the units that did not already close before their PR opened
+why: the chain close runs at the ceiling over every unit's clustered findings.
+grep: the chain's clustered swarm findings and append the loop-health row
 
 ### p5-poteto-agent-delegate — agents/poteto-agent.md
 why: the agent file is the delegate contract, with the never-list the driver depends on.
-grep: You never classify a unit, capture BASE, spawn a review subagent
+grep: You never capture BASE, spawn a review subagent
 
 ### p5-smyw-driver-round — skills/show-me-your-work/SKILL.md
-why: the cross-model trail review is the driver's step, and the gated unit's non-author round.
+why: the cross-model trail review is the driver's step, never a delegate's.
 grep: never spawned by a delegate
 
 ### p5-interrogate-cap-trigger — skills/interrogate/SKILL.md
-why: one round per unit, fired by a contested design or a gated unit's non-author round before PR open.
+why: one round per unit, fired by a contested design.
 grep: One round per unit is the cap
 
 ### p5-interrogate-ledger-per-round — skills/interrogate/SKILL.md
-why: ledger-blind on a contested-design round, fed the ledger on the gated non-author round.
-grep: Which round this is decides what the reviewers see
+why: interrogate reviewers are ledger-blind samplers; the PR verifier, not interrogate, reads the ledger as a floor.
+grep: The reviewers stay ledger-blind.
 
 ### p5-interrogate-reachable — skills/interrogate/SKILL.md
 why: findings carry a reachable value at rung 4 or higher, and the four buckets key on it.
@@ -397,3 +397,59 @@ grep: run verify-<app> in maintain mode
 ### p5-guide-verify-generator — docs/guide/09-make-it-yours.md
 why: the maintain-verification-skill link is dead; only create-verification-skill remains, and the close runs before the PR opens.
 grep: The generated skill carries its own MAINTAIN mode
+
+### p6-feature-mechanism-first — skills/poteto-mode/playbooks/feature.md
+why: 5a classifies every finding by mechanism before any remedy is chosen.
+grep: Classify each one WRONG MODEL, MISSING FACT, or MISSING GUARD
+
+### p6-feature-close-after-pr — skills/poteto-mode/playbooks/feature.md
+why: the close moved after the PR opens and its verifier verdict lands; the owner merges after.
+grep: **8a.** After the PR opens and its non-author verifier verdict lands
+
+### p6-pr-register-every-unit — skills/poteto-mode/playbooks/opening-a-pr.md
+why: registration is unconditional now that gating is gone.
+grep: Every unit is registered here, at PR open.
+
+### p6-pr-verifier-before-merge — skills/poteto-mode/playbooks/opening-a-pr.md
+why: the solo flow runs shipping step 1 right after PR open; independence-first, every fourth verifier blind.
+grep: **The verdict before the merge.**
+
+### p6-shipping-verifier-unconditional — skills/poteto-mode/playbooks/shipping.md
+why: step 1 runs on every PR, a solo PR included, and the verifier is independence-first.
+grep: This step is unconditional: every PR takes one
+
+### p6-interrogate-mechanism-first — skills/interrogate/SKILL.md
+why: mechanism picks the remedy before reachability is asked.
+grep: Mechanism decides the remedy, and it is decided first.
+
+### p6-swarm-model-no-reachability — skills/swarm/SKILL.md
+why: a wrong MODEL cluster is fixed by redesign, so it carries no reachability value.
+grep: A wrong MODEL cluster carries no reachability
+
+### p6-smyw-not-the-verifier — skills/show-me-your-work/SKILL.md
+why: the cross-model trail review is not the PR's non-author verifier.
+grep: it is not the PR's non-author verifier
+
+### p6-readme-mechanism-first — README.md
+why: the intro states mechanism-first triage and the per-PR non-author verdict.
+grep: Every finding is classified by mechanism
+
+### p6-guide-close-after-verdict — docs/guide/09-make-it-yours.md
+why: /close-unit runs after the PR's verdict and before the merge.
+grep: once the PR's non-author verdict is in and before you merge
+
+### p6-why-feature-flagged — skills/why/SKILL.md
+why: "flag-gated" retired with the gating vocabulary.
+grep: Strongest for feature-flagged code
+
+### p6-triage-errno-keyed — skills/poteto-mode/references/bugbot-triage.md
+why: "gated on ENOENT" retired with the gating vocabulary.
+grep: keyed on `ENOENT`
+
+### p6-multiphase-review-gate — skills/poteto-mode/playbooks/multi-phase-plan.md
+why: "review-gated" retired; the operator's review gate is named directly.
+grep: takes the operator's review gate
+
+### p6-worktree-human-decision — skills/poteto-mode/scripts/worktree-audit.sh
+why: "human-gated step" retired with the gating vocabulary.
+grep: deletion stays a human decision in the playbook

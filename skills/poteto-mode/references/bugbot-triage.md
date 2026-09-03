@@ -127,7 +127,7 @@ Append new candidate learnings here at a unit's close, never mid-babysit. The ba
 - Skip when: The finding asks to broaden a narrow error condition (a specific
   `errno`, error code, or status class) into a catch-all, and that narrowness
   encodes a real distinction. The canonical shape is a dependency fallback
-  gated on `ENOENT`: "binary is not installed" is a different situation from
+  keyed on `ENOENT`: "binary is not installed" is a different situation from
   "the command ran and failed". Retrying on any non-zero exit would re-run a
   legitimate failure (not found, expired auth, network) against the fallback
   and then report the fallback's error, hiding the true one.
