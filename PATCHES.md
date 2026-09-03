@@ -550,3 +550,7 @@ grep: otherwise the root opens each PR with `gh pr create --base` set to the pre
 ### p12-router-graphite-optional — skills/poteto-mode/SKILL.md
 why: the Shipping and Autopilot-stack index lines described Graphite as the only landing path.
 grep: where `gt` is installed, and otherwise handing the owner the verified run to merge with `gh`
+
+### p13-router-ask-tool-name — skills/poteto-mode/SKILL.md
+why: the fork trigger named Cursor's `AskQuestion`; the Claude Code tool is `AskUserQuestion`.
+grep: - About to `AskUserQuestion` on a
