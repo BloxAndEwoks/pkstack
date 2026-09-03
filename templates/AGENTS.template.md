@@ -8,7 +8,8 @@
 The build process for this repository is pkstack poteto-mode. Work enters through the
 `/poteto-mode` router. The router matches a playbook, and the playbook's steps carry the work.
 This file is the repository profile. It carries what the plugin cannot know about this repo,
-and it is the authority on this repo's own surfaces, constraints, and commands.
+and it is the authority on this repo's own surfaces, constraints, and commands. Build procedure
+lives in exactly two places: the plugin's playbooks and skills, and this file.
 
 The docs are part of the codebase, not optional commentary.
 
@@ -238,6 +239,13 @@ Commit at each checkpoint and at meaningful sub-steps. The commit is the system 
 
 ## Documentation discipline
 
+- **Build procedure lives in exactly two places: the plugin's playbooks and skills, and this
+  file.** Every other document in the repository carries facts, decisions, evidence,
+  measurements, or pointers — never steps, rounds, gates, or verdict rules. A document that
+  needs to name procedure points at this file's section instead of restating it. A relocated
+  plugin-owned section (the pointer form under "Build principles") is this file's text living at
+  another path, not a second home for procedure. A dated record of what was once done is
+  history, not procedure, and stays as written.
 - Update docs in the same change when behaviour, architecture, operations, product scope, or
   quality posture changes.
 - Keep `docs/001-current-state.md` accurate. It is the living repo summary.

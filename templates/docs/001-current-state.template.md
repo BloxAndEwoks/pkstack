@@ -8,6 +8,17 @@
 
 {{PRODUCT_ONE_LINER}}
 
+## Build process
+
+{{BUILD_FLOW}}
+<!-- ONE paragraph, in the router's own words, naming the plugin, its version, and the date it
+     was installed or last refreshed — e.g. "The build process is pkstack poteto-mode (pkstack
+     <version>, installed <date>): work enters through the `/poteto-mode` router, the matched
+     playbook's steps carry the work, and `AGENTS.md` is the repository profile." AGENTS.md owns
+     the procedure; this paragraph is a dated pointer at it, never a restatement of its steps.
+     Entries about an earlier process go below under their own dates as history, and history is
+     never rewritten. -->
+
 ## Deployment reality
 
 {{DEPLOYMENT_REALITY}}

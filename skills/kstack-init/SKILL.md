@@ -37,9 +37,9 @@ first init.
   **REFRESH**: the existing AGENTS.md's PROCEDURE has drifted from the current
   `templates/AGENTS.template.md` (a renamed step, a retired section, a section the template
   now requires that the old file never had) while the repo's own facts stayed current — see
-  "REFRESH mode" below for detection, section ownership, and the procedure. Run REFRESH's
-  detection check before assuming it is needed; a file that passes both checks skips straight
-  to GAP-FILL.
+  "REFRESH mode" below for detection, section ownership, and the procedure, and "The DOCS PASS"
+  for the living documents AGENTS.md routes agents into. Run REFRESH's detection check before
+  assuming it is needed; a file that passes both checks skips straight to GAP-FILL.
   If it has a NON-kstack AGENTS.md/CONTRIBUTING with real content, absorb that content into
   the generated file (its facts are provenance-grade) and say what moved where; never silently
   overwrite.
@@ -105,7 +105,7 @@ section instead, named in the report the same way. Nothing in the old file is lo
 |---|---|---|
 | Intro's first sentence naming the flow | Repo | Carry verbatim |
 | Intro's remaining sentences | Plugin | Regenerate — any repo-fact sentence among them carries per the rule above |
-| Read first (the ledger's actual path travels here) | Repo | Carry verbatim |
+| Read first (the ledger's actual path travels here) | Repo | Carry verbatim — except an entry describing a document as "doctrine" or "procedure", rewritten per the DOCS PASS's Read-first rule |
 | Build principles (+ Core doctrine) | Plugin | Regenerate in AGENTS.md — unless behind a relocation pointer, see the relocation row below |
 | Units and the PR | Plugin | Regenerate |
 | Mechanism first, reachability second | Plugin | Regenerate |
@@ -122,7 +122,7 @@ section instead, named in the report the same way. Nothing in the old file is lo
 | Documentation discipline — generic bullets | Plugin | Regenerate |
 | Documentation discipline — repo-specific bullets, and any repo-specific law with a stated reason | Repo | Carry verbatim |
 | Repo-fact sentences inside any plugin-owned section | Repo | Carry verbatim as a trailing paragraph under that section |
-| Any plugin-owned section behind a relocation pointer | Plugin | AGENTS.md keeps only the pointer line. "Regenerate" means syncing the plugin-owned text — the template's bullets and Core doctrine, 1:1 by bullet — inside the file the pointer names, same commit, BY MEANING: the repo's own house style (UK/US spelling, emphasis convention, wrapping, punctuation) stays untouched, edited only where the meaning actually differs; that file's own repo-specific sentences and sections stay untouched too. A file where no sentence's meaning differs gets no edit at all. The report lists what changed and what stayed. |
+| Any plugin-owned section behind a relocation pointer | Plugin | AGENTS.md keeps only the pointer line; the plugin-owned text is synced inside the file the pointer names. The rule is stated once, in the DOCS PASS's RELOCATED PLUGIN SECTION class — follow it there. |
 
 **Procedure.**
 1. Read the current `templates/AGENTS.template.md` and the repo's existing AGENTS.md side by
@@ -151,24 +151,122 @@ section instead, named in the report the same way. Nothing in the old file is lo
    absent, flagged exactly as init leaves it: "none recorded yet — append the first time one
    bites."
 8. Keep the repo's existing numbering, paths, and doc-spine references untouched.
-9. If the repo carries a generated `verify-<project>` skill whose `SKILL.md` still has the
-   "Cadence seat" heading, rewrite that heading and its sentences the same way this sweep
-   rewrote `create-verification-skill`'s generator output (now "Where the skill sits").
-10. If the repo keeps a founder-decision log or equivalent, record the refresh there in the
-    same commit — what changed and why, one line.
-11. Produce the result as a diff over the existing AGENTS.md (and any relocated file it points
-    at) for the owner to read, plus a report: every repo-fact sentence carried per the rule
-    above (old section → new location), and for each relocated file, exactly what changed and
-    what needed no edit — never a silent rewrite.
-12. Land it as one PR on a branch, through the router's Opening a PR playbook: the file is the
+9. Run the **DOCS PASS** below, in the same commit — after this regeneration, before GAP-FILL.
+   A refreshed AGENTS.md that still routes agents into a document carrying the retired flow has
+   moved the headings and left the law in force.
+10. Produce the result as a diff over the existing AGENTS.md and every file the DOCS PASS
+    touched, for the owner to read, plus the report the DOCS PASS specifies in (h): every
+    repo-fact sentence carried per the rule above (old section → new location), and for each
+    relocated file, exactly what changed and what needed no edit — never a silent rewrite.
+11. Land it as one PR on a branch, through the router's Opening a PR playbook: the file is the
     unit, and a non-author verifier reads the diff before it merges.
-13. Run **GAP-FILL** afterwards, in the same sitting — a refreshed procedure can still be
+12. Run **GAP-FILL** afterwards, in the same sitting — a refreshed procedure can still be
     missing a spine file the old AGENTS.md never named.
 
-**Never**: rewrite anything under `docs/` — except the file a relocation pointer names, whose
-plugin-owned text is synced per steps 3 and 6 — renumber an existing doc, discard a repo-fact
-sentence found inside a plugin-owned section, touch the finding ledger, or treat REFRESH as
-licence to re-interview the repo — it reads the old file's facts, it does not re-derive them.
+**Never**: rewrite anything under `docs/` outside the DOCS PASS's scope, renumber an existing
+doc, discard a repo-fact sentence found inside a plugin-owned section, rewrite a probe, an ADR
+or PRD body, or the ledger's lessons, evidence and loop-health rows, or treat REFRESH as licence
+to re-interview the repo — it reads the old file's facts, it does not re-derive them.
+
+## The DOCS PASS
+
+Runs inside REFRESH, after the AGENTS.md regeneration and before GAP-FILL, in the same commit.
+
+AGENTS.md is half the refresh. The retired flow survives in the documents AGENTS.md routes
+agents INTO — a quality-band file the Read-first list calls "doctrine", a current-state block
+stating the old registration rule in the present tense — and an agent that reads one obeys it.
+This pass makes the template's law true in the repo: **build procedure lives in exactly two
+places, the plugin's playbooks and skills, and AGENTS.md.** Every other document carries facts,
+decisions, evidence, measurements, or pointers.
+
+**a. Scope — the living documents.** In scope: every path AGENTS.md's Read-first list names;
+`docs/000-index.md`; `docs/001-current-state.md`'s present-tense block; every file under the
+quality band (`docs/070-quality/` or the repo's equivalent), the finding ledger's header and
+mechanism prose included; the roadmap where one exists; the generated `verify-<project>` skill;
+`CLAUDE.md`.
+
+Out of scope, history by definition: probes; the founder-decision log's dated entries; ADR and
+PRD bodies; the archive band; the ledger's lesson evidence and its loop-health rows; any dated
+report or session extract. Each is a record of what was done under the process of its day, and
+it is never edited to match today's.
+
+**b. Detection — run it as a grep, don't eyeball it.** Over the in-scope paths only:
+
+```bash
+# The scope, one path per line: add every Read-first path, the roadmap, and .claude/skills/verify-*
+# (an array, not a string — zsh does not word-split an unquoted variable).
+scope=(docs/000-index.md docs/001-current-state.md docs/070-quality CLAUDE.md)
+# 1. retired vocabulary
+grep -rinE 'cadence|gate record|re-gate|step [45][ab]?\b|gated unit|ungated|external certification|adversarial.audit|ships by commit|registers at BASE|the close is procedural|two-round cap|codex' "${scope[@]}"
+# 2. procedure in the present tense, outside the two allowed places
+grep -rinE '^ *[0-9]+\. |round|gate|certif|verdict|register|close-unit' "${scope[@]}"
+```
+
+Grep 2 over-fires by design: it is a reading list, not a verdict. Read each hit and ask whether
+the sentence tells an agent WHAT TO DO — a step, a round, a gate, a verdict rule — or records a
+fact. A numbered list whose items are build steps is a hit however it is worded.
+
+**Classify every hit into exactly one of five classes.** A hit nobody can classify is not done.
+
+| Class | What it is | Action |
+|---|---|---|
+| RELOCATED PLUGIN SECTION | the body of a plugin-owned AGENTS.md section, living at the path a relocation pointer names (the one-line pointer form: *Lives in `<path>`; that file carries the current text.*) | AGENTS.md keeps only the pointer line. Regenerate BY MEANING inside that file, same commit: the template's bullets and Core doctrine, 1:1 by bullet, in the repo's own house style (UK/US spelling, emphasis convention, wrapping, punctuation), edited only where the meaning actually differs. A sentence whose meaning already matches gets no edit; a file where none differ gets no edit at all. That file's OTHER sentences are not covered by this class — they are classified on their own by the four rows below. This is the only text outside AGENTS.md that may carry plugin procedure, because it IS AGENTS.md's text at another path. The report lists what changed and what stayed. |
+| RETIRED PROCEDURE | steps, rounds, gates, or verdict rules from the flow this refresh retired, stated in the present tense | Cut, per (c). |
+| REPO FACT inside a procedure passage | a path, a measurement, a probe number, a decision, a capability the repo lacks — a fact the retired wording was merely carrying | Carry it BEFORE the cut to where it belongs: a constraint to AGENTS.md's Machine constraints, evidence to its lesson in the ledger, a decision to the decision log, a plain fact to the doc's own facts section. Named in the report, old location → new. A cut never loses a fact. |
+| HISTORY | a dated record of what was done, decided, or measured | Leave it. In a LIVING doc, add ONE dated line immediately above the passage — `Superseded by AGENTS.md's "<section>" (<date>).` — so a reader meets the supersession before the text. Never delete it and never restate it in today's words. |
+| PSTACK'S OWN WORD | "cadence" in its rhythm sense; "gate", "register" or "round" as a word of the repo's own domain | Leave, and name it in (i)'s residue list so the next refresh does not re-litigate it. |
+
+**c. The cut.** A RETIRED PROCEDURE passage in a living doc is replaced by exactly one line
+naming the AGENTS.md section that now owns it:
+
+> The close: AGENTS.md's "The close". This section carried the pre-2026-09-03 cadence;
+> superseded 2026-09-03.
+
+The removed text is not lost. It moves to the archive band (`docs/099-archive/` or the repo's
+equivalent) as ONE dated file per source document, at the band's next number and named so a
+reader hunting the old flow finds it (`NNN-<source-slug>-retired-procedure-YYYY-MM-DD.md`), with
+a header naming the source path, the date, and the AGENTS.md section that supersedes it. Never
+rewrite a probe, an ADR or PRD body, or the ledger's lessons — they are out of scope and the cut
+never reaches them.
+
+**The Read-first list.** Repo-owned and carried verbatim, with one exception, applied AFTER the
+cut: an entry describing a document as "doctrine" or "procedure" is rewritten to describe what
+that document now carries — facts, evidence, measurements, decisions — never as a second source
+of procedure. It may point at a relocated plugin-owned section by that section's pointer. It may
+not present any repo document as the place an agent learns the steps.
+
+**d. current-state.** `docs/001-current-state.md`'s present-tense block gets ONE paragraph
+stating the flow in the router's words, naming the plugin's version and the date: "The build
+process is pkstack poteto-mode (pkstack <version>, refreshed <date>): work enters through the
+`/poteto-mode` router, the matched playbook's steps carry the work, and `AGENTS.md` is the
+repository profile." It REPLACES every sentence in that block that states the retired procedure
+— a registration rule, a review-round count, a ships-by-commit-not-PR clause. The dated history
+entries below the block stay exactly as written; they are HISTORY.
+
+**e. The finding ledger.** Its header and mechanism prose are regenerated BY MEANING from
+`templates/finding-ledger.template.md`, the same sentence-by-sentence sync a relocated section
+gets. The lessons, their extensions and evidence, the mechanization and export queues, and every
+loop-health ROW are untouched. The loop-health `mode:` FORMAT line is updated to the verifier
+form — `mode: <verifier model id>·<fed|blind>`, and `mode: self` where a close ran with no
+verifier verdict — without editing a single existing row.
+
+**f. The verify-`<project>` skill.** A generated skill whose `SKILL.md` still carries the
+"Cadence seat" heading, or seat sentences from the retired flow, has that heading and those
+sentences rewritten per `skills/create-verification-skill/SKILL.md`'s current "Where the skill
+sits" output. The feature map is NOT touched: it is the product's facts, and only MAINTAIN
+writes it.
+
+**g. The decision log.** The repo's founder-decision log or equivalent gets ONE entry recording
+the refresh — or one line under the latest entry where the repo keeps that convention: files
+cut, files archived, the plugin version, the date. Same commit.
+
+**h. The report.** A table, not a narrative. One row per passage: `file:line · class · action ·
+destination`, where class is one of the five above and action is cut / carried / archived /
+regenerated / left. The owner reads a diff and a table.
+
+**i. Re-run the detection.** Run (b)'s greps over the scope again at the end. The pass is done
+when every remaining hit is HISTORY or PSTACK'S OWN WORD, and each one is named in the report
+with its class.
 
 ## Step 1 (existing repo) — the interview wave
 
@@ -283,3 +381,5 @@ first if none exists)".
   converting a foreign docs tree is separate owner-approved migration work.
 - Never writes a fact without provenance.
 - Never overwrites an existing procedure file without absorbing and disclosing.
+- Never leaves build procedure in a generated doc. The docs carry facts, decisions, evidence,
+  measurements, and pointers; AGENTS.md and the plugin's playbooks and skills carry the steps.
