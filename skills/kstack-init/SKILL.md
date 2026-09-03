@@ -1,6 +1,6 @@
 ---
 name: kstack-init
-description: "Install the kstack build discipline into a repo: interview the codebase (existing repo) or the owner (greenfield), then GENERATE the repo's AGENTS.md, docs spine, and finding ledger from kstack's templates — never copying another repo's facts. MANDATORY TRIGGERS: 'kstack init', 'run kstack-init', 'install kstack', 'initialise the build cadence', 'set up the build discipline here'. Do NOT re-run on a repo that already carries a kstack-generated AGENTS.md — maintain that file directly instead."
+description: "Install the kstack build discipline into a repo: interview the codebase (existing repo) or the owner (greenfield), then GENERATE the repo's AGENTS.md, docs spine, and finding ledger from kstack's templates — never copying another repo's facts. MANDATORY TRIGGERS: 'kstack init', 'run kstack-init', 'install kstack', 'initialise the build flow', 'set up the build discipline here'. Do NOT re-run on a repo that already carries a kstack-generated AGENTS.md — maintain that file directly instead."
 ---
 
 # kstack-init

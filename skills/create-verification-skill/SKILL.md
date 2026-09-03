@@ -110,7 +110,7 @@ must be real).
 - The surface is never the trust boundary: a proof composes surface → action → state → side
   effects. A rendered success with no side-effect read is not a proof.
 - Product breaks are reported, never papered: a map/product disagreement is either map drift
-  (fix the map, MAINTAIN mode) or a product gap (report into the cadence's triage step) — it
+  (fix the map, MAINTAIN mode) or a product gap (report into the unit's triage table) — it
   never becomes a map edit to match the breakage.
 - Edit scope = the skill's own directory. Never product code, never the procedure file.
 
@@ -172,17 +172,18 @@ its name — some dry-runs still touch the network.
   route attempted recorded — an omitted prerequisite is drift; (5) triage, three arms: wrong
   consumer-POV description → map drift, fix the map; working behavior the harness cannot
   drive → harness gap, fix the harness (the helpers rule applies) and RE-DRIVE it before it
-  ships; broken product → product gap, reported into the cadence's triage, kept out of the
+  ships; broken product → product gap, reported into the unit's triage table, kept out of the
   map change; (6) ship the declared outcome — for changed, one commit of proven corrections,
   every changed file re-read first. Keep run notes (features covered, unreachable
   prerequisites, confirmed drift, outcome) in scratch; never commit them.
 
-**Cadence seat** (written into the generated skill AND the repo's AGENTS.md): two seats, both
-scoped to the TOUCHED surfaces — before designing (Feature step 1, `how`: read the touched
-feature files, plus a live look where genuinely informative) and after building (Feature step 5:
-any repo-level smoke first, then drive the unit's changed mapped features). The skill is never a
-per-unit regression walk of the whole map — only MAINTAIN walks everything. Findings always flow
-to the cadence's triage; lessons mint at `/close-unit`, never inside the skill.
+**Where the skill sits** (written into the generated skill AND the repo's AGENTS.md): two seats,
+both scoped to the TOUCHED surfaces. Feature step 1 reads the touched feature files before
+design (`how`, plus a live look where genuinely informative); after building (Feature step 5) run
+any repo-level smoke first, then drive the unit's changed mapped features. The skill is never a
+per-unit regression walk of the whole map — only MAINTAIN walks everything. Findings go to the
+unit's triage table with a `reachable` value; lessons mint at `/close-unit`, never inside the
+skill.
 
 ## Why maintenance is not a separate skill
 

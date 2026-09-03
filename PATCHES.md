@@ -453,3 +453,8 @@ grep: takes the operator's review gate
 ### p6-worktree-human-decision — skills/poteto-mode/scripts/worktree-audit.sh
 why: "human-gated step" retired with the gating vocabulary.
 grep: deletion stays a human decision in the playbook
+
+### p7-simplify-cadence-notes — skills/simplify/SKILL.md
+why: the vocabulary sweep retires "cadence" here too — the verification-steps reference and the
+"Cadence notes" heading are rewritten in the router's words.
+grep: ## Flow notes

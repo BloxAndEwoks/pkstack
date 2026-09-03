@@ -20,8 +20,8 @@ The reason this matters for AI-assisted decisions: Claude defaults to agreeable,
 When the target is a **code checkpoint** — a feature, refactor, or migration about to be built in a
 repo, typically as Feature step 2 in the poteto-mode flow, the design package's failure hunt that
 runs before the architect pass — the mechanism is identical (prospective hindsight + one deep-dive
-agent per failure reason, in parallel) but three things change from the business flow below. The cadence itself — what runs AFTER this step — is owned by the repo's
-procedure file (AGENTS.md or equivalent), never by this skill: naming later steps here is how a
+agent per failure reason, in parallel) but three things change from the business flow below. What runs AFTER this step is owned by the repo's
+procedure file (AGENTS.md or equivalent) and the Feature playbook, never by this skill: naming later steps here is how a
 skill goes stale the next time a step is redesigned.
 
 1. **The frame.** Not "6 months from now the business failed" but "this checkpoint SHIPPED and then:
@@ -34,7 +34,7 @@ skill goes stale the next time a step is redesigned.
    mechanism, and a checklist must not crowd it out. THEN, before closing, run the known-class
    completeness pass for what the free hunt missed — and the known-class list is the REPO'S, not this
    skill's: in a repo with a finding ledger (e.g. `docs/070-quality/004-finding-ledger.md`), walk its
-   lessons, and honour whatever design-time rows its cadence requires (e.g. a facts-before-verbs row
+   lessons, and honour whatever design-time rows its procedure file requires (e.g. a facts-before-verbs row
    per new fact). Only in a repo with NO recorded classes fall back to the generic technical set:
    multi-writer states bypassing a chokepoint, torn multi-transaction seams + retries that don't
    repair, concurrency/deadlocks, idempotency and money invariants, migrations against LIVE data,
@@ -75,7 +75,7 @@ is easiest to fake.
 **The precondition.** A wrong-MODEL classification requires a mechanism CONFIRMED by runtime
 evidence — the reproduced sequence, the queried rows, the trace, the failing composed flow — never
 inferred from the text of findings. Wrong MODEL triggers redesign, the costliest response in the
-cadence; a verdict reached by reading a finding list and recognising a vibe spends a redesign on a
+flow; a verdict reached by reading a finding list and recognising a vibe spends a redesign on a
 guess.
 
 **The tells.** Guard density is the leading indicator: if the obvious fix would add the third

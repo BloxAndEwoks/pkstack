@@ -9,7 +9,7 @@ description: "The quality pass after building and before the sweep: review the c
 
 You are improving the quality of the changed code, not hunting for bugs. Review it for reuse,
 simplification, efficiency, and altitude issues, then fix what survives adjudication. Do not look
-for correctness bugs — that is what the cadence's verification steps are for.
+for correctness bugs — that is what the router's verification steps are for.
 
 This file is self-contained on purpose: in Claude Code, `/simplify` also exists as a built-in;
 in any other environment (Cursor, Codex, a bare agent loop) this file IS the pass — follow it
@@ -72,7 +72,7 @@ convention), never silently dropped.
 Finish with a brief summary of what was fixed, what was skipped, and what was deferred with its
 trigger (or confirm the code was already clean).
 
-## Cadence notes
+## Flow notes
 
 - Remediation is new work the earlier steps never saw: a substantial fix batch (including an
   external reviewer's `--fix` diff, where a repo runs one) gets this pass before commit, exactly
