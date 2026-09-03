@@ -56,8 +56,10 @@ first init.
 The maintenance path for a repo whose kstack-generated AGENTS.md predates the current
 `templates/AGENTS.template.md` — the PROCEDURE drifted (a vocabulary rename, a retired section,
 a section the template now requires) while the repo's own facts stayed current. REFRESH
-regenerates the procedure only. It never touches the repo's own facts, `docs/`, existing
-numbering, or the finding ledger.
+regenerates the procedure only. It never touches the repo's own facts, existing numbering, or
+the finding ledger, and it never rewrites elsewhere under `docs/` — the one exception is the
+relocation pointer below, and it is named explicitly in the Never list at the end of this
+section.
 
 **Triggers.** 'kstack refresh', 'refresh AGENTS.md', 'bring AGENTS.md up to the current
 template'.
@@ -74,6 +76,14 @@ anyway, report that and stop.
             "## Tests before implementation" "## Proportionality"; do
      grep -qF "$h" AGENTS.md || echo "missing: $h"
    done
+   ```
+   A section relocated per the template's relocation form (its heading present, its body the
+   one-line `Lives in `<path>`; that file carries the current text.` pointer) counts as
+   present — the heading string is still in AGENTS.md, so `grep -qF` above already passes on
+   it; no separate carve-out needed in this check. Run a second grep to see which sections are
+   relocated and where, so the driver knows which repo docs REFRESH will regenerate into:
+   ```bash
+   grep -nE '^Lives in `[^`]+`; that file carries the current text\.$' AGENTS.md
    ```
 2. Carries a retired heading or a retired word:
    ```bash
@@ -102,33 +112,42 @@ template (PLUGIN) or carried over from the old file verbatim (REPO):
 | Commits — `{{COMMIT_RULES}}` (repo-specific commit/push law) | Repo | Carry verbatim |
 | Documentation discipline — generic bullets | Plugin | Regenerate |
 | Documentation discipline — repo-specific bullets, and any repo-specific law with a stated reason | Repo | Carry verbatim |
+| Any plugin-owned section behind a relocation pointer | Plugin | Regenerate the relocated file's plugin-owned text in place, same commit |
 
 **Procedure.**
 1. Read the current `templates/AGENTS.template.md` and the repo's existing AGENTS.md side by
    side.
-2. For each PLUGIN row, take the current template's text verbatim, cross-references (the
+2. Align heading text to the template's exactly. A repo's own heading wording — "## Units and
+   the pull request" for "## Units and the PR," bold-paragraph subsections in place of the
+   template's own "##" headings — is a STALE SIGNAL, not a repo-owned fact: rename it, then
+   carry its content per the ownership table above.
+3. For each PLUGIN row, take the current template's text verbatim, cross-references (the
    Feature playbook, `/close-unit`) included.
-3. For each REPO row, copy the old file's text for that section into the new placeholder
+4. For each REPO row, copy the old file's text for that section into the new placeholder
    verbatim. Where the new template needs a fact the old file never had, ask the owner for that
    one fact — no re-interview.
-4. Never invent a machine constraint. A fact absent from the old file and un-askable stays
+5. For each section behind a relocation pointer, regenerate the PLUGIN-owned text in place in
+   the file the pointer names — same commit, same diff-for-the-owner discipline as the rest of
+   this procedure — and leave the pointer line in AGENTS.md untouched.
+6. Never invent a machine constraint. A fact absent from the old file and un-askable stays
    absent, flagged exactly as init leaves it: "none recorded yet — append the first time one
    bites."
-5. Keep the repo's existing numbering, paths, and doc-spine references untouched.
-6. If the repo carries a generated `verify-<project>` skill whose `SKILL.md` still has the
+7. Keep the repo's existing numbering, paths, and doc-spine references untouched.
+8. If the repo carries a generated `verify-<project>` skill whose `SKILL.md` still has the
    "Cadence seat" heading, rewrite that heading and its sentences the same way this sweep
    rewrote `create-verification-skill`'s generator output (now "Where the skill sits").
-7. If the repo keeps a founder-decision log or equivalent, record the refresh there in the same
+9. If the repo keeps a founder-decision log or equivalent, record the refresh there in the same
    commit — what changed and why, one line.
-8. Produce the result as a diff over the existing AGENTS.md for the owner to read — never a
-   silent rewrite.
-9. Land it as one PR on a branch, through the router's Opening a PR playbook: the file is the
-   unit, and a non-author verifier reads the diff before it merges.
-10. Run **GAP-FILL** afterwards, in the same sitting — a refreshed procedure can still be
+10. Produce the result as a diff over the existing AGENTS.md (and any relocated file it points
+    at) for the owner to read — never a silent rewrite.
+11. Land it as one PR on a branch, through the router's Opening a PR playbook: the file is the
+    unit, and a non-author verifier reads the diff before it merges.
+12. Run **GAP-FILL** afterwards, in the same sitting — a refreshed procedure can still be
     missing a spine file the old AGENTS.md never named.
 
-**Never**: rewrite anything under `docs/`, renumber an existing doc, touch the finding ledger,
-or treat REFRESH as licence to re-interview the repo — it reads the old file's facts, it does
+**Never**: rewrite anything under `docs/` — except the file a relocation pointer names, whose
+plugin-owned text is regenerated — renumber an existing doc, touch the finding ledger, or treat
+REFRESH as licence to re-interview the repo — it reads the old file's facts, it does
 not re-derive them.
 
 ## Step 1 (existing repo) — the interview wave

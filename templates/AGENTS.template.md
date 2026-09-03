@@ -28,6 +28,10 @@ Before substantial work:
 
 ## Build principles
 
+<!-- Any plugin-owned section, this one included, may be RELOCATED to a repo doc — the heading
+     stays here and its body becomes exactly one line, nothing else under it: `Lives in
+     `<path>`; that file carries the current text.` -->
+
 - Validate, do not assume. Check assumptions against the code, the data, or the source
   documents before acting on them.
 - Ensure full context before changing behaviour. Ask targeted questions only when local context
