@@ -1,6 +1,6 @@
 ---
 name: kstack-init
-description: "Install the kstack build discipline into a repo: interview the codebase (existing repo) or the owner (greenfield), then GENERATE the repo's AGENTS.md, docs spine, and finding ledger from kstack's templates — never copying another repo's facts. MANDATORY TRIGGERS: 'kstack init', 'run kstack-init', 'install kstack', 'initialise the build flow', 'set up the build discipline here'. Do NOT re-run on a repo that already carries a kstack-generated AGENTS.md — maintain that file directly instead."
+description: "Install the kstack build discipline into a repo: interview the codebase (existing repo) or the owner (greenfield), then GENERATE the repo's AGENTS.md, docs spine, and finding ledger from kstack's templates — never copying another repo's facts. MANDATORY TRIGGERS: 'kstack init', 'run kstack-init', 'install kstack', 'initialise the build flow', 'set up the build discipline here', 'kstack refresh', 'refresh AGENTS.md', 'bring AGENTS.md up to the current template'. Do NOT re-run on a repo that already carries a kstack-generated AGENTS.md outside GAP-FILL or REFRESH (Step 0) — maintain that file directly instead."
 ---
 
 # kstack-init
@@ -30,9 +30,16 @@ first init.
 ## Step 0 — mode selection and the re-run guard
 
 - If the repo already has an AGENTS.md carrying the kstack loop (or an equivalent procedure
-  file), the only legitimate re-run is **GAP-FILL**: walk step 3's FULL generation list (the
-  spine manifest, the ledger, the CLAUDE.md pointer), create what is missing, touch NOTHING
-  that exists, report what was filled — never a re-init.
+  file), the legitimate re-runs are **GAP-FILL** and **REFRESH** — never a blind re-init.
+  **GAP-FILL**: walk step 3's FULL generation list (the spine manifest, the ledger, the
+  CLAUDE.md pointer), create what is missing, touch NOTHING that exists, report what was
+  filled.
+  **REFRESH**: the existing AGENTS.md's PROCEDURE has drifted from the current
+  `templates/AGENTS.template.md` (a renamed step, a retired section, a section the template
+  now requires that the old file never had) while the repo's own facts stayed current — see
+  "REFRESH mode" below for detection, section ownership, and the procedure. Run REFRESH's
+  detection check before assuming it is needed; a file that passes both checks skips straight
+  to GAP-FILL.
   If it has a NON-kstack AGENTS.md/CONTRIBUTING with real content, absorb that content into
   the generated file (its facts are provenance-grade) and say what moved where; never silently
   overwrite.
@@ -43,6 +50,86 @@ first init.
 - Repo with substantial code → **existing-repo mode** (interview wave first).
 - Empty or near-empty repo → **greenfield mode** (owner Q&A + defaults; skip the wave). An
   "empty empty" repo still gets the FULL docs spine — the spine needs no code to exist.
+
+## REFRESH mode
+
+The maintenance path for a repo whose kstack-generated AGENTS.md predates the current
+`templates/AGENTS.template.md` — the PROCEDURE drifted (a vocabulary rename, a retired section,
+a section the template now requires) while the repo's own facts stayed current. REFRESH
+regenerates the procedure only. It never touches the repo's own facts, `docs/`, existing
+numbering, or the finding ledger.
+
+**Triggers.** 'kstack refresh', 'refresh AGENTS.md', 'bring AGENTS.md up to the current
+template'.
+
+**Detection — run it as a grep, don't eyeball it.** An AGENTS.md is STALE when either check
+below hits anything. Both empty means the file is current: skip REFRESH and, if asked to run it
+anyway, report that and stop.
+
+1. Missing a plugin-owned procedure heading:
+   ```bash
+   for h in "## Build principles" "## Units and the PR" \
+            "## Mechanism first, reachability second" \
+            "## Checkpoint review and the PR verifier" "## The close" \
+            "## Tests before implementation" "## Proportionality"; do
+     grep -qF "$h" AGENTS.md || echo "missing: $h"
+   done
+   ```
+2. Carries a retired heading or a retired word:
+   ```bash
+   grep -inE 'Units in this repository|Gated scope\.|Registration\.|Cross-model round\.|The close is procedural|cadence|gate record|re-gate|step 4a|step 4b|step 5b' AGENTS.md
+   ```
+
+**Section ownership.** Every heading in the current template is either regenerated from the
+template (PLUGIN) or carried over from the old file verbatim (REPO):
+
+| Template section | Owner | REFRESH action |
+|---|---|---|
+| Intro's first sentence naming the flow | Repo | Carry verbatim |
+| Read first (the ledger's actual path travels here) | Repo | Carry verbatim |
+| Build principles (+ Core doctrine) | Plugin | Regenerate |
+| Units and the PR | Plugin | Regenerate |
+| Mechanism first, reachability second | Plugin | Regenerate |
+| Checkpoint review and the PR verifier | Plugin | Regenerate |
+| The close | Plugin | Regenerate |
+| Consumer verification — the Step 1 / Step 5 seat sentences | Plugin | Regenerate |
+| Consumer verification — `{{UI_VERIFICATION}}` (skill name, path, launch) | Repo | Carry verbatim |
+| Tests before implementation | Plugin | Regenerate |
+| Proportionality | Plugin | Regenerate |
+| Machine constraints (a retired "Gated scope" paragraph's paths and irreplaceable-artifact facts land here — the heading is retired, the facts are not) | Repo | Carry verbatim |
+| Commands | Repo | Carry verbatim |
+| Commits — procedural sentences | Plugin | Regenerate |
+| Commits — `{{COMMIT_RULES}}` (repo-specific commit/push law) | Repo | Carry verbatim |
+| Documentation discipline — generic bullets | Plugin | Regenerate |
+| Documentation discipline — repo-specific bullets, and any repo-specific law with a stated reason | Repo | Carry verbatim |
+
+**Procedure.**
+1. Read the current `templates/AGENTS.template.md` and the repo's existing AGENTS.md side by
+   side.
+2. For each PLUGIN row, take the current template's text verbatim, cross-references (the
+   Feature playbook, `/close-unit`) included.
+3. For each REPO row, copy the old file's text for that section into the new placeholder
+   verbatim. Where the new template needs a fact the old file never had, ask the owner for that
+   one fact — no re-interview.
+4. Never invent a machine constraint. A fact absent from the old file and un-askable stays
+   absent, flagged exactly as init leaves it: "none recorded yet — append the first time one
+   bites."
+5. Keep the repo's existing numbering, paths, and doc-spine references untouched.
+6. If the repo carries a generated `verify-<project>` skill whose `SKILL.md` still has the
+   "Cadence seat" heading, rewrite that heading and its sentences the same way this sweep
+   rewrote `create-verification-skill`'s generator output (now "Where the skill sits").
+7. If the repo keeps a founder-decision log or equivalent, record the refresh there in the same
+   commit — what changed and why, one line.
+8. Produce the result as a diff over the existing AGENTS.md for the owner to read — never a
+   silent rewrite.
+9. Land it as one PR on a branch, through the router's Opening a PR playbook: the file is the
+   unit, and a non-author verifier reads the diff before it merges.
+10. Run **GAP-FILL** afterwards, in the same sitting — a refreshed procedure can still be
+    missing a spine file the old AGENTS.md never named.
+
+**Never**: rewrite anything under `docs/`, renumber an existing doc, touch the finding ledger,
+or treat REFRESH as licence to re-interview the repo — it reads the old file's facts, it does
+not re-derive them.
 
 ## Step 1 (existing repo) — the interview wave
 
