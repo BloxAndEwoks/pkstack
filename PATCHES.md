@@ -490,3 +490,23 @@ grep: Ten lanes on `opus` at the PR head drive the real surface
 ### p8-checkplan-lane-model — skills/poteto-mode/scripts/check-plan.mjs
 why: the plan checker asserts the lane sentence verbatim, so it moves with the playbook.
 grep: const LANES = "Ten lanes on `opus` at the PR head";
+
+### p9-architect-panel — skills/architect/SKILL.md
+why: the runner panel named two vendors the Agent tool cannot dispatch; Claude Code has no cross-provider diversity, so the seats are `opus` with one `sonnet` and independence comes from roles and fresh contexts.
+grep: Use your configured architect runners (defaults four runners, three on `opus` and one on `sonnet`)
+
+### p9-arena-runners-panel — skills/arena/SKILL.md
+why: same retarget for the Phase A runner defaults.
+grep: Otherwise default to four runners, three on `opus` and one on `sonnet`.
+
+### p9-arena-cross-judge — skills/arena/SKILL.md
+why: the Phase C cross-judge pool was a vendor list and "a different model family from the parent's" is unreachable in Claude Code; the judge is `opus` in a fresh context.
+grep: not from a different model family
+
+### p9-how-critics-panel — skills/how/SKILL.md
+why: the critics panel retargets to Claude models, and "one critic per model" becomes "per entry" now that entries repeat.
+grep: spawn one architectural critic per entry in your configured how-critics list
+
+### p9-interrogate-reviewers-panel — skills/interrogate/SKILL.md
+why: the reviewer table's four vendor slugs become three `opus` seats and one `sonnet`, with the provider-diversity note under the table.
+grep: | Reviewer C | `sonnet` |

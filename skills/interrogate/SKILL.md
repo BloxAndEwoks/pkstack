@@ -39,10 +39,12 @@ Launch all reviewers in a single message using the Task tool. Use the `interroga
 
 | Subagent | Default model |
 |----------|---------------|
-| Reviewer A | `claude-fable-5-thinking-max` |
-| Reviewer B | `gpt-5.6-sol-max` |
-| Reviewer C | `grok-4.6-fast-xhigh` |
-| Reviewer D | `claude-opus-5-thinking-xhigh` |
+| Reviewer A | `opus` |
+| Reviewer B | `opus` |
+| Reviewer C | `sonnet` |
+| Reviewer D | `opus` |
+
+Model diversity across providers is not available in Claude Code; the panel's independence comes from its roles and fresh contexts.
 
 For each reviewer:
 - `subagent_type`: `"general-purpose"`
