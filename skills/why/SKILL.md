@@ -117,7 +117,7 @@ Launch all matching investigators in a single message so they run concurrently. 
 
 Subagent config (each):
 - `subagent_type`: `"general-purpose"`
-- `model`: your configured why-investigators model (default `grok-4.6-fast-xhigh`)
+- `model`: your configured why-investigators model (default the Agent tool's `opus`, falling back to `sonnet` only when Opus returns a server error)
 - `readonly`: `false` (agent mode). **Do not use readonly/Ask mode.** It strips MCP access, which disables MCP-backed investigators entirely. The source control investigator would be safe in readonly, but keep modes uniform. Investigators still shouldn't write anything. That's a posture, not a sandbox.
 
 Each investigator gets:

@@ -45,7 +45,7 @@ The right decomposition depends on the question. Use your judgment. Narrow quest
 Spawn all explorers in a single message:
 
 - `subagent_type`: `"general-purpose"`
-- `model`: your configured how-explorer model (default `grok-4.6-fast-xhigh`)
+- `model`: your configured how-explorer model (default the Agent tool's `opus`, falling back to `sonnet` only when Opus returns a server error)
 - `readonly`: `true`
 
 Each explorer gets the same base prompt from `references/explorer-prompt.md` plus a specific exploration angle naming its slice. Each explorer should:

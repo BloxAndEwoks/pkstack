@@ -458,3 +458,35 @@ grep: deletion stays a human decision in the playbook
 why: the vocabulary sweep retires "cadence" here too — the verification-steps reference and the
 "Cadence notes" heading are rewritten in the router's words.
 grep: ## Flow notes
+
+### p8-feature-delegate-model — skills/poteto-mode/playbooks/feature.md
+why: the step-4 delegate default was pstack's Cursor-side `grok-4.6-fast-xhigh`; in Claude Code the delegate runs on Opus, with Sonnet only after an Opus server error.
+grep: the delegate runs on Opus, the Agent tool's `opus` model
+
+### p8-refactor-delegate-model — skills/poteto-mode/playbooks/refactoring.md
+why: same rule for the mechanical-edit delegate in step 5.
+grep: using your configured refactoring model (the delegate runs on Opus
+
+### p8-router-code-model — skills/poteto-mode/SKILL.md
+why: the Task-call defaults named grok as the code model; the code default is `opus`, and the tiering line now points at that default instead of a "fast code model".
+grep: defaults the Agent tool's `opus` for code
+
+### p8-swarm-worker-model — skills/swarm/SKILL.md
+why: the Phase A worker fallback named grok; unset config falls back to `opus`.
+grep: Otherwise use the Agent tool's `opus`
+
+### p8-why-investigator-model — skills/why/SKILL.md
+why: the investigator subagent default named grok.
+grep: why-investigators model (default the Agent tool's `opus`
+
+### p8-how-explorer-model — skills/how/SKILL.md
+why: the explorer subagent default named grok.
+grep: how-explorer model (default the Agent tool's `opus`
+
+### p8-multiphase-lane-model — skills/poteto-mode/playbooks/multi-phase-plan.md
+why: the live-verification lane model named grok in both the rule and the boot recipe.
+grep: Ten lanes on `opus` at the PR head drive the real surface
+
+### p8-checkplan-lane-model — skills/poteto-mode/scripts/check-plan.mjs
+why: the plan checker asserts the lane sentence verbatim, so it moves with the playbook.
+grep: const LANES = "Ten lanes on `opus` at the PR head";
