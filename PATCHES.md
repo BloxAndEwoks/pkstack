@@ -538,3 +538,15 @@ grep: your configured how-explainer model (default `fable`)
 ### p11-why-synthesizer-model — skills/why/SKILL.md
 why: the synthesizer seat defaulted to a fable slug the Agent tool cannot dispatch.
 grep: your configured why-synthesizer model (default `fable`)
+
+### p12-shipping-no-graphite — skills/poteto-mode/playbooks/shipping.md
+why: `gt` is not installed for this plugin's users; the verifier step is Graphite-free and says so, and arming forks to the owner's `gh` merge where `gt` is absent.
+grep: Otherwise nothing is armed and steps 5 through 8 do not apply.
+
+### p12-autopilot-stack-no-graphite — skills/poteto-mode/playbooks/autopilot-stack.md
+why: registration, append, topology, restack, and the deliverable each carry the `gh` path where `gt` is absent; a stack is then a sequence of PRs each based on the previous.
+grep: otherwise the root opens each PR with `gh pr create --base` set to the previous PR's branch
+
+### p12-router-graphite-optional — skills/poteto-mode/SKILL.md
+why: the Shipping and Autopilot-stack index lines described Graphite as the only landing path.
+grep: where `gt` is installed, and otherwise handing the owner the verified run to merge with `gh`
