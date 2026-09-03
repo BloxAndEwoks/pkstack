@@ -93,11 +93,20 @@ anyway, report that and stop.
 **Section ownership.** Every heading in the current template is either regenerated from the
 template (PLUGIN) or carried over from the old file verbatim (REPO):
 
+**No content is discarded.** A sentence inside a plugin-owned section that states a REPO FACT —
+a path, a service, a tool, a person's act, a capability the repo lacks today, anything the
+template's text does not contain — is repo-owned wherever it sits. REFRESH carries it forward
+verbatim as a trailing paragraph under the regenerated section (under the synced text, for a
+relocated section), and the report names every such carry, old section → new location. A
+sentence the driver cannot place under its own section lands under the nearest regenerated
+section instead, named in the report the same way. Nothing in the old file is lost.
+
 | Template section | Owner | REFRESH action |
 |---|---|---|
 | Intro's first sentence naming the flow | Repo | Carry verbatim |
+| Intro's remaining sentences | Plugin | Regenerate — any repo-fact sentence among them carries per the rule above |
 | Read first (the ledger's actual path travels here) | Repo | Carry verbatim |
-| Build principles (+ Core doctrine) | Plugin | Regenerate |
+| Build principles (+ Core doctrine) | Plugin | Regenerate in AGENTS.md — unless behind a relocation pointer, see the relocation row below |
 | Units and the PR | Plugin | Regenerate |
 | Mechanism first, reachability second | Plugin | Regenerate |
 | Checkpoint review and the PR verifier | Plugin | Regenerate |
@@ -112,7 +121,8 @@ template (PLUGIN) or carried over from the old file verbatim (REPO):
 | Commits — `{{COMMIT_RULES}}` (repo-specific commit/push law) | Repo | Carry verbatim |
 | Documentation discipline — generic bullets | Plugin | Regenerate |
 | Documentation discipline — repo-specific bullets, and any repo-specific law with a stated reason | Repo | Carry verbatim |
-| Any plugin-owned section behind a relocation pointer | Plugin | Regenerate the relocated file's plugin-owned text in place, same commit |
+| Repo-fact sentences inside any plugin-owned section | Repo | Carry verbatim as a trailing paragraph under that section |
+| Any plugin-owned section behind a relocation pointer | Plugin | AGENTS.md keeps only the pointer line. "Regenerate" means syncing the plugin-owned text — the template's bullets and Core doctrine, 1:1 by bullet — inside the file the pointer names, same commit, BY MEANING: the repo's own house style (UK/US spelling, emphasis convention, wrapping, punctuation) stays untouched, edited only where the meaning actually differs; that file's own repo-specific sentences and sections stay untouched too. A file where no sentence's meaning differs gets no edit at all. The report lists what changed and what stayed. |
 
 **Procedure.**
 1. Read the current `templates/AGENTS.template.md` and the repo's existing AGENTS.md side by
@@ -121,34 +131,44 @@ template (PLUGIN) or carried over from the old file verbatim (REPO):
    the pull request" for "## Units and the PR," bold-paragraph subsections in place of the
    template's own "##" headings — is a STALE SIGNAL, not a repo-owned fact: rename it, then
    carry its content per the ownership table above.
-3. For each PLUGIN row, take the current template's text verbatim, cross-references (the
-   Feature playbook, `/close-unit`) included.
-4. For each REPO row, copy the old file's text for that section into the new placeholder
+3. Every regenerate — inside a relocated file or directly in AGENTS.md — syncs the template's
+   wording to the repo BY MEANING, sentence by sentence, applying the repo's own spelling
+   convention (UK/US), emphasis, wrapping, and punctuation rather than the template's, so a
+   sentence that already carries the template's meaning in the repo's own style gets no edit at
+   all.
+4. For each PLUGIN row, apply step 3's sync to the current template's text, cross-references
+   (the Feature playbook, `/close-unit`) included — then check the OLD section's text for a
+   repo-fact sentence (rule above) and carry it forward as a trailing paragraph; never let
+   regeneration discard it.
+5. For each REPO row, copy the old file's text for that section into the new placeholder
    verbatim. Where the new template needs a fact the old file never had, ask the owner for that
    one fact — no re-interview.
-5. For each section behind a relocation pointer, regenerate the PLUGIN-owned text in place in
-   the file the pointer names — same commit, same diff-for-the-owner discipline as the rest of
-   this procedure — and leave the pointer line in AGENTS.md untouched.
-6. Never invent a machine constraint. A fact absent from the old file and un-askable stays
+6. For each section behind a relocation pointer, apply step 3's sync inside the file the
+   pointer names, same commit; leave that file's own repo-specific sentences and sections
+   alone, and leave AGENTS.md's pointer line as its only content for that heading. A file where
+   every sentence's meaning already matches gets no edit — say so in the report.
+7. Never invent a machine constraint. A fact absent from the old file and un-askable stays
    absent, flagged exactly as init leaves it: "none recorded yet — append the first time one
    bites."
-7. Keep the repo's existing numbering, paths, and doc-spine references untouched.
-8. If the repo carries a generated `verify-<project>` skill whose `SKILL.md` still has the
+8. Keep the repo's existing numbering, paths, and doc-spine references untouched.
+9. If the repo carries a generated `verify-<project>` skill whose `SKILL.md` still has the
    "Cadence seat" heading, rewrite that heading and its sentences the same way this sweep
    rewrote `create-verification-skill`'s generator output (now "Where the skill sits").
-9. If the repo keeps a founder-decision log or equivalent, record the refresh there in the same
-   commit — what changed and why, one line.
-10. Produce the result as a diff over the existing AGENTS.md (and any relocated file it points
-    at) for the owner to read — never a silent rewrite.
-11. Land it as one PR on a branch, through the router's Opening a PR playbook: the file is the
+10. If the repo keeps a founder-decision log or equivalent, record the refresh there in the
+    same commit — what changed and why, one line.
+11. Produce the result as a diff over the existing AGENTS.md (and any relocated file it points
+    at) for the owner to read, plus a report: every repo-fact sentence carried per the rule
+    above (old section → new location), and for each relocated file, exactly what changed and
+    what needed no edit — never a silent rewrite.
+12. Land it as one PR on a branch, through the router's Opening a PR playbook: the file is the
     unit, and a non-author verifier reads the diff before it merges.
-12. Run **GAP-FILL** afterwards, in the same sitting — a refreshed procedure can still be
+13. Run **GAP-FILL** afterwards, in the same sitting — a refreshed procedure can still be
     missing a spine file the old AGENTS.md never named.
 
 **Never**: rewrite anything under `docs/` — except the file a relocation pointer names, whose
-plugin-owned text is regenerated — renumber an existing doc, touch the finding ledger, or treat
-REFRESH as licence to re-interview the repo — it reads the old file's facts, it does
-not re-derive them.
+plugin-owned text is synced per steps 3 and 6 — renumber an existing doc, discard a repo-fact
+sentence found inside a plugin-owned section, touch the finding ledger, or treat REFRESH as
+licence to re-interview the repo — it reads the old file's facts, it does not re-derive them.
 
 ## Step 1 (existing repo) — the interview wave
 
