@@ -16,11 +16,11 @@ Invoked at the end of every other playbook.
 - `## Scope`. State facts from the diff. Name real symbols and paths. Name both sides of a rename or retarget. State what is in and out when the boundary matters.
 - `## Tradeoffs`. State real choices only. Skip this section when there are none.
 - `## Blast Radius`. State who and what the change touches. Explain why the change is safe or risky. If main is red without the fix, name the continuing cost.
-- `## Verification`. State how you ran each check and its rigor. Name the real path, such as the repo's `verify-<project>` skill or the targeted tests. State the outcome of each check, not only the command name. On a gated unit, name the ledger walk in this section: `ledger: n lessons swept — clean`, or the exceptions.
+- `## Verification`. State how you ran each check and its rigor. The real path is the repo's `verify-<project>` drives and their outcomes. Targeted tests are the unit floor and never the substitute on a change to a shipped surface. State the outcome of each check, not only the command name. Every unit that swept carries its ledger line here, `ledger: n lessons swept · k findings · r reachable by a real user, all fixed · m registered`, plus the loop-health row when **close-unit** ran.
 
 After these sections, attach videos or screenshots when they prove a claim. Do not use `## Summary` or `## Test plan` boilerplate. A commit body does not restate its subject.
 
-**Register the unit.** A gated unit is registered here, at PR open. Update its probe with the BASE, the gated classification, and the clusters so far. Record a named close trigger alongside them: a stack closes at Shipping's ceiling, a program closes at the coordinator's wave boundary, and solo work with no shipping pass closes on the unit's final review round. A registered unit that never closes surfaces as an overdue register at the next close.
+**Register the unit.** A gated unit is registered here, at PR open. Update its probe with the BASE, the gated classification, and the clusters so far. Record a named close trigger alongside them: a stack closes at Shipping's ceiling, a program closes at the coordinator's wave boundary, and solo work with no shipping pass closes on the unit's final review round. That last close has already happened by here, after the sweep's triage and before this PR opens, and this PR cites its loop-health row. A registered unit that never closes surfaces as an overdue register at the next close.
 
 **Size and stacks.** Prefer five narrow PRs to one large PR. Stack follow-ups with Graphite (`gt`), and keep the ordered stack visible to reviewers. Branch from main only for independent work. Rebase on `main` before substantial stack work.
 
@@ -28,4 +28,4 @@ After these sections, attach videos or screenshots when they prove a claim. Do n
 
 **Babysit.** Opening a PR does not start a babysit. Post the URL and keep building. Finish the phase or stack first. Run a separate babysit pass only when the user asks for one after the whole stack exists. A babysit for each new PR stalls the build and spends checks on commits that later waves restart. Push back when feedback drifts from intent.
 
-A subagent that opens a PR runs `interrogate`, `/deslop`, and `/no-comments`. It returns the URL and does not babysit. Return to the parent.
+A delegate never opens a PR. The driver opens it, after its own `/deslop` and `/no-comments` passes.

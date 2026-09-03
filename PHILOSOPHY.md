@@ -14,18 +14,21 @@ is belt-and-suspenders, which does not ship.
 
 ## Two nested loops
 
-**The inner loop builds a unit** (a unit = the body of work answering one named goal, usually
-one to five commits): premortem → test-first build → simplify → verification sweep → external
-gate (gated units) → triage → drive the user-facing result → commit. It is deliberately
-boring and always the same; proportionality lives only in classifying the unit (gated or
-not — unsure ⇒ gated), never in skipping a step.
+**The inner loop builds a unit** (a unit = the work behind one PR, answering one named goal,
+usually one to five commits). It is the router's playbook walked end to end: understand the
+subsystem, premortem then architect the design, plan the fan-out, delegate the code, verify on
+the matching surface with the ledger sweep inside that step, rebase, interrogate a contested
+design, open the PR. It is deliberately boring and always the same. Proportionality lives only
+in classifying the unit, gated or not, never in skipping a step. What "gated" means is the
+repo's procedure file to define; the default scope list travels with the plugin, and a profile
+that narrows it owes a named re-widening trigger.
 
 **The outer loop improves the process itself**, and it has exactly ONE step: the unit close
-(`/close-unit`), run once per gated unit after the final gate round. One step, placed there,
-because that is when the finding sample is largest; because it must sit outside remediation
-(a mid-fix reflection is contaminated by deadline pressure); and because it must not live
-inside the gate (the gate is the loop's unbiased sampler — instrumenting it changes what it
-samples). A process whose improvement step fires "whenever someone gets around to editing the
+(`/close-unit`), run after the unit's final review round, before its PR opens, on any unit whose
+sweep landed findings. One step, placed there, because that is when the finding sample is
+largest; because it must sit outside remediation (a mid-fix reflection is contaminated by
+deadline pressure); and because it must not live inside the review round itself (that round is
+the loop's unbiased sampler, and instrumenting it changes what it samples). A process whose improvement step fires "whenever someone gets around to editing the
 procedure file" does not have an outer loop; it has accumulated pain.
 
 The outer loop also attacks itself: every close runs a mechanical self-check (anchoring, the
@@ -74,13 +77,14 @@ its own unit closes, from its own findings. This is a considered rule, not modes
   its premortems and sweeps to another architecture's failure distribution.
 - **The generalizable part already travels at the right altitude.** What deserves to cross
   repos is method-level doctrine (requiredness, enforcement tiers, compose-the-flow — in the
-  generated AGENTS.md) and the generic falsification classes (`/adversarial-audit`'s seam
-  catalogue). The ledger's job is precisely the part that must be local: which classes THIS
+  generated AGENTS.md) and the generic falsification classes (the seam catalogue at
+  `skills/verify-sweep/references/seam-catalogue.md`). The ledger's job is precisely the part
+  that must be local: which classes THIS
   repo actually samples, with what evidence, enforced where.
 
 **The young-ledger bootstrap:** an empty ledger does not shrink verification to nothing. Until
 lessons exist, the sweep's work breakdown falls back to the generic falsification classes in
-`/adversarial-audit` — the floor every repo starts from — and the first closes convert what
+its own seam catalogue — the floor every repo starts from — and the first closes convert what
 those rounds actually land into the repo's first lessons. The ledger then takes over as the
 primary breakdown, with the generic catalogue remaining the completeness floor beneath it.
 
@@ -102,39 +106,41 @@ a written reason.
 
 Three verification instruments, deliberately asymmetric:
 
-- **The sweep (4a, every unit)** applies the repo's KNOWN classes to the diff — cheap,
-  parallel, exhaustive over the ledger. Run in a neutral falsify/verify register with bounded
-  per-lesson executor specs; judgment (scope, triage, verdict) stays with the driver.
-- **The non-author verifier (the middle rung)** is a fresh agent that did NOT write the code,
-  in its own worktree, driving the real surface parent-vs-head, with its verdict posted where it
-  outlives the chat. It buys the one property the sweep's executors are denied by design —
-  independence from the build — at a fraction of the gate's cost, and it samples what a builder's
-  own falsification structurally cannot: the assumption the author never knew they were making. It
-  does not replace the gate; it is still in-family, and being OUT of the family is precisely what
-  the gate is for.
-- **The external gate (4b, gated units)** is an INDEPENDENT model hunting NOVEL classes — the
-  builder's blind spots, which no amount of self-review samples. A clean sweep is the gate's
-  precondition, so the expensive reviewer never spends its budget re-discovering the ledger.
-  Caps hold the loop convergent: one round per unit, at most one re-gate, survivors registered
-  with named triggers.
+- **The sweep (every unit)** applies the repo's KNOWN classes to the diff — cheap, parallel,
+  exhaustive over the ledger. Run in a neutral falsify/verify register with bounded per-lesson
+  executor specs; judgment (scope, triage, verdict) stays with the driver.
+- **The non-author round (the default independence rung)** is a fresh agent that did NOT write
+  the code, in its own worktree, driving the real surface parent-vs-head, with its verdict posted
+  where it outlives the chat. It buys the one property the sweep's executors are denied by
+  design — independence from the build — and it samples what a builder's own falsification
+  structurally cannot: the assumption the author never knew they were making. This is the rung
+  the playbooks route to: on a composed-on checkpoint inside a unit, and over the whole diff of a
+  gated unit before its PR opens. It is still in-family, which is a stated limit rather than a
+  hidden one.
+- **The external gate** is an INDEPENDENT model hunting NOVEL classes — the builder's blind
+  spots, which no amount of in-family review samples. It is TOOLBOX, not flow: it runs when a
+  repo's procedure file names it, on the surfaces that repo judges worth the cost, and never as
+  an ambient step. A clean sweep is its precondition wherever it runs, so the expensive reviewer
+  never spends its budget re-discovering the ledger.
 
-Feeding the gate the ledger (as its floor, never its ceiling) risks **anchoring** — a fed
+Feeding a reviewer the ledger (as its floor, never its ceiling) risks **anchoring** — a fed
 reviewer can satisfice on known classes and under-sample novel ones — and whether that is
-happening must be MEASURED, never remembered: the gate script self-schedules a blind control
-round every 4th gated unit from the ledger's own loop-health table. The novel-vs-resampled
+happening must be MEASURED, never remembered. Every FOURTH non-author round therefore runs as a
+blind control, and the driver schedules it by counting the `·fed` rows standing since the last
+`·blind` row in the ledger's loop-health table. No script keeps that count. The novel-vs-resampled
 ratio alone is confounded (an anchored reviewer and genuinely exhausted classes look the
 same); only the blind control discriminates. Nothing about loop health lives in ambient human
-memory — the row the close appends IS the scheduler's state.
+memory — the row the close appends IS the counter's state.
 
 ## The last layer: drive the product as its consumer
 
 Every instrument above stops at a boundary the consumer never sees: composed tests cross the
-server boundary, the sweep falsifies code classes, the gate reads. The one verifier below
+server boundary, the sweep falsifies code classes, a review round reads. The one verifier below
 that plane is a human — unless the repo has a **verification skill** (`verify-<project>`,
 generated by `/create-verification-skill`): a maintained **feature map** of how a consumer
 reaches and drives every consumer-facing surface (browser UI, public API, CLI, token links,
 outbound messages), plus a driver that operates the product exactly that way against a
-hermetic stack, handing back replayable evidence. Its standards are the cadence's, restated
+hermetic stack, handing back replayable evidence. Its standards are the loop's, restated
 at the surface: the surface is never the trust boundary (a proof composes surface → action →
 state → side-effect read → a second view), and the hermetic stack is non-negotiable — a
 verification skill pointed at production is refused, not accommodated.
@@ -167,7 +173,7 @@ and nothing more, with the judgement recorded either way.
 
 Growth is routed, never ambient. The procedure file (AGENTS.md) stays a fixed size: lessons
 and evidence accrete in the LEDGER; when a lesson is fully mechanized, its procedure-file
-prose is cut to a one-line pointer. The gate rubric consolidates rather than appends — an
+prose is cut to a one-line pointer. A review rubric consolidates rather than appends — an
 entry that turns out to be an instance of an existing class sharpens that entry; two entries
 that share a deeper principle merge. A rubric nobody can hold in attention guides nothing;
 its value is inversely related to its length.

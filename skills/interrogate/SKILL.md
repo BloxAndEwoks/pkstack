@@ -10,6 +10,8 @@ Spawn one reviewer per configured model to adversarially review code changes. Ea
 
 The deliverable is a synthesized verdict. Do NOT auto-apply changes.
 
+One round per unit is the cap. Two triggers fire it. A contested design, and a gated unit's non-author round over the whole unit diff before the PR opens.
+
 ## Step 1, Determine Scope
 
 Identify what to review from context:
@@ -57,7 +59,7 @@ Read `references/reviewer-prompt.md` and fill in the template with:
 
 The same filled template goes to all reviewers, so every model applies the code-quality lens.
 
-Reviewers are samplers and stay ledger-blind. The repo's finding ledger never enters a reviewer prompt.
+Which round this is decides what the reviewers see. On a contested-design round they are samplers and stay ledger-blind, because the class you are hunting is one the ledger has not named yet. On a gated unit's non-author round they are fed the repo's finding ledger, because what that round buys is independence from the builder over known classes, not novelty.
 
 Each reviewer produces structured findings as described in the prompt template.
 
@@ -75,21 +77,24 @@ As results come back, build a unified picture:
 
 Carry each finding's Location and Severity into the Act On entries. The reviewer prompt already produces both, and a finding that drops them is no longer citable.
 
+Give every surviving finding a `reachable` value, one of `real user today`, `crafted client`, `raw writer`, `operator`, or `not today`. Evidence it at rung 4 or higher of the **blast-radius** evidence ladder, meaning you ran it or you reproduced it in the running app. A finding you could not reproduce gets no value and enters no bucket.
+
 ## Step 5, Lead Judgment
 
 You are the lead reviewer, a pragmatic senior engineer, not a neutral aggregator.
 
 Read `references/lead-judgment.md` for the full framework. Reviewers only see a slice of the codebase. You have the full context (the goal, the constraints, the timeline, which tradeoffs were already considered). Use that context aggressively.
 
-Categorize every finding using these buckets:
+Categorize every finding using these buckets. The `reachable` value picks the bucket, not the severity word the reviewer chose.
 
-- **Act on**. Real issues affecting correctness, security, or maintainability given the actual goals. These would block a real PR.
-- **Consider**. Legitimate points, but you're not sure they outweigh the cost of addressing them right now. Worth the user's attention.
-- **Noted**. Technically valid but not actionable. Context-dependent, premature optimization, or low-impact given the current stage.
+- **Act on**. `reachable: real user today`. Fixed by class before the PR opens. A finding at any other reachability lands here too when the design itself is wrong (a wrong MODEL cluster), because a named trigger cannot hold a broken model.
+- **Consider**. Reproduced at `crafted client`, `raw writer`, or `operator`, and expensive to leave standing. Registered with a named trigger, and worth the user's attention now.
+- **Noted**. Reproduced but `not today`, or reachable only past a boundary nothing crosses yet. Registered with a named trigger and left there.
 - **Dismissed**. Wrong, nitpicky, or missing context. Brief explanation why.
 
 For each finding, include:
 - Which model(s) raised it
+- Its `reachable` value and the ladder rung that evidenced it
 - The category (act on / consider / noted / dismissed)
 - A one-line rationale for the categorization
 

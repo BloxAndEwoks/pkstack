@@ -20,7 +20,7 @@ Update mode mines only the history since the skill last changed. It keeps rules 
 
 ## Capture a unit's lessons with `/close-unit`
 
-At the close of a unit of work, once the last review round is in, run:
+At the close of a unit of work, once the last review round is in and before the PR opens, run:
 
 ```text
 /close-unit that took way too long. distill what we learned so the next unit doesn't repeat it.
@@ -40,7 +40,7 @@ When you already know the workflow you want to capture:
 
 Writing a skill matches the [Authoring or modifying a skill playbook](../../skills/poteto-mode/playbooks/authoring-a-skill.md), which drafts the `SKILL.md`, validates the frontmatter and links, and ships the result through the Opening a PR playbook. Agent-facing prose has a higher bar than human prose, because an unhelpful sentence becomes an instruction some future agent follows. Let the playbook hold that bar rather than writing a `SKILL.md` freehand.
 
-One special case has its own generator. A skill that must drive your app and prove behavior is a verification skill, so use [`/create-verification-skill`](../../skills/create-verification-skill/SKILL.md) and [`/maintain-verification-skill`](../../skills/maintain-verification-skill/SKILL.md) instead. [Verify and ship](./06-verify-and-ship.md#create-a-project-verification-skill) covers both.
+One special case has its own generator. A skill that must drive your app and prove behavior is a verification skill, so use [`/create-verification-skill`](../../skills/create-verification-skill/SKILL.md) instead. The generated skill carries its own MAINTAIN mode, so keeping the map honest needs no second skill. [Verify and ship](./06-verify-and-ship.md#create-a-project-verification-skill) covers both.
 
 ## Write docs to a standard with `/technical-writing`
 

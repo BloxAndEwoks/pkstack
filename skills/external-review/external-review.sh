@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # external-review.sh — drive Codex (an INDEPENDENT model) as the external certification gate.
 #
-# The build cadence's own verification step (the ledger-driven sweep, or /adversarial-audit where no
+# The build cadence's own verification step (the ledger-driven sweep, or the verify-sweep seam catalogue where no
 # ledger exists) is OUR audit — it applies every KNOWN defect class to the unit's diff before this
 # gate runs. This is the backstop that CERTIFIES the unit: an independent reviewer that does not
 # share our blind spots or our incentive to confirm our own work, whose budget goes to NOVEL classes
@@ -190,7 +190,7 @@ fi
 # The feed is SPLIT by position in the prompt (plan-before-feed): the BLIND prohibition must land
 # EARLY (before the reviewer starts reading files), while the FED feed must land LATE (after the
 # reviewer has recorded its own plan), or the feed frames the search it was only meant to floor.
-# The blind arm also withholds the probe's Gate manifest — its known-class and residue lines are
+# The blind arm also withholds the probe's Review manifest (formerly Gate manifest) — its known-class and residue lines are
 # ledger content by proxy — and binds every spawned subagent.
 LEDGER_EARLY=""
 LEDGER_FLOOR=""
@@ -198,9 +198,9 @@ SWEEP_LINE=""
 if [[ -f "$LEDGER_DOC" ]]; then
   SWEEP_LINE="CONTEXT: the repo's own ledger-driven verification sweep has ALREADY applied every known defect class to this diff before you were invoked (its record is in the unit's probe). Your budget is the certification the sweep cannot give: NOVEL classes, composed-flow depth, and an honest check that the discipline was actually followed. Re-deriving the ledger's known classes is the one way to waste this round."
   if [[ "$LEDGER_MODE" == "blind" ]]; then
-    LEDGER_EARLY="CONTROL ROUND: this repo keeps a finding ledger of its known defect classes at ${LEDGER_DOC}. Neither you nor any subagent you spawn may open it this round — it is deliberately withheld so your search is an unanchored control sample (the feed itself is being tested for anchoring). The probe section titled 'Gate manifest' is withheld with it (its known-class and residue lines are ledger content by proxy) — take your scope from the diff range and the probe's design sections. Hunt entirely from your own plan; re-denying something the repo registered elsewhere is acceptable this round."
+    LEDGER_EARLY="CONTROL ROUND: this repo keeps a finding ledger of its known defect classes at ${LEDGER_DOC}. Neither you nor any subagent you spawn may open it this round — it is deliberately withheld so your search is an unanchored control sample (the feed itself is being tested for anchoring). The probe section titled 'Review manifest' is withheld with it (its known-class and residue lines are ledger content by proxy) — take your scope from the diff range and the probe's design sections. Hunt entirely from your own plan; re-denying something the repo registered elsewhere is acceptable this round."
   else
-    LEDGER_FLOOR="COMPLETENESS FLOOR — read only NOW, with your own plan already recorded. (1) The ledger, ${LEDGER_DOC}: its lessons are your MINIMUM defect classes (hunt their extensions in the new code), and a finding whose remediation is REGISTERED there or in the probes with a named trigger is a DISCLOSURE to verify honestly stated, not a denial to re-litigate. (2) The unit probe's 'Gate manifest' section (where present): unit, base..head, named guarantees, the known-class checks the sweep executed, registered residues with triggers, suite evidence, and the runtime surfaces needing live attack. Use both to verify your plan covers every guarantee — never as your search strategy."
+    LEDGER_FLOOR="COMPLETENESS FLOOR — read only NOW, with your own plan already recorded. (1) The ledger, ${LEDGER_DOC}: its lessons are your MINIMUM defect classes (hunt their extensions in the new code), and a finding whose remediation is REGISTERED there or in the probes with a named trigger is a DISCLOSURE to verify honestly stated, not a denial to re-litigate. (2) The unit probe's 'Review manifest' section (where present): unit, base..head, named guarantees, the known-class checks the sweep executed, registered residues with triggers, suite evidence, and the runtime surfaces needing live attack. Use both to verify your plan covers every guarantee — never as your search strategy."
   fi
 fi
 echo "[external-review] ledger feed: ${LEDGER_MODE}${LEDGER_AUTO:+ (auto — 4th-unit control rule)}"

@@ -25,6 +25,7 @@ git merge vendor && scripts/wire-check.sh
 | `README.md` | ours (pkstack README) |
 | `skills/create-verification-skill/**` | ours — kstack v0.3 superset; pstack's create/maintain interview already folded in |
 | `skills/reflect/**` | deleted — its three reviewer prompts moved to `skills/close-unit/references/` and rewired to return process findings; `synthesizer.md` dropped, close-unit's own procedure is the synthesizer. A vendor merge resurrects this directory; delete it again. |
+| `skills/maintain-verification-skill/**` | deleted — every generated verify-<project> carries its own MAINTAIN mode; this stale duplicate delivered by "one PR" and drifted from the generator. A vendor merge resurrects this directory; delete it again. |
 
 ## Wires (P1/P2 entries appended as they land)
 
@@ -73,10 +74,6 @@ grep: "general-purpose"
 ### p1-interrogate-subagent — skills/interrogate/SKILL.md
 why: Task-call shape plus the models-note path retargeted to Claude Code.
 grep: "general-purpose"
-
-### p1-maintain-verify-path — skills/maintain-verification-skill/SKILL.md
-why: project-local verification skills live under `.claude/skills/`.
-grep: .claude/skills/verify-*/
 
 ### p1-poteto-router — skills/poteto-mode/SKILL.md
 why: the control-skill trigger now names the repo's verify-<project> skill; reflect → close-unit; deslop is ours.
@@ -226,7 +223,7 @@ grep: A registered unit that never closes surfaces as an overdue register
 
 ### p2-shipping-close — skills/poteto-mode/playbooks/shipping.md
 why: the ceiling step is the stack's close point (close-unit over the accumulated verdicts and clusters, tree pinned by patch-id); verdict lines carry the surface · mechanism · class schema and persist to the probe.
-grep: The close runs here for the stack's gated units
+grep: that did not already close before their PR opened
 
 ### p2-babysit-emit-only — skills/poteto-mode/playbooks/babysit.md
 why: the mid-run sweep is cut to EMIT-only — triage decisions become findings in the unit's probe; lessons and rubric edits wait for the close.
@@ -273,7 +270,7 @@ why: the designed phase list carries each unit's gated classification and close 
 grep: gated or ungated classification (unsure means gated) and its close point
 ### p2-router-close-trigger — skills/poteto-mode/SKILL.md
 why: close routing for gated units (supplemental per-addition guard)
-grep: A GATED unit reaching its registered close point
+grep: The unit's final review round has run and its sweep landed findings
 
 ### p2-router-promotion — skills/poteto-mode/SKILL.md
 why: process-lesson promotion rule in the Principles index (supplemental)
@@ -316,3 +313,87 @@ grep: .claude/projects
 ### p4-router-model-invocable — skills/poteto-mode/SKILL.md
 why: probe 002 — CC has no mode system; disable-model-invocation left the router dead unless the user typed it every task
 grep: Invoke at the START of any multi-step engineering task
+
+### p5-router-gating-source — skills/poteto-mode/SKILL.md
+why: the repo's procedure file defines gated scope where one exists; the plugin's list is the default only, and a delegate never classifies.
+grep: defines gated scope wherever one exists
+
+### p5-router-delegate-contract — skills/poteto-mode/SKILL.md
+why: delegates are bound by agents/poteto-agent.md and never re-enter classification, review rounds, close-unit, or Opening a PR.
+grep: bound by the delegate contract in `agents/poteto-agent.md`
+
+### p5-feature-premortem-step2 — skills/poteto-mode/playbooks/feature.md
+why: step 2 opens with the premortem whose ledger walk leaves the implicated-lessons map in the probe, then architect.
+grep: Premortem the design package with the **premortem** skill
+
+### p5-feature-composed-on — skills/poteto-mode/playbooks/feature.md
+why: the delegate owns the diff and never spawns a review round; composed-on checkpoints take one non-author round before the next builds on them.
+grep: A checkpoint is composed-on when it lands a migration
+
+### p5-feature-verify-skill — skills/poteto-mode/playbooks/feature.md
+why: step 5 drives the unit's changed mapped features through verify-<project>; MAINTAIN in the same sitting on a wrong map.
+grep: drive the unit's changed mapped features as their consumer meets them
+
+### p5-feature-reachable — skills/poteto-mode/playbooks/feature.md
+why: 5a's fallback moves to verify-sweep's seam catalogue and every finding carries a reachable value at rung 4 or higher.
+grep: skills/verify-sweep/references/seam-catalogue.md
+
+### p5-pr-verification-ledger-line — skills/poteto-mode/playbooks/opening-a-pr.md
+why: the Verification section's real path is the verify-<project> drives, and every swept unit carries the reachable-counting ledger line.
+grep: r reachable by a real user, all fixed
+
+### p5-pr-no-delegate-pr — skills/poteto-mode/playbooks/opening-a-pr.md
+why: a delegate never opens a PR; the driver does, after its own deslop and no-comments.
+grep: A delegate never opens a PR
+
+### p5-refactor-verify-floor — skills/poteto-mode/playbooks/refactoring.md
+why: the smoke through verify-<project> is the floor on a shipped surface; the equivalence check is additive.
+grep: an equivalence check runs in addition to that smoke and never instead of it
+
+### p5-autopilot-close-hedge — skills/poteto-mode/playbooks/autopilot-full.md
+why: the batch close covers units that did not already close before their PR opened.
+grep: for the units that did not already close before their PR opened
+
+### p5-autopilot-stack-close-hedge — skills/poteto-mode/playbooks/autopilot-stack.md
+why: the chain close covers units that did not already close before their PR opened.
+grep: for the units that did not already close before their PR opened
+
+### p5-poteto-agent-delegate — agents/poteto-agent.md
+why: the agent file is the delegate contract, with the never-list the driver depends on.
+grep: You never classify a unit, capture BASE, spawn a review subagent
+
+### p5-smyw-driver-round — skills/show-me-your-work/SKILL.md
+why: the cross-model trail review is the driver's step, and the gated unit's non-author round.
+grep: never spawned by a delegate
+
+### p5-interrogate-cap-trigger — skills/interrogate/SKILL.md
+why: one round per unit, fired by a contested design or a gated unit's non-author round before PR open.
+grep: One round per unit is the cap
+
+### p5-interrogate-ledger-per-round — skills/interrogate/SKILL.md
+why: ledger-blind on a contested-design round, fed the ledger on the gated non-author round.
+grep: Which round this is decides what the reviewers see
+
+### p5-interrogate-reachable — skills/interrogate/SKILL.md
+why: findings carry a reachable value at rung 4 or higher, and the four buckets key on it.
+grep: The `reachable` value picks the bucket
+
+### p5-swarm-reachable — skills/swarm/SKILL.md
+why: the cluster tag carries reachable alongside GUARD/FACT/MODEL.
+grep: and a `reachable` value of `real user today`
+
+### p5-create-verify-feature-seats — skills/create-verification-skill/SKILL.md
+why: the verification seats are Feature steps 1 and 5 in the poteto-mode flow, and no step depends on an external gate.
+grep: after building (Feature step 5
+
+### p5-readme-router-pr-flow — README.md
+why: the intro describes the router-and-PR flow with the ledger loop at its chokepoints, not a cadence.
+grep: the unit is the work behind one PR
+
+### p5-guide-maintain-mode — docs/guide/06-verify-and-ship.md
+why: maintain-verification-skill is deleted; MAINTAIN is a mode inside the generated verify skill.
+grep: run verify-<app> in maintain mode
+
+### p5-guide-verify-generator — docs/guide/09-make-it-yours.md
+why: the maintain-verification-skill link is dead; only create-verification-skill remains, and the close runs before the PR opens.
+grep: The generated skill carries its own MAINTAIN mode

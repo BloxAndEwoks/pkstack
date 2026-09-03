@@ -4,10 +4,11 @@ pstack's body, kstack's nervous system.
 
 A standalone fork merging [pstack](https://github.com/cursor/plugins/tree/main/pstack)
 (Lauren Tan, MIT — vendored as a subtree with full history) with kstack's build discipline.
-poteto-mode's router and playbooks carry the work; kstack's finding ledger, Bennett's-razor
-lessons, the instantiated-lessons map, the verification sweep, and the close-unit
-self-improvement loop run through them natively — wired at the playbooks' own chokepoints,
-ledger-blind wherever sampling happens.
+The flow is pstack's: `/poteto-mode` routes the task to a playbook, the playbook builds it,
+and the unit is the work behind one PR. kstack's finding ledger, Bennett's-razor lessons, the
+instantiated-lessons map, the verification sweep, and the close-unit self-improvement loop run
+at that flow's own chokepoints — the design step, the verify step, the PR — with every finding
+carrying who can reach it, and the fan-out hunters kept ledger-blind wherever sampling happens.
 
 ## Install (Claude Code)
 

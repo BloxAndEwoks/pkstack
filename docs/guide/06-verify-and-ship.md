@@ -42,13 +42,13 @@ Once the verify skill works, a [`/swarm`](../../skills/swarm/SKILL.md) can split
 
 ## Keep the verification skill honest
 
-Apps change and feature maps rot. When yours drifts, run:
+Apps change and feature maps rot. Maintenance is not a separate skill. Every generated skill carries its own MAINTAIN mode, so when yours drifts, ask it directly:
 
 ```text
-/maintain-verification-skill
+run verify-<app> in maintain mode
 ```
 
-[`/maintain-verification-skill`](../../skills/maintain-verification-skill/SKILL.md) audits the generated skill: one read-only source reader per feature in parallel, then one live pass that drives every mapped feature. It ends in exactly one of three outcomes. `clean` means full coverage and nothing to ship. `changed` means one PR of proven corrections, confined to the verification skill's own directory. `blocked` names the blocker. It never edits product code. If the live pass catches a product regression, it reports the regression instead of papering over it in docs.
+MAINTAIN audits the map: one read-only source reader per feature in parallel, then one live pass that drives every mapped feature. It ends in exactly one of three outcomes. `clean` means full coverage and nothing to ship. `changed` means one PR of proven corrections, confined to the verification skill's own directory. `blocked` names the blocker. It never edits product code. If the live pass catches a product regression, it reports the regression instead of papering over it in docs. A unit whose close finds the map wrong runs MAINTAIN in the same sitting rather than deferring it.
 
 ## Open the PR
 

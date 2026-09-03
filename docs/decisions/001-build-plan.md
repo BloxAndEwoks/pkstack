@@ -23,6 +23,14 @@ Ratified decisions of record (full rationale in the session's build-plan artifac
 5. **The gate is toolbox, not flow.** external-review stays out of the playbooks; per-repo
    AGENTS.md owns policy; the non-author verifier is the default independence rung; the
    loop-health row records the verifier's model id verbatim so anchoring is measured.
+
+   *Amendment, 2026-09-03.* The non-author round is the default independence rung **in** the
+   playbooks, not merely available to them: it runs on a composed-on checkpoint inside a unit,
+   and on a gated unit over the whole unit diff before the PR opens. The external gate is
+   **unrouted toolbox** — kstack-init seeds no `scripts/external-review.sh`, and the gate runs
+   only where a repo's own procedure file names it. The blind control is **driver-counted**
+   from the ledger's loop-health rows, the `·fed` rows standing since the last `·blind` row;
+   no script schedules it.
 6. **Register/close split.** opening-a-pr registers a gated unit with a named close trigger;
    shipping's ceiling (stacks), the coordinator's wave boundary (orchestrate/autopilot), or
    the named trigger (solo) closes it. Fan-out hunters stay ledger-blind everywhere.

@@ -1,12 +1,15 @@
 ---
 name: external-review
-description: "Run the adversarial EXTERNAL review gate: drive Codex (an independent model) over the current branch to DENY the work's claims, then remediate what it lands. The backstop on the repo's own verification step — it checks we followed the discipline honestly, with blind spots we don't share. MANDATORY TRIGGERS: 'external review', 'run codex', 'codex review', 'have codex check this', 'external review gate', 'independent review', 'get a second model on this'. STRONG TRIGGERS: 'is this actually shippable', 'red-team this externally', 'would codex deny this'. Trigger AFTER the repo's own verification pass (its ledger-driven sweep where one exists, else /adversarial-audit) plus /simplify, as a gate before calling a unit done — especially on money rails, the state machine/lifecycle, and customer-facing flows. Do NOT trigger for a trivial or docs-only change."
+description: "UNROUTED TOOLBOX: this gate runs only when the repo's procedure file names it, it is not part of the Feature flow, and it requires the Codex CLI installed and logged in. Run the adversarial EXTERNAL review gate: drive Codex (an independent model) over the current branch to DENY the work's claims, then remediate what it lands. The backstop on the repo's own verification step — it checks we followed the discipline honestly, with blind spots we don't share. MANDATORY TRIGGERS: 'external review', 'run codex', 'codex review', 'have codex check this', 'external review gate', 'independent review', 'get a second model on this'. STRONG TRIGGERS: 'is this actually shippable', 'red-team this externally', 'would codex deny this'. Trigger AFTER the repo's own verification pass (its ledger-driven sweep where one exists, else /adversarial-audit) plus /simplify, as a gate before calling a unit done — especially on money rails, the state machine/lifecycle, and customer-facing flows. Do NOT trigger for a trivial or docs-only change."
 ---
 
 # External Review Gate
 
+This skill is unrouted toolbox: it runs only when the repo's procedure file names it, no step of
+the Feature flow depends on it, and it requires the Codex CLI installed and logged in.
+
 This is the backstop on the build cadence, not a step in it. The repo's own verification pass (the
-ledger-driven sweep, or `/adversarial-audit` where no ledger exists) is where WE attack the
+ledger-driven sweep, or the seam catalogue at `skills/verify-sweep/references/seam-catalogue.md` where no ledger exists) is where WE attack the
 guarantees; this gate has an **independent model (Codex)** attack them — one that does not share our
 blind spots or our incentive to confirm our own work. It exists because a green suite plus a self-run
 audit still leave the builder's blind spots unsampled — an independent reviewer repeatedly lands
@@ -30,7 +33,7 @@ second opinion" into something that actually happens at every high-stakes unit.
 ## How to run it
 
 The gate works in ANY git repo on this machine. Script resolution order:
-1. `scripts/external-review.sh` in the repo (the project-seeded copy — `kstack-init` installs one) —
+1. `scripts/external-review.sh` in the repo (the project-seeded copy — `kstack-init` no longer seeds one; a repo may vendor its own copy) —
    prefer it.
 2. Otherwise the PROJECT-AGNOSTIC copy bundled with this skill: `external-review.sh` in this skill's
    base directory. Same flags, same rubric, same no-commit enforcement — it discovers the repo's own
@@ -87,7 +90,7 @@ passes — the design degrades, the discipline doesn't. NEVER run two gate scrip
 concurrently: that is how shared suites, fixed-port smoke stacks, and shared databases corrupt.
 
 The gate certifies against a **manifest floor**: on gated units the verify-sweep closes by writing
-a `## Gate manifest` section into the unit's probe (unit · base..head · guarantees · known-class
+a `## Review manifest` section (formerly `## Gate manifest`) into the unit's probe (unit · base..head · guarantees · known-class
 checks executed · residues with triggers · suite evidence · runtime surfaces). The prompt has Codex
 read it only AFTER forming its own plan — a completeness floor, never the search strategy.
 

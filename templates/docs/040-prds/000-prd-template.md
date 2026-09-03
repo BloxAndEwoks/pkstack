@@ -29,13 +29,17 @@ Date: YYYY-MM-DD · Status: draft | ratified | built | superseded
 
 ## Gated-scope classification
 
-<!-- Does this touch money rails, the lifecycle/state machine, customer- or supplier-facing
-     flows, custody, or a migration? Unsure ⇒ gated. This line decides the unit's cadence. -->
+<!-- Classify against the gated scope in the repo's procedure file (AGENTS.md) — the default
+     list is money rails, the lifecycle/state machine, customer- or supplier-facing flows,
+     custody, or a migration, and a profile may have narrowed it with a named re-widening
+     trigger. Classify per the profile's gated scope; unsure means gated within it. This line
+     decides whether the unit takes a non-author review round over its whole diff before the
+     PR opens. -->
 
 ## New facts (facts-before-verbs preview)
 
 <!-- For each fact this feature introduces: occurrence-or-state · writer set · requiredness
-     per boundary · intended enforcement tier. The probe's step-1 table refines this. -->
+     per boundary · intended enforcement tier. The probe's design-package table refines this. -->
 
 ## Open questions
 

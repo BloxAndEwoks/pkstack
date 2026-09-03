@@ -1,6 +1,6 @@
 ---
 name: premortem
-description: "Run a premortem on any plan, launch, product, hire, strategy, decision — or an engineering CODE CHECKPOINT before building it (build-cadence step 1: engineering mode targets technical failure classes and outputs a committed probe doc, not the HTML report). Assumes it already failed and works backward to find every reason why. MANDATORY TRIGGERS: 'premortem this', 'premortem my', 'run a premortem', 'what could kill this', 'future-proof this', 'stress test this plan', 'what am i missing here', 'find the blind spots'. STRONG TRIGGERS: 'what could go wrong', 'am i missing anything', 'poke holes in this', 'where will this break', 'devil's advocate this'. Do NOT trigger on simple feedback requests or factual questions. DO trigger when someone has a plan or commitment where the cost of being wrong is high."
+description: "Run a premortem on any plan, launch, product, hire, strategy, decision — or an engineering CODE CHECKPOINT before building it (Feature step 2 in the poteto-mode flow, the design package's failure hunt: engineering mode targets technical failure classes and outputs a committed probe doc, not the HTML report). Assumes it already failed and works backward to find every reason why. MANDATORY TRIGGERS: 'premortem this', 'premortem my', 'run a premortem', 'what could kill this', 'future-proof this', 'stress test this plan', 'what am i missing here', 'find the blind spots'. STRONG TRIGGERS: 'what could go wrong', 'am i missing anything', 'poke holes in this', 'where will this break', 'devil's advocate this'. Do NOT trigger on simple feedback requests or factual questions. DO trigger when someone has a plan or commitment where the cost of being wrong is high."
 ---
 
 # Premortem
@@ -15,12 +15,12 @@ The reason this matters for AI-assisted decisions: Claude defaults to agreeable,
 
 ---
 
-## engineering checkpoint mode (build-cadence step 1)
+## engineering checkpoint mode (Feature step 2)
 
 When the target is a **code checkpoint** — a feature, refactor, or migration about to be built in a
-repo, typically as step 1 of that repo's build cadence — the mechanism is identical (prospective
-hindsight + one deep-dive agent per failure reason, in parallel) but three things change from the
-business flow below. The cadence itself — what runs AFTER this step — is owned by the repo's
+repo, typically as Feature step 2 in the poteto-mode flow, the design package's failure hunt that
+runs before the architect pass — the mechanism is identical (prospective hindsight + one deep-dive
+agent per failure reason, in parallel) but three things change from the business flow below. The cadence itself — what runs AFTER this step — is owned by the repo's
 procedure file (AGENTS.md or equivalent), never by this skill: naming later steps here is how a
 skill goes stale the next time a step is redesigned.
 
@@ -55,11 +55,11 @@ skill goes stale the next time a step is redesigned.
 
 3. **The output.** NOT the HTML report + transcript — record the findings as the repo's probe/design
    doc convention (e.g. `docs/050-probes/NNN-*.md` in repos that keep probes; otherwise a committed
-   markdown doc). The findings are the checkpoint's test-first target list; what later cadence steps
+   markdown doc). The findings are the checkpoint's test-first target list; what later steps
    append to that document is their business, defined in the procedure file. **Record the unit's
    BASE in the probe header** — `git rev-parse HEAD` at unit start, before the first checkpoint
-   commit — so the verification sweep's diff range and the external gate's `--base` are captured
-   facts, never later archaeology.
+   commit — so the verification sweep's `BASE..head` diff range, and every later reviewer's scope
+   with it, is a captured fact and never later archaeology.
 
 Two instruments ride with the engineering mode: the bar for its costliest verdict, and the pin for
 its riskiest axis.

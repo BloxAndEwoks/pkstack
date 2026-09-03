@@ -6,7 +6,7 @@ description: "Generate a repo's verification skill (verify-<project>): the featu
 # create-verification-skill
 
 The verification tower ends one layer short of the consumer: unit and composed tests cross the
-server boundary, the sweep falsifies code classes, the external gate reads, a smoke proves
+server boundary, the sweep falsifies code classes, any reviewer reads, a smoke proves
 surfaces render — but none of them *operates* the rendered product and hands back evidence a
 human can replay. This skill generates the per-repo skill that closes that layer: a maintained
 **feature map** of how a consumer reaches and drives every consumer-facing surface, plus the
@@ -92,10 +92,10 @@ must be real).
    dies.
 6. **Record and register.** The creation is a unit: record it as a probe, including a
    facts-before-verbs row for the map itself (it is a new fact: writer = the generated skill's
-   MAINTAIN mode only; required at = every step-6 drive and every EXPERIENCE pass; enforcement
-   tier = procedure, with the written reason that the map is prose about a moving product —
+   MAINTAIN mode only; required at = every Feature step 5 drive and every EXPERIENCE pass;
+   enforcement tier = procedure, with the written reason that the map is prose about a moving product —
    its verification medium is execution, not the compiler). Seat the skill in the repo's
-   AGENTS.md steps 1 and 6.
+   AGENTS.md at Feature steps 1 and 5.
 
 ## The generated skill's contract (every verify-<project> carries all of this)
 
@@ -178,11 +178,11 @@ its name — some dry-runs still touch the network.
   prerequisites, confirmed drift, outcome) in scratch; never commit them.
 
 **Cadence seat** (written into the generated skill AND the repo's AGENTS.md): two seats, both
-scoped to the TOUCHED surfaces — before designing (step 1: read the touched feature files,
-plus a live look where genuinely informative) and after building (step 6: any repo-level
-smoke first, then drive the unit's changed mapped features). The skill is never a per-unit
-regression walk of the whole map — only MAINTAIN walks everything. Findings always flow to
-the cadence's triage; lessons mint at `/close-unit`, never inside the skill.
+scoped to the TOUCHED surfaces — before designing (Feature step 1, `how`: read the touched
+feature files, plus a live look where genuinely informative) and after building (Feature step 5:
+any repo-level smoke first, then drive the unit's changed mapped features). The skill is never a
+per-unit regression walk of the whole map — only MAINTAIN walks everything. Findings always flow
+to the cadence's triage; lessons mint at `/close-unit`, never inside the skill.
 
 ## Why maintenance is not a separate skill
 

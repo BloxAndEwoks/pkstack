@@ -11,7 +11,7 @@ the **weakest statement still sufficient** to correctly decide every finding in 
 **extension** (the recorded defects it forbids). AGENTS.md holds the *procedure*; lessons and
 their evidence accrete HERE, so the procedure file stays a fixed size.
 
-**How lessons are born.** Only at unit closes (AGENTS.md step 5b), only from local evidence:
+**How lessons are born.** Only at unit closes (`/close-unit`), only from local evidence:
 when a round's findings are clustered by mechanism, each cluster is looked up here first —
 
 - **Covered but unenforced** — an existing lesson's extension already decides it. The statement
@@ -66,11 +66,11 @@ regression — is also the medium-rot detector for this rung: a ruler that has s
 discriminating is rotten even though it still runs green.
 
 **The young-ledger bootstrap.** An empty lesson list does not shrink verification to nothing:
-until lessons exist, the per-unit sweep (AGENTS.md step 4a) falls back to the generic
-falsification classes in `/adversarial-audit`'s seam catalogue as its work breakdown, and the
-first closes convert what those rounds actually land into this repo's first lessons. The ledger
-then takes over as the sweep's primary breakdown, with the generic catalogue remaining the
-completeness floor beneath it.
+until lessons exist, the per-unit sweep falls back to the generic falsification classes in the
+sweep's own seam catalogue (`skills/verify-sweep/references/seam-catalogue.md`) as its work
+breakdown, and the first closes convert what those rounds actually land into this repo's first
+lessons. The ledger then takes over as the sweep's primary breakdown, with the generic catalogue
+remaining the completeness floor beneath it.
 
 ---
 
@@ -119,6 +119,9 @@ never fires. Proposed statement (prohibition): the generated procedure file name
 chokepoint the installed plugin's loop depends on (entry router, design step, hygiene,
 register, close), not only the verification spine. Target medium: the kstack-init template.
 Trigger: next pkstack maintenance close.
+**LANDED 2026-09-03** (owner-approved, the router-and-PR flow change): `templates/AGENTS.template.md`
+rewritten in the router's vocabulary, every chokepoint named (entry, premortem and architect,
+delegate, verify through the verification skill, sweep, non-author round, close, PR).
 
 ### EQ-2 — invocability asymmetry pulls mixed repos toward the invocable half
 Provenance: pangea:probe-061. kstack-side skills are model-invocable (MANDATORY TRIGGERS);
@@ -150,17 +153,20 @@ like the mechanization queue's.
 
 ## Loop health
 
-One row per gated unit, appended by the close-unit step: `- <date> · probe <n> · novel <n/m> ·
-mode: <model id>·<fed|blind>`. `novel n/m` = statements minted vs total findings (the loop's
-health metric: mostly re-samplings ⇒ the problem is media, not doctrine). `mode:` = the certifying
-reviewer's MODEL ID, verbatim, plus whether it ran `·fed` (ledger in the rubric) or `·blind` —
-`mode: gpt-5-codex·fed`, `mode: claude-opus-5 (non-author)·blind`, `mode: self`. The id is recorded
-rather than an internal/external category because that binary flattens exactly the case that
-matters: a cross-family reviewer that is still internal. The gate script SELF-SCHEDULES a blind
-CONTROL round every 4th unit by counting `·fed` rows since the last `·blind` row in this table (no
-human keeps the count; `--with-ledger` / `--no-ledger` override one run). If blind rounds keep
-finding what fed rounds stopped finding, the feed is anchoring (drop the hunt clause, keep the
-disclosure rule); if both converge on the same shrinking set, the feed is innocent.
+One row per unit whose close ran, appended by the close-unit step: `- <date> · probe <n> · novel
+<n/m> · mode: <model id>·<fed|blind>`. `novel n/m` = statements minted vs total findings (the
+loop's health metric: mostly re-samplings ⇒ the problem is media, not doctrine). `mode:` = the
+REVIEWING model's ID, verbatim, plus whether that round ran `·fed` (ledger in its brief) or
+`·blind`. Examples: `mode: claude-opus-5 (non-author)·fed`, `mode: gpt-5-codex·blind`. A unit
+with no non-author round records `mode: self`. The id is recorded rather than an
+internal/external category because that binary flattens exactly the case that matters: a
+cross-family reviewer that is still internal.
+
+Every FOURTH non-author round runs ledger-blind as the anchoring CONTROL. The driver counts it
+from this table before briefing the round, by counting the `·fed` rows standing since the last
+`·blind` row. No script schedules it, and nobody keeps the count in their head. If blind rounds
+keep finding what fed rounds stopped finding, the feed is anchoring (drop the hunt clause, keep
+the disclosure rule); if both converge on the same shrinking set, the feed is innocent.
 
 A row may also carry `ceremony: <wall-clock or context share>` — what the loop's own paperwork cost
 that unit. The loop's housekeeping is wanted, and it is measured so it stays lean: a ceremony

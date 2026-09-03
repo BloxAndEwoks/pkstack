@@ -1,6 +1,6 @@
 ---
 name: simplify
-description: "Build-cadence step 3: review the changed code for reuse, simplification, efficiency, and altitude cleanups, then apply what survives adjudication. Quality only — it does not hunt for bugs; that is the verification steps' job. MANDATORY TRIGGERS: 'simplify this', 'run simplify', 'simplify pass', 'four-lens review'. Runs AFTER building and BEFORE verification — and over any substantial remediation diff (external-review --fix included) before it is committed. Do NOT trigger as a bug hunt or on an empty diff."
+description: "The quality pass after building and before the sweep: review the changed code for reuse, simplification, efficiency, and altitude cleanups, then apply what survives adjudication. Quality only — it does not hunt for bugs; that is the verification steps' job. MANDATORY TRIGGERS: 'simplify this', 'run simplify', 'simplify pass', 'four-lens review'. Runs AFTER building and BEFORE verification — and over any substantial remediation diff (an external reviewer's --fix diff included, where a repo runs one) before it is committed. Do NOT trigger as a bug hunt or on an empty diff."
 ---
 
 # Simplify
@@ -75,7 +75,7 @@ trigger (or confirm the code was already clean).
 ## Cadence notes
 
 - Remediation is new work the earlier steps never saw: a substantial fix batch (including an
-  external reviewer's `--fix` diff) gets this pass before commit, exactly as first-build code
-  does.
+  external reviewer's `--fix` diff, where a repo runs one) gets this pass before commit, exactly
+  as first-build code does.
 - A batch that accumulated across several checkpoints without a simplify pass gets one
   retroactively over the whole range — better late than layered.

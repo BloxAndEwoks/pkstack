@@ -1,17 +1,19 @@
 ---
 name: close-unit
-description: "Build-cadence step 5b: the self-improvement close of a GATED unit of work. Runs after the FINAL external-review round (the cadence cap), consuming the unit's triage clusters and the repo's finding ledger. Distills lessons per Bennett's razor (weakest sufficient hypothesis), diagnoses regenerated findings as covered-but-unenforced vs not-covered, promotes lesson media, and records the run in the unit's probe. MANDATORY TRIGGERS: 'close the unit', 'run close-unit', 'distill this round', 'ledger run'. Do NOT trigger on ungated/trivial units — they skip this step by design."
+description: "The self-improvement close of a unit of work. Runs after the unit's FINAL review round — the sweep's triage, or a gated unit's non-author round — and BEFORE the PR opens, consuming the unit's triage clusters and the repo's finding ledger. Distills lessons per Bennett's razor (weakest sufficient hypothesis), diagnoses regenerated findings as covered-but-unenforced vs not-covered, promotes lesson media, and records the run in the unit's probe. MANDATORY TRIGGERS: 'close the unit', 'run close-unit', 'distill this round', 'ledger run'. Runs on any unit whose sweep landed findings; a unit whose sweep came back clean records no row."
 ---
 
 # Close the unit
 
-The self-improvement step of the build cadence, run ONCE per gated unit, after the final gate
-round. Its theory (recorded in the ledger's header): a lesson is a hypothesis meant to
-generalise from the findings you observed (the child task) to the class they sample (the
-parent). The optimal such hypothesis is the WEAKEST one still sufficient — "explanations should
-be no more specific than necessary" (Bennett, arXiv:2301.12987) — and it must land in a medium
-that can only express universally-quantified statements, because that is what makes it apply to
-members that do not exist yet.
+The self-improvement step of the build cadence, run ONCE per unit, after the unit's final review
+round — the sweep's triage, or a gated unit's fresh-context non-author round — and before the PR
+opens. It runs on any unit whose sweep landed findings; a unit whose sweep came back clean has
+nothing to distil and records no row. Its theory (recorded in the ledger's header): a lesson is a
+hypothesis meant to generalise from the findings you observed (the child task) to the class they
+sample (the parent). The optimal such hypothesis is the WEAKEST one still sufficient —
+"explanations should be no more specific than necessary" (Bennett, arXiv:2301.12987) — and it
+must land in a medium that can only express universally-quantified statements, because that is
+what makes it apply to members that do not exist yet.
 
 ## Inputs
 
@@ -35,14 +37,21 @@ members that do not exist yet.
 
 ## The process sampler
 
-Optional at a close: fan out the three reviewer prompts in `references/` (judgment, tooling,
-divergent) over the unit's transcript or its `decisions.tsv` trail, one subagent each, models
-per the `close-unit sampler` roles in `~/.claude/pkstack-models.md` (defaults: judgment
-`fable`, tooling `opus`, divergent `fable`). What they return are PROCESS findings — how the
-agent worked, not what the code does. Cluster them by mechanism alongside the unit's own
-clusters and run each through the same per-cluster procedure below.
+Optional at a close: the DRIVER may fan out the three reviewer prompts in `references/`
+(judgment, tooling, divergent) over the unit's transcript or its `decisions.tsv` trail, one
+subagent each, models per the `close-unit sampler` roles in `~/.claude/pkstack-models.md`
+(defaults: judgment `fable`, tooling `opus`, divergent `fable`). A delegate never spawns the
+sampler. What they return are PROCESS findings — how the agent worked, not what the code does.
+Cluster them by mechanism alongside the unit's own clusters and run each through the same
+per-cluster procedure below.
 
 ## The procedure
+
+Clusters arrive from triage carrying each finding's `reachable` value. Reachability does NOT
+change the ledger decision — mint, weaken, or promote is about MECHANISM, and a `not today`
+finding samples its class exactly as a `real user today` one does. Reachability decided only
+whether the finding was FIXED before the PR opened: `real user today` fixed by class, every other
+reproduced finding registered with a named trigger.
 
 For EACH triage cluster, in order:
 
@@ -95,7 +104,7 @@ step` > `prose`.
   future session; the Eval playbook (`skills/poteto-mode/playbooks/eval.md`) is the instrument, and
   the promotion is not done until it has run.
 
-## Outputs (all four, same sitting)
+## Outputs (all five, same sitting)
 
 1. **The ledger updated** — extensions grown, statements weakened/minted, promotions queued
    with NAMED triggers.
@@ -103,28 +112,35 @@ step` > `prose`.
    fork → action, plus the headline ratio (new lessons vs re-sampled extensions — the ratio is
    the loop's health metric: mostly re-samplings means the problem is media, not doctrine).
 3. **The Loop-health row appended** to the ledger's table: `- <date> · probe <n> · novel <n/m> ·
-   mode: <certifying reviewer's model id>·<fed|blind>`. The model id goes in VERBATIM — `mode:
-   gpt-5-codex·fed`, `mode: claude-opus-5 (non-author)·blind`, `mode: self` — never an
-   internal/external binary, which flattens exactly the case that matters (cross-family but
-   internal). The fed|blind flag rides alongside it, from the gate's own `[external-review] ledger
-   feed:` log line: the gate script schedules its blind control rounds by COUNTING these rows — the
-   row IS the scheduler's state; skipping it silently disables the anchoring control. Optionally
-   add `ceremony: <wall-clock or context share>` — what the loop's own paperwork cost this unit.
-   Housekeeping is WANTED here, and measured so it stays lean: a ceremony figure that keeps growing
-   means move the paperwork to subagents, never that the step gets dropped.
-4. **The rubric fed** — landed findings into the external-review prompt/ledger feed, per the
-   repo's build cadence.
+   mode: <reviewer model id>·<fed|blind>` where a non-author round ran, and `mode: self` where
+   only the sweep did. The model id goes in VERBATIM — `mode: claude-opus-5 (non-author)·blind`,
+   `mode: gpt-5-codex·fed`, `mode: self` — never an internal/external binary, which flattens
+   exactly the case that matters (cross-family but internal). The DRIVER sets the fed|blind flag,
+   from whether the non-author round was given the ledger, and the driver also schedules the
+   control by COUNTING these rows: every FOURTH non-author round runs blind (count the fed rows
+   standing since the last blind one). The row IS the counter's state; skipping it silently
+   disables the anchoring control. Optionally add `ceremony: <wall-clock or context share>` — what
+   the loop's own paperwork cost this unit. Housekeeping is WANTED here, and measured so it stays
+   lean: a ceremony figure that keeps growing means move the paperwork to subagents, never that
+   the step gets dropped.
+4. **The rubric fed** — landed findings into the LEDGER, which is the only feed. A lesson that
+   does not reach the ledger reaches nothing.
+5. **The product-health line**, for the PR and for the owner: "of N findings, k reachable by a
+   real user, all fixed; the changed journeys driven green through verify-<project>". The PR's
+   Verification section cites it alongside the loop-health row.
 
 ## The loop self-check (final step — the loop attacks ITSELF)
 
 The process's own known failure modes, checked mechanically at every close. A newly discovered
 loop-level failure mode is added to this list in the same sitting it is found.
 
-- **Anchoring** — if this unit ran blind, compare its findings against the recent fed rounds:
-  did the blind reviewer find classes the fed rounds stopped finding? If yes, the feed is
-  anchoring: demote it (drop the hunt clause, keep only the disclosure rule).
-- **Ratio confound** — never read a falling novel ratio as success on its own; only the blind
-  control distinguishes an anchored reviewer from genuinely exhausted classes.
+- **Anchoring** — if the driver's count put this unit's non-author round on the blind arm,
+  compare its findings against the recent fed rounds: did the blind reviewer find classes the fed
+  rounds stopped finding? If yes, the feed is anchoring: demote it (drop the hunt clause, keep
+  only the disclosure rule).
+- **Ratio confound** — never read a falling novel ratio as success on its own; only the
+  driver-counted blind control distinguishes an anchored reviewer from genuinely exhausted
+  classes. A run of closes that never schedules one has no reading at all.
 - **Register abuse / overdue triggers** — walk ALL THREE register homes (the ledger's
   mechanization queue, the probes' Registers sections, and current-state's deferral
   register): has any NAMED TRIGGER since fired without the work being done? An overdue
