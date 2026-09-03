@@ -518,3 +518,23 @@ grep: **Use `subagent_type: "pkstack:poteto-agent"` for any subagent you spawn i
 ### p10-router-dispatchable-models — skills/poteto-mode/SKILL.md
 why: the prose/judgment default and the difficulty-tiering both named slugs the Agent tool cannot dispatch; tiering is now by brief, not by vendor.
 grep: The Agent tool dispatches `opus`, `sonnet`, `haiku`, and `fable` and nothing else
+
+### p11-bugfix-delegate-model — skills/poteto-mode/playbooks/bug-fix.md
+why: the step-3 code delegate defaulted to `gpt-5.6-sol-max`, which the Agent tool cannot dispatch; same Opus form as feature.md.
+grep: using your configured bug-fix model (the delegate runs on Opus
+
+### p11-hillclimb-delegate-model — skills/poteto-mode/playbooks/hillclimb.md
+why: same for the hypothesis-implementing delegate.
+grep: using your configured hillclimb model (the delegate runs on Opus
+
+### p11-perf-delegate-model — skills/poteto-mode/playbooks/perf-issue.md
+why: same for the perf-fix delegate.
+grep: using your configured perf-issue model (the delegate runs on Opus
+
+### p11-how-explainer-model — skills/how/SKILL.md
+why: both explainer seats defaulted to a fable slug the Agent tool cannot dispatch; the dispatchable name is `fable`.
+grep: your configured how-explainer model (default `fable`)
+
+### p11-why-synthesizer-model — skills/why/SKILL.md
+why: the synthesizer seat defaulted to a fable slug the Agent tool cannot dispatch.
+grep: your configured why-synthesizer model (default `fable`)
