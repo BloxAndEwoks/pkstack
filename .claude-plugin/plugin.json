@@ -1,7 +1,7 @@
 {
   "name": "pkstack",
   "description": "pstack's body, kstack's nervous system. A standalone fork merging Lauren Tan's pstack (vendored subtree, MIT) with kstack's build discipline: the poteto-mode router and playbooks carrying kstack's finding ledger, Bennett's-razor lessons, the instantiated-lessons map, and the close-unit self-improvement loop — wired natively at the playbooks' own chokepoints, ledger-blind wherever sampling happens.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": {
     "name": "keivan",
     "email": "keivan.samani@live.co.uk"
