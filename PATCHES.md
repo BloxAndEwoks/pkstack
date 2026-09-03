@@ -510,3 +510,11 @@ grep: spawn one architectural critic per entry in your configured how-critics li
 ### p9-interrogate-reviewers-panel — skills/interrogate/SKILL.md
 why: the reviewer table's four vendor slugs become three `opus` seats and one `sonnet`, with the provider-diversity note under the table.
 grep: | Reviewer C | `sonnet` |
+
+### p10-router-subagent-namespace — skills/poteto-mode/SKILL.md
+why: the delegate `subagent_type` must be the plugin-namespaced `pkstack:poteto-agent`; an unrecognized value does not error in Claude Code, it silently starts a `general-purpose` agent, which is the drift the line exists to prevent.
+grep: **Use `subagent_type: "pkstack:poteto-agent"` for any subagent you spawn inside a playbook step**
+
+### p10-router-dispatchable-models — skills/poteto-mode/SKILL.md
+why: the prose/judgment default and the difficulty-tiering both named slugs the Agent tool cannot dispatch; tiering is now by brief, not by vendor.
+grep: The Agent tool dispatches `opus`, `sonnet`, `haiku`, and `fable` and nothing else
