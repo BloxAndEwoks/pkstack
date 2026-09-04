@@ -38,8 +38,9 @@ first init.
   `templates/AGENTS.template.md` (a renamed step, a retired section, a section the template
   now requires that the old file never had) while the repo's own facts stayed current — see
   "REFRESH mode" below for detection, section ownership, and the procedure, and "The DOCS PASS"
-  for the living documents AGENTS.md routes agents into. Run REFRESH's detection check before
-  assuming it is needed; a file that passes both checks skips straight to GAP-FILL.
+  for the living documents AGENTS.md routes agents into. Run REFRESH's detection before assuming
+  it is needed; a file that passes all three checks — the third being the sentence-level sync —
+  skips straight to GAP-FILL.
   If it has a NON-kstack AGENTS.md/CONTRIBUTING with real content, absorb that content into
   the generated file (its facts are provenance-grade) and say what moved where; never silently
   overwrite.
@@ -64,9 +65,11 @@ section.
 **Triggers.** 'kstack refresh', 'refresh AGENTS.md', 'bring AGENTS.md up to the current
 template'.
 
-**Detection — run it as a grep, don't eyeball it.** An AGENTS.md is STALE when either check
-below hits anything. Both empty means the file is current: skip REFRESH and, if asked to run it
-anyway, report that and stop.
+**Detection — two greps, then a sentence-level diff.** An AGENTS.md is STALE when any of the
+three checks below finds something. Empty greps are not a stop: a file can pass both and still
+lack sentences the template ADDED since that file was written, which no grep for a retired word
+can see. Both greps empty means proceed to check 3; stop only when THAT finds no difference, and
+then report the file current.
 
 1. Missing a plugin-owned procedure heading:
    ```bash
@@ -89,6 +92,11 @@ anyway, report that and stop.
    ```bash
    grep -inE 'Units in this repository|Gated scope\.|Registration\.|Cross-model round\.|The close is procedural|cadence|gate record|re-gate|step 4a|step 4b|step 5b' AGENTS.md
    ```
+3. Missing what the template ADDED — a diff BY MEANING, read, not grepped. For every PLUGIN row
+   of the ownership table below, read that section in `templates/AGENTS.template.md` against the
+   repo's, sentence by sentence: a template sentence whose MEANING appears nowhere in the repo's
+   section is a miss, and one miss makes the file stale. This is the procedure's step 3 run as a
+   check — when it finds nothing, the procedure has nothing left to do.
 
 **Section ownership.** Every heading in the current template is either regenerated from the
 template (PLUGIN) or carried over from the old file verbatim (REPO):
@@ -100,6 +108,12 @@ verbatim as a trailing paragraph under the regenerated section (under the synced
 relocated section), and the report names every such carry, old section → new location. A
 sentence the driver cannot place under its own section lands under the nearest regenerated
 section instead, named in the report the same way. Nothing in the old file is lost.
+
+**Who wins on a contradiction.** A regenerated plugin-owned section and a carried repo-owned
+sentence can end up stating opposite things — the template's PR flow against a repo bullet
+saying this repo ships by commit with no PRs. The plugin's text wins for PROCEDURE, what an
+agent is to DO; the repo's wins for a FACT, what is true here. Neither is silently dropped: the
+contradiction is named in the report with both sentences quoted, for the owner to settle.
 
 | Template section | Owner | REFRESH action |
 |---|---|---|
@@ -177,57 +191,92 @@ agents INTO — a quality-band file the Read-first list calls "doctrine", a curr
 stating the old registration rule in the present tense — and an agent that reads one obeys it.
 This pass makes the template's law true in the repo: **build procedure lives in exactly two
 places, the plugin's playbooks and skills, and AGENTS.md.** Every other document carries facts,
-decisions, evidence, measurements, or pointers.
+decisions, evidence, measurements, or pointers. The law is about LOCATION, so the pass cuts a
+correct statement of today's build procedure outside those two places just as it cuts a retired
+one — a second copy is right only until the first changes. Procedure that is not BUILD procedure
+— a runbook, a release checklist — is not this law's business at all.
 
-**a. Scope — the living documents.** In scope: every path AGENTS.md's Read-first list names;
-`docs/000-index.md`; `docs/001-current-state.md`'s present-tense block; every file under the
-quality band (`docs/070-quality/` or the repo's equivalent), the finding ledger's header and
-mechanism prose included; the roadmap where one exists; the generated `verify-<project>` skill;
-`CLAUDE.md`.
+**a. Scope — the living documents, by path AND range.** A path in scope is not wholly in scope.
+Each carries the range this pass may touch, and a hit outside its file's range is not this
+pass's hit:
+
+| In scope | The range |
+|---|---|
+| every path AGENTS.md's Read-first list names | the Read-first ENTRY that names it — its one-line description of what that document carries. The document's own body enters scope only where a row below puts it there. |
+| `docs/000-index.md` | the whole file, its dated anchors excepted |
+| `docs/001-current-state.md` | the present-tense block only |
+| the quality band (`docs/070-quality/` or the repo's equivalent) | every file in it, minus the dated reports and session extracts it holds |
+| the finding ledger | its header and mechanism prose only |
+| the roadmap where one exists | the whole file |
+| the generated `verify-<project>` skill | its seat sentences, plus any sentence anywhere in it that INSTRUCTS — see (f); its product facts never |
+| `CLAUDE.md` | the whole file |
 
 Out of scope, history by definition: probes; the founder-decision log's dated entries; ADR and
-PRD bodies; the archive band; the ledger's lesson evidence and its loop-health rows; any dated
-report or session extract. Each is a record of what was done under the process of its day, and
-it is never edited to match today's.
+PRD bodies (their Read-first ENTRIES are in scope, their bodies never); the archive band; the
+ledger's lessons, extensions, evidence, queues, and loop-health rows; any dated report or
+session extract, wherever it sits. Each is a record of what was done under the process of its
+day, and it is never edited to match today's.
 
-**b. Detection — run it as a grep, don't eyeball it.** Over the in-scope paths only:
+**b. Detection — run it as a grep, don't eyeball it.** Over the in-scope FILES only, and inside
+(a)'s range for each:
 
 ```bash
-# The scope, one path per line: add every Read-first path, the roadmap, and .claude/skills/verify-*
-# (an array, not a string — zsh does not word-split an unquoted variable).
-scope=(docs/000-index.md docs/001-current-state.md docs/070-quality CLAUDE.md)
+# The scope, one FILE per line — never a directory. A directory re-collects the ranges (a)
+# excluded (a session extract in the quality band, the ledger's evidence) and buys hundreds of
+# forced classifications. Expand the quality band by hand, minus its dated reports; add every
+# Read-first path, the roadmap, and .claude/skills/verify-*/SKILL.md.
+# (An array, not a string — zsh does not word-split an unquoted variable.)
+scope=(docs/000-index.md docs/001-current-state.md CLAUDE.md \
+       docs/070-quality/001-testing-strategy.md docs/070-quality/004-finding-ledger.md)
 # 1. retired vocabulary
-grep -rinE 'cadence|gate record|re-gate|step [45][ab]?\b|gated unit|ungated|external certification|adversarial.audit|ships by commit|registers at BASE|the close is procedural|two-round cap|codex' "${scope[@]}"
+grep -inE 'cadence|gate record|re-gate|step [45][ab]\b|gated unit|ungated|external certification|adversarial.audit|ships by commit|registers at BASE|the close is procedural|two-round cap' "${scope[@]}"
 # 2. procedure in the present tense, outside the two allowed places
-grep -rinE '^ *[0-9]+\. |round|gate|certif|verdict|register|close-unit' "${scope[@]}"
+grep -inE '^ *[0-9]+\. |round|gate|certif|verdict|register|close-unit' "${scope[@]}"
 ```
 
 Grep 2 over-fires by design: it is a reading list, not a verdict. Read each hit and ask whether
 the sentence tells an agent WHAT TO DO — a step, a round, a gate, a verdict rule — or records a
-fact. A numbered list whose items are build steps is a hit however it is worded.
+fact. A numbered list whose items are build steps is a hit however it is worded. A hit falling
+outside its file's (a) range — a line in current-state's dated history, a passage in the
+ledger's evidence — is dropped unread.
 
-**Classify every hit into exactly one of five classes.** A hit nobody can classify is not done.
+**Classify every hit into exactly one of seven classes.** A hit nobody can classify is not done.
 
 | Class | What it is | Action |
 |---|---|---|
-| RELOCATED PLUGIN SECTION | the body of a plugin-owned AGENTS.md section, living at the path a relocation pointer names (the one-line pointer form: *Lives in `<path>`; that file carries the current text.*) | AGENTS.md keeps only the pointer line. Regenerate BY MEANING inside that file, same commit: the template's bullets and Core doctrine, 1:1 by bullet, in the repo's own house style (UK/US spelling, emphasis convention, wrapping, punctuation), edited only where the meaning actually differs. A sentence whose meaning already matches gets no edit; a file where none differ gets no edit at all. That file's OTHER sentences are not covered by this class — they are classified on their own by the four rows below. This is the only text outside AGENTS.md that may carry plugin procedure, because it IS AGENTS.md's text at another path. The report lists what changed and what stayed. |
-| RETIRED PROCEDURE | steps, rounds, gates, or verdict rules from the flow this refresh retired, stated in the present tense | Cut, per (c). |
+| RELOCATED PLUGIN SECTION | the body of a plugin-owned AGENTS.md section, living at the path a relocation pointer names (the one-line pointer form: *Lives in `<path>`; that file carries the current text.*) | AGENTS.md keeps only the pointer line. Regenerate BY MEANING inside that file, same commit: sync the template section's STATEMENT SET — every statement it makes — in whatever SHAPE that file already holds it (bullets, numbered evidence sections, running prose), in the repo's own house style (UK/US spelling, emphasis convention, wrapping, punctuation), edited only where the meaning actually differs. Never reshape the file to the template's structure. A statement whose meaning already stands gets no edit; a file where none differ gets no edit at all. That file's OTHER sentences are not covered by this class — they are classified on their own by the six rows below. This is the only text outside AGENTS.md that may carry plugin procedure, because it IS AGENTS.md's text at another path. The report lists what changed and what stayed. |
+| RETIRED PROCEDURE | build procedure stated in the present tense anywhere but the two allowed places. The test is LOCATION, not vintage: a correct statement of TODAY's flow outside the plugin's playbooks and skills and AGENTS.md is a second source, and it drifts the day the first changes. Steps, rounds, gates, and verdict rules from the flow this refresh retired are the common case, not the definition. | Cut, per (c). |
 | REPO FACT inside a procedure passage | a path, a measurement, a probe number, a decision, a capability the repo lacks — a fact the retired wording was merely carrying | Carry it BEFORE the cut to where it belongs: a constraint to AGENTS.md's Machine constraints, evidence to its lesson in the ledger, a decision to the decision log, a plain fact to the doc's own facts section. Named in the report, old location → new. A cut never loses a fact. |
-| HISTORY | a dated record of what was done, decided, or measured | Leave it. In a LIVING doc, add ONE dated line immediately above the passage — `Superseded by AGENTS.md's "<section>" (<date>).` — so a reader meets the supersession before the text. Never delete it and never restate it in today's words. |
-| PSTACK'S OWN WORD | "cadence" in its rhythm sense; "gate", "register" or "round" as a word of the repo's own domain | Leave, and name it in (i)'s residue list so the next refresh does not re-litigate it. |
+| OTHER PROCEDURE | steps that are not BUILD procedure — a runbook, a release checklist, an ops ceremony, a drive or data recipe. How to OPERATE the thing, not how to change it. | Leave. The two-places law governs build procedure only, and a runbook is where its own steps belong. |
+| TEMPLATE TEXT | plugin-owned prose this pass itself wrote or synced — the ledger's regenerated header and mechanism prose, a relocated section's body. It says "round", "gate", and "verdict" because the template says them. | Leave, and name it in (i)'s residue list. Re-cutting the pass's own output is the loop this row exists to break. |
+| HISTORY | a dated record of what was done, decided, or measured | Leave it. Add the supersession line — ONE dated line immediately above the passage, `Superseded by AGENTS.md's "<section>" (<date>).` — ONLY where the passage would otherwise read as a CURRENT instruction, and only where a named AGENTS.md section actually supersedes it. In a block that is nothing but dated, self-marked entries (an index's dated anchors, current-state's history blockquotes) the line is noise: the entries announce themselves. Where nothing in AGENTS.md supersedes the record — a stale test baseline, an old measurement — the line would be false, so it is not written. Never delete the record and never restate it in today's words. |
+| PSTACK'S OWN WORD | "cadence" in its rhythm sense; "gate", "register" or "round" as a word of the repo's own domain; a vendor tool the repo still runs, named in a fact — Codex in a machine constraint, an adversarial-audit script the repo ships | Leave, and name it in (i)'s residue list so the next refresh does not re-litigate it. |
 
 **c. The cut.** A RETIRED PROCEDURE passage in a living doc is replaced by exactly one line
-naming the AGENTS.md section that now owns it:
+naming the AGENTS.md section that now owns it. **The heading survives**, and only the BODY
+becomes the pointer line, so an existing citation of that section — by number or by name — still
+lands somewhere:
 
+> ### 4. The close
+>
 > The close: AGENTS.md's "The close". This section carried the pre-2026-09-03 cadence;
 > superseded 2026-09-03.
 
-The removed text is not lost. It moves to the archive band (`docs/099-archive/` or the repo's
-equivalent) as ONE dated file per source document, at the band's next number and named so a
-reader hunting the old flow finds it (`NNN-<source-slug>-retired-procedure-YYYY-MM-DD.md`), with
-a header naming the source path, the date, and the AGENTS.md section that supersedes it. Never
-rewrite a probe, an ADR or PRD body, or the ledger's lessons — they are out of scope and the cut
-never reaches them.
+Where the cut passage stated TODAY's procedure correctly, the line says what actually happened —
+*The close: AGENTS.md's "The close". Procedure lives there; this copy was a second source, cut
+2026-09-03.* — because nothing was superseded, only de-duplicated.
+
+**Archive by size, not by count.** A cut PASSAGE — a section, a paragraph, a numbered list —
+moves to the archive band. A single word or a clause whose meaning SURVIVES in the replacement
+("the gated unit's probe" → "the unit's probe") is not archived: the replacement sentence carries
+it, and a file per word buries the band and the reader with it.
+
+The removed passages are not lost. They move to the archive band (`docs/099-archive/` or the
+repo's equivalent) as ONE dated file per source document, at the band's next number and named so
+a reader hunting the old flow finds it (`NNN-<source-slug>-retired-procedure-YYYY-MM-DD.md`),
+with a header naming the source path, the date, and the AGENTS.md section that supersedes it.
+Never rewrite a probe, an ADR or PRD body, or the ledger's lessons — they are out of scope and
+the cut never reaches them.
 
 **The Read-first list.** Repo-owned and carried verbatim, with one exception, applied AFTER the
 cut: an entry describing a document as "doctrine" or "procedure" is rewritten to describe what
@@ -240,33 +289,72 @@ stating the flow in the router's words, naming the plugin's version and the date
 process is pkstack poteto-mode (pkstack <version>, refreshed <date>): work enters through the
 `/poteto-mode` router, the matched playbook's steps carry the work, and `AGENTS.md` is the
 repository profile." It REPLACES every sentence in that block that states the retired procedure
-— a registration rule, a review-round count, a ships-by-commit-not-PR clause. The dated history
-entries below the block stay exactly as written; they are HISTORY.
+— a registration rule, a review-round count, a ships-by-commit-not-PR clause. Those replaced
+sentences are a RETIRED PROCEDURE passage like any other: archive them per (c) BEFORE the
+paragraph is written, or the replacement is a silent delete. The dated history entries below the
+block stay exactly as written; they are HISTORY.
 
 **e. The finding ledger.** Its header and mechanism prose are regenerated BY MEANING from
 `templates/finding-ledger.template.md`, the same sentence-by-sentence sync a relocated section
 gets. The lessons, their extensions and evidence, the mechanization and export queues, and every
-loop-health ROW are untouched. The loop-health `mode:` FORMAT line is updated to the verifier
-form — `mode: <verifier model id>·<fed|blind>`, and `mode: self` where a close ran with no
-verifier verdict — without editing a single existing row.
+loop-health ROW are untouched. What the sync writes is TEMPLATE TEXT from the moment it lands:
+(i) does not re-cut the pass's own output.
+
+The loop-health `mode:` FORMAT line is updated to the verifier form — `mode: <verifier model
+id>·<fed|blind>`, and `mode: self` where a close ran with no verifier verdict — without editing
+a single existing row. **Unless repo CODE enforces the format the template would change**: a
+test pinning the `mode:` tokens, a script counting `·fed` rows to schedule the blind control.
+Then the format line records the TARGET form and a named trigger — "target form `mode: <model
+id>·<fed|blind>`; moves when the loop-health parser next changes" — and the enforced format is
+left exactly as it stands. A docs pass that edits a format a code assert reads breaks the repo
+from a documentation commit; the medium moves in a CODE unit that changes the test, the script,
+and this line together.
+
+**Structure is not added.** A template section the repo's ledger has no equivalent of — `## The
+export queue` in a ledger that keeps export entries inside the mechanization queue — is not
+created by this pass. The sync is sentence-level over the prose that EXISTS. A missing section
+is registered in the report with a named trigger, and it lands when a unit needs it.
+
+**Polarity is not backfilled.** Where the template's lesson entry form has gained a field the
+repo's standing lessons predate — **Polarity** is the current one — the form's description is
+synced and the existing entries are left under-specified. Each takes its field at the next
+`/close-unit` that touches it, from the person holding its evidence. This pass never infers a
+lesson's polarity.
 
 **f. The verify-`<project>` skill.** A generated skill whose `SKILL.md` still carries the
 "Cadence seat" heading, or seat sentences from the retired flow, has that heading and those
 sentences rewritten per `skills/create-verification-skill/SKILL.md`'s current "Where the skill
-sits" output. The feature map is NOT touched: it is the product's facts, and only MAINTAIN
-writes it.
+sits" output.
+
+The feature map is split by INSTRUCTS versus RECORDS, not by file. Its product FACTS — surfaces,
+journeys, selectors, expected behaviour — are not touched: only MAINTAIN writes them. A dated
+RECORD inside the map (a last-verified stamp, an observed-behaviour note) is HISTORY, left for
+MAINTAIN too and named in the residue. But a sentence in the map or its README that INSTRUCTS —
+a build-procedure pointer, a step from the retired flow, a rule about how to change the code —
+is classified like any other hit and cut per (c). Product facts are the map's; build procedure
+is never the map's, wherever inside it the sentence sits.
 
 **g. The decision log.** The repo's founder-decision log or equivalent gets ONE entry recording
 the refresh — or one line under the latest entry where the repo keeps that convention: files
 cut, files archived, the plugin version, the date. Same commit.
 
+A repo that keeps NO decision log records the refresh in its own convention instead — a dated
+paragraph in `docs/001-current-state.md`'s history, a line in a changelog, whatever that repo
+already uses to date its own changes. Never mint a decision log, or a docs band to hold one, as
+a side effect of this pass: a repo gains a decision log when its owner decides it wants one.
+
 **h. The report.** A table, not a narrative. One row per passage: `file:line · class · action ·
-destination`, where class is one of the five above and action is cut / carried / archived /
-regenerated / left. The owner reads a diff and a table.
+destination`, where class is one of the seven above and action is cut / carried / archived /
+regenerated / left / registered. A REGISTER gets its own row with the trigger named in the
+destination cell: a ledger section the pass did not create, a format left standing because code
+enforces it, a contradiction between a plugin section and a repo fact. The owner reads a diff
+and a table.
 
 **i. Re-run the detection.** Run (b)'s greps over the scope again at the end. The pass is done
-when every remaining hit is HISTORY or PSTACK'S OWN WORD, and each one is named in the report
-with its class.
+when every hit IN THE (a) SCOPE — inside its file's range; a hit outside it was never this
+pass's — is HISTORY, PSTACK'S OWN WORD, OTHER PROCEDURE, or TEMPLATE TEXT, and each one is named
+in the report with its class. Those four are the whole admissible residue. Anything else still
+standing means the pass is not done.
 
 ## Step 1 (existing repo) — the interview wave
 

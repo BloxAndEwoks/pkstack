@@ -28,7 +28,9 @@ when a round's findings are clustered by mechanism, each cluster is looked up he
 forbids, weakened toward sufficiency. A PERMISSION (a skip rule, a dismissal rule, an allow-list)
 inverts: its extension is what it LETS THROUGH, so it is NARROWED toward sufficiency, and a
 regenerated member means narrow it, never weaken it. Every entry states which polarity it is on —
-the two forks are indistinguishable until you know.
+the two forks are indistinguishable until you know. A lesson minted before this field existed
+takes its polarity at the next `/close-unit` that touches it, from the person holding its
+evidence; a docs refresh syncs the form's wording and never infers the value.
 
 A lesson is never seeded from another repo, this template included: a statement with no local
 members has an unrunnable sufficiency walk and undefined regeneration forks — it would be
